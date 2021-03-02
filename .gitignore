@@ -1,0 +1,17 @@
+# Builds
+dist/
+
+# NPM
+.npmignore
+node_modules
+
+# OS generated files
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+Desktop.ini
+._*
+.Spotlight-V100
+.Trashes
