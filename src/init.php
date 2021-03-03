@@ -24,7 +24,7 @@ function hello_charts_block_categories( $categories ) {
 		$categories,
 		[
 			[
-				'slug' => 'charts',
+				'slug'  => 'charts',
 				'title' => __( 'Charts', 'hello-charts' ),
 			],
 		]
@@ -47,41 +47,52 @@ add_filter( 'block_categories', 'hello_charts_block_categories' );
  * @since 1.0.0
  */
 function hello_charts_block_assets() {
-	// Register block styles for both frontend + backend.
-	wp_register_style(
-		'hello-charts-style-css', // Handle.
-		plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ), // Block style CSS.
-		is_admin() ? [ 'wp-editor' ] : null, // Dependency to include the CSS after it.
-		null // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ) // Version: File modification time.
+	$version = get_file_data(
+		plugins_url( '/hello-charts.php', dirname( __FILE__ ) ),
+		[ 'Version' ],
+		'plugin'
 	);
 
-	// Register block editor script for backend.
-	wp_register_script(
-		'hello-charts-block-js', // Handle.
-		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
-		[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ], // Dependencies, defined above.
-		null, // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ), // Version: filemtime — Gets file modification time.
-		true // Enqueue the script in the footer.
+	// Register block styles for both frontend + backend.
+	wp_register_style(
+		'hello-charts-style-css',
+		plugins_url( '/build/style.css', dirname( __FILE__ ) ),
+		is_admin() ? [ 'wp-editor' ] : null,
+		$version
 	);
 
 	// Register block editor styles for backend.
 	wp_register_style(
-		'hello-charts-block-editor-css', // Handle.
-		plugins_url( 'dist/blocks.editor.build.css', dirname( __FILE__ ) ), // Block editor CSS.
-		[ 'wp-edit-blocks' ], // Dependency to include the CSS after it.
-		null // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.editor.build.css' ) // Version: File modification time.
+		'hello-charts-editor-css', // Handle.
+		plugins_url( '/build/editor.css', dirname( __FILE__ ) ),
+		[ 'wp-edit-blocks' ],
+		$version
+	);
+
+	// Register block editor script for backend.
+	wp_register_script(
+		'hello-charts-block-js',
+		plugins_url( '/build/blocks.js', dirname( __FILE__ ) ),
+		[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ],
+		$version,
+		true
 	);
 
 	// WP Localized globals. Use dynamic PHP stuff in JavaScript via `helloCharts` object.
 	wp_localize_script(
 		'hello-charts-block-js',
-		'helloCharts', // Array containing dynamic data for a JS Global.
+		'helloCharts',
 		[
 			'pluginDirPath' => plugin_dir_path( __DIR__ ),
 			'pluginDirUrl'  => plugin_dir_url( __DIR__ ),
-			// Add more data here that you want to access from `helloCharts` object.
 		]
 	);
+
+	$block_type_args = [
+		'style'         => 'hello-charts-style-css',
+		'editor_style'  => 'hello-charts-editor-css',
+		'editor_script' => 'hello-charts-block-js',
+	];
 
 	/**
 	 * Register Gutenberg block on server-side.
@@ -93,37 +104,8 @@ function hello_charts_block_assets() {
 	 * @link https://wordpress.org/gutenberg/handbook/blocks/writing-your-first-block-type#enqueuing-block-scripts
 	 * @since 1.16.0
 	 */
-	register_block_type(
-		'heello-charts/block-pie', [
-			// Enqueue blocks.style.build.css on both frontend & backend.
-			'style'         => 'hello-charts-style-css',
-			// Enqueue blocks.build.js in the editor only.
-			'editor_script' => 'hello-charts-block-js',
-			// Enqueue blocks.editor.build.css in the editor only.
-			'editor_style'  => 'hello-charts-block-editor-css',
-		]
-	);
-
-	/**
-	 * Register Gutenberg block on server-side.
-	 *
-	 * Register the block on server-side to ensure that the block
-	 * scripts and styles for both frontend and backend are
-	 * enqueued when the editor loads.
-	 *
-	 * @link https://wordpress.org/gutenberg/handbook/blocks/writing-your-first-block-type#enqueuing-block-scripts
-	 * @since 1.16.0
-	 */
-	register_block_type(
-		'hello-charts/block-line', [
-			// Enqueue blocks.style.build.css on both frontend & backend.
-			'style'         => 'hello-charts-style-css',
-			// Enqueue blocks.build.js in the editor only.
-			'editor_script' => 'hello-charts-block-js',
-			// Enqueue blocks.editor.build.css in the editor only.
-			'editor_style'  => 'hello-charts-block-editor-css',
-		]
-	);
+	register_block_type( 'hello-charts/block-pie', $block_type_args );
+	register_block_type( 'hello-charts/block-line', $block_type_args );
 }
 
 // Hook: Block assets.
