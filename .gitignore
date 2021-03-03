@@ -1,9 +1,10 @@
 # Builds
-dist/
+build/
 
 # NPM
 .npmignore
 node_modules
+vendor
 
 # OS generated files
 .DS_Store

@@ -6,9 +6,6 @@
 import './editor.scss';
 import './style.scss';
 
-// Import Chart.js
-import {Line} from 'react-chartjs-3';
-
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { Component } = wp.element; // Extend component
@@ -360,7 +357,7 @@ class ChartLineBlock extends Component {
 					value={ title }
 					onChange={ ( value ) => setAttributes( { title: value } ) }
 				/>
-				<Line data={ parsedData } options={ parsedOptions } />
+				<div data={ parsedData } options={ parsedOptions } />
 			</div>
 		];
 	}
@@ -475,7 +472,7 @@ registerBlockType( 'hello-charts/block-line', {
 		return (
 			<div className={ props.className }>
 				<RichText.Content tagName="h3" placeholder="Line Chart" value={ props.title } />
-				<Line data={ props.chartData } />
+				<div data={ props.chartData } />
 			</div>
 		);
 	},

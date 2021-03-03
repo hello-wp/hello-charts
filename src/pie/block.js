@@ -8,7 +8,7 @@ import './style.scss';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-
+const { card } = wp.components;
 /**
  * Registers this as a block.
  *
@@ -41,10 +41,10 @@ registerBlockType( 'hello-charts/block-pie', {
 	 */
 	edit: ( props ) => {
 		return (
-			<div className={ props.className }>
+			<Card className={ props.className }>
 				<p>🥧</p>
 				<p>👋🌏</p>
-			</div>
+			</Card>
 		);
 	},
 
@@ -61,10 +61,10 @@ registerBlockType( 'hello-charts/block-pie', {
 	 */
 	save: ( props ) => {
 		return (
-			<div className={ props.className }>
+			<Card className={ props.className }>
 				<p>🥧</p>
 				<p>👋🌏</p>
-			</div>
+			</Card>
 		);
 	},
 } );
