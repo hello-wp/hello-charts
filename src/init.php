@@ -61,19 +61,36 @@ function hello_charts_block_assets() {
 		$version
 	);
 
+	// Register chart.js styles.
+	wp_register_style(
+		'chart-js', // Handle.
+		plugins_url( '/build/lib/chart.js/chart.min.css', dirname( __FILE__ ) ),
+		[],
+		$version
+	);
+
 	// Register block editor styles for backend.
 	wp_register_style(
 		'hello-charts-editor-css', // Handle.
 		plugins_url( '/build/editor.css', dirname( __FILE__ ) ),
-		[ 'wp-edit-blocks' ],
+		[ 'chart-js', 'wp-edit-blocks' ],
 		$version
+	);
+
+	// Register chart.js script.
+	wp_register_script(
+		'chart-js',
+		plugins_url( '/build/lib/chart.js/chart.min.js', dirname( __FILE__ ) ),
+		[],
+		$version,
+		true
 	);
 
 	// Register block editor script for backend.
 	wp_register_script(
 		'hello-charts-block-js',
 		plugins_url( '/build/blocks.js', dirname( __FILE__ ) ),
-		[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ],
+		[ 'chart-js', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ],
 		$version,
 		true
 	);
