@@ -10,6 +10,8 @@ module.exports = {
 	...defaultConfig,
 	entry: {
     	'./build/blocks': './src/blocks.js',
+		'./build/editor': './src/editor.scss',
+		'./build/style': './src/style.scss',
 	},
 	output: {
 		path: path.resolve( __dirname ),
