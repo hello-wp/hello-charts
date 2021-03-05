@@ -9,7 +9,7 @@ const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 module.exports = {
 	...defaultConfig,
 	entry: {
-    './build/blocks': './src/blocks.js',
+    	'./build/blocks': './src/blocks.js',
 	},
 	output: {
 		path: path.resolve( __dirname ),
@@ -50,14 +50,7 @@ module.exports = {
 				use: [
 					{ loader: MiniCssExtractPlugin.loader },
 					{ loader: 'css-loader' },
-					{
-						loader: 'postcss-loader',
-						options: { plugins: [ require( 'autoprefixer' ) ] },
-					},
-					{
-						loader: 'sass-loader',
-						options: { additionalData: '@import "./src/common.scss";\n' },
-					},
+					{ loader: 'sass-loader' },
 				],
 			},
 		],

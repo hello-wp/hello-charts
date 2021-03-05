@@ -21,7 +21,7 @@
   },
   "scripts": {
     "check-licenses": "wp-scripts check-licenses --prod --gpl2",
-    "build": "wp-scripts build --webpack-no-externals",
+    "build": "wp-scripts build",
     "dev": "wp-scripts start",
     "env": "wp-env",
     "lint": "npm-run-all --parallel lint:*",
@@ -40,12 +40,10 @@
   },
   "devDependencies": {
     "@wordpress/scripts": "^13.0.3",
-    "autoprefixer": "^9.8.6",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^4.2.1",
     "ignore-emit-webpack-plugin": "^2.0.6",
     "mini-css-extract-plugin": "^0.9.0",
-    "postcss-loader": "^3.0.0",
     "sass-loader": "^9.0.3",
     "webpack": "^4.44.1"
   },
