@@ -1,0 +1,19 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+.wp-block-hello-charts-block-line,
+.wp-block-hello-charts-block-pie  {
+  background: white;
+  border: 1px solid black;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.wp-block-hello-charts-block-pie canvas,
+.wp-block-hello-charts-block-line canvas {
+  padding: 0 1em 0.5em;
+}

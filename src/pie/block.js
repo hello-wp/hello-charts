@@ -2,17 +2,13 @@
  * BLOCK: Pie Chart
  */
 
-//  Import CSS.
-import './editor.scss';
-import './style.scss';
-
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-
+const { Card } = wp.components;
 /**
  * Registers this as a block.
  *
- * @link https://wordpress.org/gutenberg/handbook/block-api/
+ * @see https://wordpress.org/gutenberg/handbook/block-api/
  * @param  {string}   name     Block name.
  * @param  {Object}   settings Block settings.
  * @return {?WPBlock}          The block, if it has been successfully
@@ -22,11 +18,7 @@ registerBlockType( 'hello-charts/block-pie', {
 	title: __( 'Pie Chart' ),
 	icon: 'chart-pie',
 	category: 'charts',
-	keywords: [
-		__( 'charts' ),
-		__( 'graph' ),
-		__( 'data' ),
-	],
+	keywords: [ __( 'charts' ), __( 'graph' ), __( 'data' ) ],
 
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
@@ -34,17 +26,16 @@ registerBlockType( 'hello-charts/block-pie', {
 	 *
 	 * The "edit" property must be a valid function.
 	 *
-	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
 	 *
 	 * @param {Object} props Props.
-	 * @returns {Mixed} JSX Component.
+	 * @return {*} JSX Component.
 	 */
 	edit: ( props ) => {
 		return (
-			<div className={ props.className }>
-				<p>🥧</p>
-				<p>👋🌏</p>
-			</div>
+			<Card className={ props.className }>
+				<p>Pie Chart</p>
+			</Card>
 		);
 	},
 
@@ -54,17 +45,16 @@ registerBlockType( 'hello-charts/block-pie', {
 	 *
 	 * The "save" property must be specified and must be a valid function.
 	 *
-	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
 	 *
 	 * @param {Object} props Props.
-	 * @returns {Mixed} JSX Frontend HTML.
+	 * @return {*} JSX Frontend HTML.
 	 */
 	save: ( props ) => {
 		return (
-			<div className={ props.className }>
-				<p>🥧</p>
-				<p>👋🌏</p>
-			</div>
+			<Card className={ props.className }>
+				<p>Pie Chart</p>
+			</Card>
 		);
 	},
 } );
