@@ -25,7 +25,7 @@
     "dev": "wp-scripts start",
     "env": "wp-env",
     "lint": "npm-run-all --parallel lint:*",
-    "lint:js": "wp-scripts lint-js js tests/e2e",
+    "lint:js": "wp-scripts lint-js src",
     "lint:js:files": "wp-scripts lint-js",
     "lint:js:fix": "npm run lint:js -- --fix",
     "lint:pkg-json": "wp-scripts lint-pkg-json",
@@ -44,6 +44,7 @@
     "css-loader": "^4.2.1",
     "ignore-emit-webpack-plugin": "^2.0.6",
     "mini-css-extract-plugin": "^0.9.0",
+    "prettier": "^2.2.1",
     "sass-loader": "^9.0.3",
     "webpack": "^4.44.1"
   },
