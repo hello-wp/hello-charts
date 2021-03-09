@@ -14,11 +14,11 @@ const { Card } = wp.components;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType('hello-charts/block-pie', {
-	title: __('Pie Chart'),
+registerBlockType( 'hello-charts/block-pie', {
+	title: __( 'Pie Chart' ),
 	icon: 'chart-pie',
 	category: 'charts',
-	keywords: [__('charts'), __('graph'), __('data')],
+	keywords: [ __( 'charts' ), __( 'graph' ), __( 'data' ) ],
 
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
@@ -31,9 +31,9 @@ registerBlockType('hello-charts/block-pie', {
 	 * @param {Object} props Props.
 	 * @return {*} JSX Component.
 	 */
-	edit: (props) => {
+	edit: ( props ) => {
 		return (
-			<Card className={props.className}>
+			<Card className={ props.className }>
 				<p>Pie Chart</p>
 			</Card>
 		);
@@ -50,11 +50,11 @@ registerBlockType('hello-charts/block-pie', {
 	 * @param {Object} props Props.
 	 * @return {*} JSX Frontend HTML.
 	 */
-	save: (props) => {
+	save: ( props ) => {
 		return (
-			<Card className={props.className}>
+			<Card className={ props.className }>
 				<p>Pie Chart</p>
 			</Card>
 		);
 	},
-});
+} );
