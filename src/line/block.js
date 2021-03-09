@@ -2,6 +2,8 @@
  * BLOCK: Line Chart
  */
 
+import { Line } from 'react-chartjs-3';
+
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { Component } = wp.element; // Extend component
@@ -28,7 +30,8 @@ class ChartLineBlock extends Component {
 	componentDidMount() {
 		// Setup the attributes
 		const {
-			attributes: { chartData },
+			attributes: { chartType, chartData },
+			clientId,
 			setAttributes,
 		} = this.props;
 
@@ -75,6 +78,8 @@ class ChartLineBlock extends Component {
 
 		setAttributes({
 			activeDatasetIndex: 0,
+			chartType: 'line',
+			blockId: clientId,
 			chartData: JSON.stringify(parsedData),
 		});
 	}
@@ -90,10 +95,10 @@ class ChartLineBlock extends Component {
 	render() {
 		// Setup the attributes
 		const {
-			attributes: { title, activeDatasetIndex, chartData, chartOptions },
+			attributes: { title, activeDatasetIndex, chartType, chartData, chartOptions },
 			className,
 			setAttributes,
-			instanceId,
+			clientId,
 		} = this.props;
 
 		const hex2rgba = this.hex2rgba;
@@ -269,13 +274,10 @@ class ChartLineBlock extends Component {
 								</FlexBlock>
 							</Flex>
 						</CardHeader>
-						{(parsedData.datasets[activeDatasetIndex].pointRadius >
-							0 ||
-							parsedData.datasets[activeDatasetIndex]
-								.showLine) && (
+						{(parsedData.datasets[activeDatasetIndex].pointRadius > 0 ||
+							parsedData.datasets[activeDatasetIndex].showLine) && (
 							<CardBody>
-								{parsedData.datasets[activeDatasetIndex]
-									.pointRadius > 0 && (
+								{parsedData.datasets[activeDatasetIndex].pointRadius > 0 && (
 									<SelectControl
 										label="Point Style"
 										value={
@@ -313,11 +315,10 @@ class ChartLineBlock extends Component {
 										}
 									/>
 								)}
-								{parsedData.datasets[activeDatasetIndex]
-									.showLine && (
+								{parsedData.datasets[activeDatasetIndex].showLine && (
 									<BaseControl
 										label="Color"
-										id={`inspect-chart-line-border-color-${instanceId}`}
+										id={`inspect-chart-line-border-color-${clientId}`}
 									>
 										<ColorPalette
 											value={
@@ -418,7 +419,7 @@ class ChartLineBlock extends Component {
 					value={title}
 					onChange={(value) => setAttributes({ title: value })}
 				/>
-				<div data={parsedData} options={parsedOptions} />
+				<Line data={parsedData} options={parsedOptions} />
 			</div>,
 		];
 	}
@@ -446,6 +447,12 @@ registerBlockType('hello-charts/block-line', {
 		activeDatasetIndex: {
 			type: 'integer',
 			default: 0,
+		},
+		blockId: {
+			type: 'number',
+		},
+		chartType: {
+			type: 'string',
 		},
 		chartData: {
 			type: 'string',
@@ -529,15 +536,17 @@ registerBlockType('hello-charts/block-line', {
 	 * @param {Object} props Props.
 	 * @return {*} JSX Frontend HTML.
 	 */
-	save: (props) => {
+	save: ( props ) => {
+		// Setup the attributes
+		const {
+			attributes: { title, blockId },
+			className,
+		} = props;
+
 		return (
-			<div className={props.className}>
-				<RichText.Content
-					tagName="h3"
-					placeholder="Line Chart"
-					value={props.title}
-				/>
-				<div data={props.chartData} />
+			<div className={ className }>
+				<RichText.Content tagName="h3" placeholder="Line Chart" value={ title } />
+				<canvas id={`chart-${blockId}`}></canvas>
 			</div>
 		);
 	},

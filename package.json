@@ -49,6 +49,7 @@
     "webpack": "^4.44.1"
   },
   "dependencies": {
-    "chart.js": "^2.9.4"
+    "chart.js": "^2.9.4",
+    "react-chartjs-3": "^2.7.7"
   }
 }

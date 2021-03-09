@@ -95,18 +95,9 @@ function hello_charts_block_assets() {
 		true
 	);
 
-	// WP Localized globals. Use dynamic PHP stuff in JavaScript via `helloCharts` object.
-	wp_localize_script(
-		'hello-charts-block-js',
-		'helloCharts',
-		[
-			'pluginDirPath' => plugin_dir_path( __DIR__ ),
-			'pluginDirUrl'  => plugin_dir_url( __DIR__ ),
-		]
-	);
-
 	$block_type_args = [
 		'style'         => 'hello-charts-style-css',
+		'script'        => 'chart-js',
 		'editor_style'  => 'hello-charts-editor-css',
 		'editor_script' => 'hello-charts-block-js',
 	];
@@ -127,3 +118,50 @@ function hello_charts_block_assets() {
 
 // Hook: Block assets.
 add_action( 'init', 'hello_charts_block_assets' );
+
+/**
+ * Output the Chart.js initalizer in a <script> tag when the block is output.
+ *
+ * @param string $block_content The block content about to be appended.
+ * @param array  $block         The full block, including name and attributes.
+ * @return string Modified block content.
+ */
+function hello_charts_block_render( $block_content, $block ) {
+	if ( is_admin() ) {
+		return $block_content;
+	}
+
+	$data = '{}';
+	if ( isset( $block['attrs']['chartData'] ) ) {
+		$data = $block['attrs']['chartData'];
+	}
+
+	$options = '{}';
+	if ( isset( $block['attrs']['chartOptions'] ) ) {
+		$options = $block['attrs']['chartOptions'];
+	}
+
+	$type = 'line';
+	if ( isset( $block['attrs']['chartType'] ) ) {
+		$type = $block['attrs']['chartType'];
+	}
+
+	$id = '';
+	if ( isset( $block['attrs']['blockId'] ) ) {
+		$id = $block['attrs']['blockId'];
+	}
+
+	$script = "
+		var ctx = document.getElementById('chart-${id}').getContext('2d');
+		var chart = new Chart(ctx, {
+			type: '${type}',
+			data: ${data},
+			options: ${options}
+		});
+	";
+
+	wp_add_inline_script( 'chart-js', $script );
+
+	return $block_content;
+}
+add_filter( 'render_block_hello-charts/block-line', 'hello_charts_block_render', 10, 2 );
