@@ -30,7 +30,7 @@ class ChartLineBlock extends Component {
 	componentDidMount() {
 		// Setup the attributes
 		const {
-			attributes: { chartType, chartData },
+			attributes: { chartData },
 			clientId,
 			setAttributes,
 		} = this.props;
@@ -95,7 +95,13 @@ class ChartLineBlock extends Component {
 	render() {
 		// Setup the attributes
 		const {
-			attributes: { title, activeDatasetIndex, chartType, chartData, chartOptions },
+			attributes: {
+				title,
+				activeDatasetIndex,
+				blockId,
+				chartData,
+				chartOptions,
+			},
 			className,
 			setAttributes,
 			clientId,
@@ -419,7 +425,7 @@ class ChartLineBlock extends Component {
 					value={title}
 					onChange={(value) => setAttributes({ title: value })}
 				/>
-				<Line data={parsedData} options={parsedOptions} />
+				<Line id={blockId} data={parsedData} options={parsedOptions} />
 			</div>,
 		];
 	}
@@ -440,6 +446,10 @@ registerBlockType('hello-charts/block-line', {
 	category: 'charts',
 	keywords: [__('charts'), __('graph'), __('data')],
 	attributes: {
+		blockId: {
+			type: 'string',
+			default: '',
+		},
 		title: {
 			type: 'string',
 			default: '',
@@ -447,9 +457,6 @@ registerBlockType('hello-charts/block-line', {
 		activeDatasetIndex: {
 			type: 'integer',
 			default: 0,
-		},
-		blockId: {
-			type: 'number',
 		},
 		chartType: {
 			type: 'string',
@@ -540,7 +547,7 @@ registerBlockType('hello-charts/block-line', {
 		// Setup the attributes
 		const {
 			attributes: { title, blockId },
-			className,
+			className
 		} = props;
 
 		return (
