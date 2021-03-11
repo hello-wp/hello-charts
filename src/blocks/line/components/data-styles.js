@@ -69,17 +69,8 @@ export default class ChartStyles extends Component {
 						<Flex>
 							<FlexBlock>
 								<RichText
-									value={
-										parsedData.datasets[
-											activeDatasetIndex
-										].label
-									}
-									onChange={ ( text ) =>
-										updateDatasetLabel(
-											text,
-											activeDatasetIndex
-										)
-									}
+									value={ parsedData.datasets[ activeDatasetIndex ].label }
+									onChange={ ( text ) => updateDatasetLabel( text, activeDatasetIndex ) }
 								/>
 							</FlexBlock>
 						</Flex>
@@ -90,39 +81,15 @@ export default class ChartStyles extends Component {
 							{ parsedData.datasets[ activeDatasetIndex ].pointRadius > 0 && (
 								<SelectControl
 									label="Point Style"
-									value={
-										parsedData.datasets[
-											activeDatasetIndex
-										].pointStyle
-									}
+									value={ parsedData.datasets[ activeDatasetIndex ].pointStyle }
 									options={ [
-										{
-											label: 'Circle',
-											value: 'circle',
-										},
-										{
-											label: 'Rectangle',
-											value: 'rect',
-										},
-										{
-											label: 'Rounded Rectangle',
-											value: 'rectRounded',
-										},
-										{
-											label: 'Diamond',
-											value: 'rectRot',
-										},
-										{
-											label: 'Triangle',
-											value: 'triangle',
-										},
+										{ label: 'Circle', value: 'circle' },
+										{ label: 'Rectangle', value: 'rect' },
+										{ label: 'Rounded Rectangle', value: 'rectRounded' },
+										{ label: 'Diamond', value: 'rectRot' },
+										{ label: 'Triangle', value: 'triangle' },
 									] }
-									onChange={ ( style ) =>
-										updateDatasetPointStyle(
-											style,
-											activeDatasetIndex
-										)
-									}
+									onChange={ ( style ) => updateDatasetPointStyle( style, activeDatasetIndex ) }
 								/>
 							) }
 							{ parsedData.datasets[ activeDatasetIndex ].showLine && (
@@ -131,18 +98,9 @@ export default class ChartStyles extends Component {
 									id={ `inspect-chart-line-border-color-${ clientId }` }
 								>
 									<ColorPalette
-										value={
-											parsedData.datasets[
-												activeDatasetIndex
-											].borderColor
-										}
+										value={ parsedData.datasets[ activeDatasetIndex ].borderColor }
 										clearable={ false }
-										onChange={ ( color ) =>
-											updateDatasetColor(
-												color,
-												activeDatasetIndex
-											)
-										}
+										onChange={ ( color ) => updateDatasetColor( color, activeDatasetIndex ) }
 									/>
 								</BaseControl>
 							) }
@@ -167,11 +125,8 @@ export default class ChartStyles extends Component {
 					</FlexItem>
 					<FlexItem>
 						<Button
-							disabled={
-								activeDatasetIndex ===
-								parsedData.datasets.length - 1
-							}
-							isSmal={ true }
+							disabled={ activeDatasetIndex === parsedData.datasets.length - 1 }
+							isSmall={ true }
 							icon="arrow-right-alt2"
 							label="Next Dataset"
 							onClick={ incrementActiveDataset }
