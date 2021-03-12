@@ -5,8 +5,8 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { Component } = wp.element; // Extend component
+const { __ } = wp.i18n;
+const { Component } = wp.element;
 const { RichText } = wp.blockEditor;
 
 export default class Save extends Component {

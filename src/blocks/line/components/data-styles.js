@@ -21,7 +21,7 @@ const {
  */
 import hex2rgba from '../../../common/helpers/hex2rgba';
 
-export default class ChartStyles extends Component {
+export default class DataStyles extends Component {
 	render() {
 		const {
 			attributes: {

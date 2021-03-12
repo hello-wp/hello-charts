@@ -17,6 +17,10 @@ module.exports = {
 		path: path.resolve( __dirname ),
 		filename: '[name].js',
 	},
+	externals: {
+		// Prevents an editor crash. See https://github.com/WordPress/gutenberg/issues/4043#issuecomment-633081315.
+		'lodash': 'lodash'
+	},
 	optimization: {
 		splitChunks: {
 			cacheGroups: {
@@ -74,4 +78,7 @@ module.exports = {
 			}
 		),
 	],
+	externals: {
+	   'lodash': 'lodash'
+	},
 };

@@ -4,3 +4,17 @@
  * CSS for just Backend enqueued after style.scss
  * which makes it higher in priority.
  */
+
+.wp-block-hello-charts-block-line {
+    .data-editor-toggle {
+        position: absolute;
+        right: 1em;
+        top: 1em;
+    }
+
+    .data-editor {
+        border: 1px solid black;
+        padding: 1em;
+        margin: 0 1em 1em;
+    }
+}

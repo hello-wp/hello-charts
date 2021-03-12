@@ -5,9 +5,13 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { Component } = wp.element; // Extend component
+const { __ } = wp.i18n;
+const { Component, createRef } = wp.element;
 const { InspectorControls, RichText } = wp.blockEditor;
+const {
+	Button,
+	TextareaControl,
+} = wp.components;
 
 /**
  * Components and dependencies.
@@ -19,7 +23,9 @@ import Legend from '../../../common/components/legend';
 import randomColors from '../../../common/helpers/random-colors';
 
 export default class Edit extends Component {
-	componentDidMount() {
+	constructor( props ) {
+		super( props );
+
 		// Setup the attributes
 		const {
 			attributes: { chartData },
@@ -29,6 +35,13 @@ export default class Edit extends Component {
 
 		const parsedData = JSON.parse( chartData );
 
+		this.state = {
+			editorOpen: false,
+			containerHeight: 0,
+		};
+
+		this.chartRef = createRef();
+
 		parsedData.datasets = randomColors( parsedData.datasets );
 
 		setAttributes( {
@@ -37,6 +50,12 @@ export default class Edit extends Component {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 		} );
+	}
+
+	getInitialState() {
+		return {
+			editorOpen: false,
+		};
 	}
 
 	render() {
@@ -54,21 +73,44 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		return [
-			<InspectorControls key="inspector">
-				<ChartStyles { ...this.props } />
-				<DataStyles { ...this.props } />
-				<Legend { ...this.props } />
-			</InspectorControls>,
-			<div className={ className } key="editor">
-				<RichText
-					tagName="h3"
-					placeholder={ __( 'Line Chart' ) }
-					value={ title }
-					onChange={ ( value ) => setAttributes( { title: value } ) }
-				/>
-				<Line id={ blockId } data={ parsedData } options={ parsedOptions } />
-			</div>,
-		];
+		return (
+			<>
+				<InspectorControls key="inspector">
+					<ChartStyles { ...this.props } />
+					<DataStyles { ...this.props } />
+					<Legend { ...this.props } />
+				</InspectorControls>
+				<div className={ className } key="preview">
+					<Button
+						isSecondary
+						className="data-editor-toggle"
+						label={ __( 'Toggle Data Editor' ) }
+						onClick={ () => this.setState( { editorOpen: this.state.editorOpen ? false : true } ) }
+					>
+						{ this.state.editorOpen ? (
+							<>View Chart</>
+						) : (
+							<>Edit Chart Data</>
+						) }
+					</Button>
+					<RichText
+						tagName="h3"
+						placeholder={ __( 'Line Chart' ) }
+						value={ title }
+						onChange={ ( value ) => setAttributes( { title: value } ) }
+					/>
+					{ ! this.state.editorOpen && (
+						<div className="chart" ref={ this.chartRef }>
+							<Line id={ blockId } data={ parsedData } options={ parsedOptions } />
+						</div>
+					) }
+					{ this.state.editorOpen && (
+						<div className="data-editor" style={ { height: `calc(${ this.chartRef.current.clientHeight }px - 1em)` } }>
+							<TextareaControl value={ JSON.stringify( parsedData.datasets ) } />
+						</div>
+					) }
+				</div>
+			</>
+		);
 	}
 }
