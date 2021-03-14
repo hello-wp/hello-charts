@@ -17,10 +17,9 @@ const {
  * Components and dependencies.
  */
 import { Line } from 'react-chartjs-3';
-import ChartStyles from './chart-styles';
-import DataStyles from './data-styles';
-import Legend from '../../../common/components/legend';
-import randomColors from '../../../common/helpers/random-colors';
+import { ChartStyles, DataStyles } from '.';
+import { Legend } from '../../../common/components';
+import { randomColors } from '../../../common/helpers';
 
 export default class Edit extends Component {
 	constructor( props ) {

@@ -19,7 +19,7 @@ const {
 /**
  * Components and dependencies.
  */
-import hex2rgba from '../../../common/helpers/hex2rgba';
+import { hex2rgba } from '../../../common/helpers';
 
 export default class DataStyles extends Component {
 	render() {

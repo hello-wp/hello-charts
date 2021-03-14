@@ -1,4 +1,4 @@
-import hex2rgba from './hex2rgba';
+import { hex2rgba } from '.';
 
 /**
  * Assigns random colors to a range of Chart.js properties in a given dataset.

@@ -11,8 +11,7 @@ const { registerBlockType } = wp.blocks;
 /**
  * Components and dependencies.
  */
-import Edit from './components/edit';
-import Save from './components/save';
+import { Edit, Save } from './components';
 
 /**
  * Registers this as a block.
