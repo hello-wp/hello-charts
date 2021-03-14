@@ -22,12 +22,15 @@ const {
 import { hex2rgba } from '../../../common/helpers';
 
 export default class DataStyles extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.state = { activeDataset: 0 };
+	}
+
 	render() {
 		const {
-			attributes: {
-				activeDatasetIndex,
-				chartData,
-			},
+			attributes: { chartData },
 			clientId,
 			setAttributes,
 		} = this.props;
@@ -54,14 +57,6 @@ export default class DataStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function incrementActiveDataset() {
-			setAttributes( { activeDatasetIndex: activeDatasetIndex + 1 } );
-		}
-
-		function decrementActiveDataset() {
-			setAttributes( { activeDatasetIndex: activeDatasetIndex - 1 } );
-		}
-
 		return (
 			<PanelBody title="Data Styles" initialOpen={ false }>
 				<Card>
@@ -69,19 +64,19 @@ export default class DataStyles extends Component {
 						<Flex>
 							<FlexBlock>
 								<RichText
-									value={ parsedData.datasets[ activeDatasetIndex ].label }
-									onChange={ ( text ) => updateDatasetLabel( text, activeDatasetIndex ) }
+									value={ parsedData.datasets[ this.state.activeDataset ].label }
+									onChange={ ( text ) => updateDatasetLabel( text, this.state.activeDataset ) }
 								/>
 							</FlexBlock>
 						</Flex>
 					</CardHeader>
-					{ ( parsedData.datasets[ activeDatasetIndex ].pointRadius > 0 ||
-						parsedData.datasets[ activeDatasetIndex ].showLine ) && (
+					{ ( parsedData.datasets[ this.state.activeDataset ].pointRadius > 0 ||
+						parsedData.datasets[ this.state.activeDataset ].showLine ) && (
 						<CardBody>
-							{ parsedData.datasets[ activeDatasetIndex ].pointRadius > 0 && (
+							{ parsedData.datasets[ this.state.activeDataset ].pointRadius > 0 && (
 								<SelectControl
 									label="Point Style"
-									value={ parsedData.datasets[ activeDatasetIndex ].pointStyle }
+									value={ parsedData.datasets[ this.state.activeDataset ].pointStyle }
 									options={ [
 										{ label: 'Circle', value: 'circle' },
 										{ label: 'Rectangle', value: 'rect' },
@@ -89,18 +84,18 @@ export default class DataStyles extends Component {
 										{ label: 'Diamond', value: 'rectRot' },
 										{ label: 'Triangle', value: 'triangle' },
 									] }
-									onChange={ ( style ) => updateDatasetPointStyle( style, activeDatasetIndex ) }
+									onChange={ ( style ) => updateDatasetPointStyle( style, this.state.activeDataset ) }
 								/>
 							) }
-							{ parsedData.datasets[ activeDatasetIndex ].showLine && (
+							{ parsedData.datasets[ this.state.activeDataset ].showLine && (
 								<BaseControl
 									label="Color"
 									id={ `inspect-chart-line-border-color-${ clientId }` }
 								>
 									<ColorPalette
-										value={ parsedData.datasets[ activeDatasetIndex ].borderColor }
+										value={ parsedData.datasets[ this.state.activeDataset ].borderColor }
 										clearable={ false }
-										onChange={ ( color ) => updateDatasetColor( color, activeDatasetIndex ) }
+										onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
 									/>
 								</BaseControl>
 							) }
@@ -110,26 +105,26 @@ export default class DataStyles extends Component {
 				<Flex>
 					<FlexItem>
 						<Button
-							disabled={ 0 === activeDatasetIndex }
+							disabled={ 0 === this.state.activeDataset }
 							isSmal={ true }
 							icon="arrow-left-alt2"
 							label="Previous Dataset"
-							onClick={ decrementActiveDataset }
+							onClick={ () => this.setState( { activeDataset: this.state.activeDataset - 1 } ) }
 						/>
 					</FlexItem>
 					<FlexItem>
 						<span>
-							{ activeDatasetIndex + 1 } /{ ' ' }
+							{ this.state.activeDataset + 1 }{ ' / ' }
 							{ parsedData.datasets.length }
 						</span>
 					</FlexItem>
 					<FlexItem>
 						<Button
-							disabled={ activeDatasetIndex === parsedData.datasets.length - 1 }
+							disabled={ this.state.activeDataset === parsedData.datasets.length - 1 }
 							isSmall={ true }
 							icon="arrow-right-alt2"
 							label="Next Dataset"
-							onClick={ incrementActiveDataset }
+							onClick={ () => this.setState( { activeDataset: this.state.activeDataset + 1 } ) }
 						/>
 					</FlexItem>
 				</Flex>

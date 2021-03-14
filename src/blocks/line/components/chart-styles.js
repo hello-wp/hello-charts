@@ -11,10 +11,7 @@ const {
 export default class ChartStyles extends Component {
 	render() {
 		const {
-			attributes: {
-				chartData,
-				chartOptions,
-			},
+			attributes: { chartData, chartOptions },
 			setAttributes,
 		} = this.props;
 

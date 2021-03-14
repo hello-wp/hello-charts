@@ -8,10 +8,7 @@
 const { __ } = wp.i18n;
 const { Component, createRef } = wp.element;
 const { InspectorControls, RichText } = wp.blockEditor;
-const {
-	Button,
-	TextareaControl,
-} = wp.components;
+const { Button, TextareaControl } = wp.components;
 
 /**
  * Components and dependencies.
@@ -34,27 +31,17 @@ export default class Edit extends Component {
 
 		const parsedData = JSON.parse( chartData );
 
-		this.state = {
-			editorOpen: false,
-			containerHeight: 0,
-		};
+		this.state = { editorOpen: false };
 
 		this.chartRef = createRef();
 
 		parsedData.datasets = randomColors( parsedData.datasets );
 
 		setAttributes( {
-			activeDatasetIndex: 0,
 			chartType: 'line',
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 		} );
-	}
-
-	getInitialState() {
-		return {
-			editorOpen: false,
-		};
 	}
 
 	render() {

@@ -36,10 +36,6 @@ registerBlockType( 'hello-charts/block-line', {
 			type: 'string',
 			default: '',
 		},
-		activeDatasetIndex: {
-			type: 'integer',
-			default: 0,
-		},
 		chartType: {
 			type: 'string',
 		},
