@@ -11,9 +11,8 @@
   color: black;
   margin: 0 auto;
   text-align: center;
-}
 
-.wp-block-hello-charts-block-pie canvas,
-.wp-block-hello-charts-block-line canvas {
-  padding: 0 1em 0.5em;
+  canvas {
+    padding: 0 1em 0.5em;
+  }
 }

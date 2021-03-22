@@ -9,5 +9,5 @@
  * Webpack is compiling as the input file.
  */
 
-import './pie/block.js';
-import './line/block.js';
+import './blocks/pie';
+import './blocks/line';
