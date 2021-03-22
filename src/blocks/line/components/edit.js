@@ -34,6 +34,7 @@ export default class Edit extends Component {
 		this.state = { editorOpen: false };
 
 		this.chartRef = createRef();
+		this.dataRef = createRef();
 
 		parsedData.datasets = randomColors( parsedData.datasets );
 
@@ -58,6 +59,24 @@ export default class Edit extends Component {
 
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
+
+		function updateDatasetLabel( text, index ) {
+			const data = JSON.parse( chartData );
+			data.datasets[ index ].label = text;
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function updateLabel( text, row ) {
+			const data = JSON.parse( chartData );
+			data.labels[ row ] = text;
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function updateData( value, index, row ) {
+			const data = JSON.parse( chartData );
+			data.datasets[ index ].data[ row ] = parseInt( value );
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
 
 		return (
 			<>
@@ -91,8 +110,51 @@ export default class Edit extends Component {
 						</div>
 					) }
 					{ this.state.editorOpen && (
-						<div className="data-editor" style={ { height: `calc(${ this.chartRef.current.clientHeight }px - 1em)` } }>
-							<TextareaControl value={ JSON.stringify( parsedData.datasets ) } />
+						<div
+							className="data-editor"
+							ref={ this.dataRef }
+							style={
+								{ height: `${ this.chartRef?.current?.clientHeight ?? this.dataRef?.current?.clientHeight }px` }
+							}
+						>
+							<table>
+								<thead>
+									<tr>
+										<th key="-1"></th>
+										{ parsedData.datasets.map( ( dataset, index ) => (
+											<th key={ index }>
+												<RichText
+													tagName="span"
+													value={ dataset.label }
+													onChange={ ( text ) => updateDatasetLabel( text, index ) }
+												/>
+											</th>
+										) ) }
+									</tr>
+								</thead>
+								<tbody>
+									{ parsedData.labels.map( ( label, row ) => (
+										<tr key={ row }>
+											<th>
+												<RichText
+													tagName="span"
+													value={ label }
+													onChange={ ( text ) => updateLabel( text, row ) }
+												/>
+											</th>
+											{ parsedData.datasets.map( ( dataset, index ) => (
+												<td key={ `${row}-${index}` }>
+													<RichText
+														tagName="span"
+														value={ parsedData.datasets[ index ].data[ row ].toString() }
+														onChange={ ( value ) => updateData( value, index, row ) }
+													/>
+												</td>
+											) ) }
+										</tr>
+									) ) }
+								</tbody>
+							</table>
 						</div>
 					) }
 				</div>

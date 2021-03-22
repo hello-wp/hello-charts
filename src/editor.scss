@@ -13,8 +13,49 @@
     }
 
     .data-editor {
-        border: 1px solid black;
-        padding: 1em;
-        margin: 0 1em 1em;
+        margin: 0 1em;
+
+        table {
+            position: relative;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+            width: 100%;
+            border: 1px solid black;
+
+            th,
+            td {
+                border-left: 1px solid #e2e4e7;
+                border-top: 1px solid #e2e4e7;
+            }
+
+            th:first-child,
+            td:first-child {
+                border-left: none;
+                width: 15%;
+            }
+
+            thead tr:first-child th,
+            thead tr:first-child td {
+                border-top: none;
+            }
+
+            thead th {
+              position: -webkit-sticky; /* for Safari */
+              position: sticky;
+              top: 0;
+            }
+
+            thead th:first-child {
+              left: 0;
+              z-index: 1;
+            }
+
+            tbody th {
+              position: -webkit-sticky; /* for Safari */
+              position: sticky;
+              left: 0;
+            }
+        }
     }
 }
