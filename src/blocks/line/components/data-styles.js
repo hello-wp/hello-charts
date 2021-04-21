@@ -1,4 +1,9 @@
 /**
+ * Components and dependencies.
+ */
+import { hex2rgba } from '../../../common/helpers';
+
+/**
  * WordPress dependencies.
  */
 const { Component } = wp.element;
@@ -15,11 +20,6 @@ const {
 	PanelBody,
 	SelectControl,
 } = wp.components;
-
-/**
- * Components and dependencies.
- */
-import { hex2rgba } from '../../../common/helpers';
 
 export default class DataStyles extends Component {
 	constructor( props ) {
