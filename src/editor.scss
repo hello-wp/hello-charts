@@ -5,16 +5,62 @@
  * which makes it higher in priority.
  */
 
-.wp-block-hello-charts-block-line {
-    .data-editor-toggle {
-        position: absolute;
-        right: 1em;
-        top: 1em;
+.edit-post-sidebar {
+    .edit-data-card {
+        .edit-data-card-body {
+            padding-top: 0;
+        }
+    }
+}
+
+.hello-charts-data-editor {
+    > div {
+        padding: 0;
     }
 
-    .data-editor {
-        border: 1px solid black;
-        padding: 1em;
-        margin: 0 1em 1em;
+    .components-modal__header {
+        margin: 0;
+    }
+
+    table {
+        position: relative;
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: fixed;
+        width: 100%;
+
+        th,
+        td {
+            border: 1px solid #dcdcde;
+            padding: 0.4em;
+        }
+
+        thead th {
+          border-top: 0;
+          text-align: left;
+        }
+
+        tbody th {
+            text-align: right;
+        }
+
+        .title {
+            width: 15%;
+        }
+
+        .new {
+            width: 10%;
+            text-align: center;
+        }
+
+        .disabled {
+            background: #f6f7f7;
+            border: none;
+            text-align: center;
+        }
+
+        .dashicons {
+            vertical-align: middle;
+        }
     }
 }

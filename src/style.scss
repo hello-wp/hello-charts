@@ -7,10 +7,15 @@
 .wp-block-hello-charts-block-line,
 .wp-block-hello-charts-block-pie  {
   background: white;
-  border: 1px solid black;
   color: black;
   margin: 0 auto;
   text-align: center;
+  padding: 1px;
+
+  .wrapper {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
 
   canvas {
     padding: 0 1em 0.5em;

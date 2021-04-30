@@ -3,20 +3,19 @@
  */
 
 /**
- * WordPress dependencies.
- */
-const { __ } = wp.i18n;
-const { Component, createRef } = wp.element;
-const { InspectorControls, RichText } = wp.blockEditor;
-const { Button, TextareaControl } = wp.components;
-
-/**
  * Components and dependencies.
  */
 import { Line } from 'react-chartjs-3';
 import { ChartStyles, DataStyles } from '.';
-import { Legend } from '../../../common/components';
-import { randomColors } from '../../../common/helpers';
+import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
+import { hex2rgba, randomColor, randomValues } from '../../../common/helpers';
+
+/**
+ * WordPress dependencies.
+ */
+const { __ } = wp.i18n;
+const { Component } = wp.element;
+const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
 
 export default class Edit extends Component {
 	constructor( props ) {
@@ -33,15 +32,28 @@ export default class Edit extends Component {
 
 		this.state = { editorOpen: false };
 
-		this.chartRef = createRef();
+		parsedData.datasets.forEach( ( dataset ) => {
+			if ( 'generate' === dataset.data[ 0 ] ) {
+				dataset.data = randomValues();
+			}
 
-		parsedData.datasets = randomColors( parsedData.datasets );
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				const color = randomColor();
+				dataset.borderColor = color;
+				dataset.pointBackgroundColor = color;
+				dataset.backgroundColor = hex2rgba( color, 0.6 );
+			}
+		} );
 
 		setAttributes( {
 			chartType: 'line',
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 		} );
+	}
+
+	toggleEditor() {
+		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
 	}
 
 	render() {
@@ -59,42 +71,38 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
+		this.toggleEditor = this.toggleEditor.bind( this );
+
 		return (
 			<>
 				<InspectorControls key="inspector">
+					<EditDataButton toggleEditor={ this.toggleEditor } />
 					<ChartStyles { ...this.props } />
 					<DataStyles { ...this.props } />
 					<Legend { ...this.props } />
 				</InspectorControls>
+				<BlockControls>
+					<EditDataToolbar toggleEditor={ this.toggleEditor } />
+				</BlockControls>
 				<div className={ className } key="preview">
-					<Button
-						isSecondary
-						className="data-editor-toggle"
-						label={ __( 'Toggle Data Editor' ) }
-						onClick={ () => this.setState( { editorOpen: this.state.editorOpen ? false : true } ) }
-					>
-						{ this.state.editorOpen ? (
-							<>View Chart</>
-						) : (
-							<>Edit Chart Data</>
+					<div className="wrapper">
+						<RichText
+							tagName="h3"
+							placeholder={ __( 'Line Chart' ) }
+							value={ title }
+							allowedFormats={ [] }
+							withoutInteractiveFormatting={ true }
+							onChange={ ( value ) => setAttributes( { title: value } ) }
+						/>
+						{ ! this.state.editorOpen && (
+							<div className="chart">
+								<Line id={ blockId } data={ parsedData } options={ parsedOptions } />
+							</div>
 						) }
-					</Button>
-					<RichText
-						tagName="h3"
-						placeholder={ __( 'Line Chart' ) }
-						value={ title }
-						onChange={ ( value ) => setAttributes( { title: value } ) }
-					/>
-					{ ! this.state.editorOpen && (
-						<div className="chart" ref={ this.chartRef }>
-							<Line id={ blockId } data={ parsedData } options={ parsedOptions } />
-						</div>
-					) }
-					{ this.state.editorOpen && (
-						<div className="data-editor" style={ { height: `calc(${ this.chartRef.current.clientHeight }px - 1em)` } }>
-							<TextareaControl value={ JSON.stringify( parsedData.datasets ) } />
-						</div>
-					) }
+						{ this.state.editorOpen && (
+							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
+						) }
+					</div>
 				</div>
 			</>
 		);
