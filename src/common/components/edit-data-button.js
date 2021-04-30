@@ -9,7 +9,7 @@ const {
 	CardBody,
 } = wp.components;
 
-export default class EditData extends Component {
+export default class EditDataButton extends Component {
 	render() {
 		const { toggleEditor } = this.props;
 

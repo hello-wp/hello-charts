@@ -7,8 +7,8 @@
  */
 import { Line } from 'react-chartjs-3';
 import { ChartStyles, DataStyles } from '.';
-import { EditData, EditDataToolbar, Legend } from '../../../common/components';
-import { randomColors } from '../../../common/helpers';
+import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
+import { hex2rgba, randomColor, randomValues } from '../../../common/helpers';
 
 /**
  * WordPress dependencies.
@@ -16,13 +16,6 @@ import { randomColors } from '../../../common/helpers';
 const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
-const { __experimentalNumberControl, Icon, Modal } = wp.components;
-
-let { NumberControl } = wp.components;
-
-if ( typeof NumberControl === 'undefined' ) {
-	NumberControl = __experimentalNumberControl;
-}
 
 export default class Edit extends Component {
 	constructor( props ) {
@@ -39,7 +32,18 @@ export default class Edit extends Component {
 
 		this.state = { editorOpen: false };
 
-		parsedData.datasets = randomColors( parsedData.datasets );
+		parsedData.datasets.forEach( ( dataset ) => {
+			if ( 'generate' === dataset.data[ 0 ] ) {
+				dataset.data = randomValues();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				const color = randomColor();
+				dataset.borderColor = color;
+				dataset.pointBackgroundColor = color;
+				dataset.backgroundColor = hex2rgba( color, 0.6 );
+			}
+		} );
 
 		setAttributes( {
 			chartType: 'line',
@@ -69,33 +73,10 @@ export default class Edit extends Component {
 
 		this.toggleEditor = this.toggleEditor.bind( this );
 
-		function updateDatasetLabel( text, index ) {
-			const data = JSON.parse( chartData );
-			data.datasets[ index ].label = text;
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
-		function updateLabel( text, row ) {
-			const data = JSON.parse( chartData );
-			data.labels[ row ] = text;
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
-		function updateData( value, index, row ) {
-			const data = JSON.parse( chartData );
-			const int = parseInt( value.replace( /\D/g, '' ) ); // Strip non-numeric characters.
-
-			if ( ! isNaN( int ) ) {
-				data.datasets[ index ].data[ row ] = int;
-			}
-
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
 		return (
 			<>
 				<InspectorControls key="inspector">
-					<EditData toggleEditor={ this.toggleEditor } />
+					<EditDataButton toggleEditor={ this.toggleEditor } />
 					<ChartStyles { ...this.props } />
 					<DataStyles { ...this.props } />
 					<Legend { ...this.props } />
@@ -119,62 +100,7 @@ export default class Edit extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<Modal
-								title={ __( 'Edit Chart Data' ) }
-								className="hello-charts-data-editor	"
-								onRequestClose={ () => this.setState( { editorOpen: false } ) }
-								shouldCloseOnClickOutside={ false }
-							>
-								<table>
-									<thead>
-										<tr>
-											<th key="-1" className="title"></th>
-											{ parsedData.datasets.map( ( dataset, index ) => (
-												<th key={ index }>
-													<RichText
-														tagName="span"
-														value={ dataset.label }
-														allowedFormats={ [] }
-														withoutInteractiveFormatting={ true }
-														onChange={ ( text ) => updateDatasetLabel( text, index ) }
-													/>
-												</th>
-											) ) }
-											<th key="new" className="new"><Icon icon="plus" /></th>
-										</tr>
-									</thead>
-									<tbody>
-										{ parsedData.labels.map( ( label, row ) => (
-											<tr key={ row }>
-												<th className="title">
-													<RichText
-														tagName="span"
-														value={ label }
-														allowedFormats={ [] }
-														withoutInteractiveFormatting={ true }
-														onChange={ ( text ) => updateLabel( text, row ) }
-													/>
-												</th>
-												{ parsedData.datasets.map( ( dataset, index ) => (
-													<td key={ `${ row }-${ index }` }>
-														<NumberControl
-															hideHTMLArrows={ true }
-															isDragEnabled={ false }
-															value={ parsedData.datasets[ index ].data[ row ] }
-															onChange={ ( value ) => updateData( value, index, row ) }
-														/>
-													</td>
-												) ) }
-												<td className="disabled"></td>
-											</tr>
-										) ) }
-										<tr>
-											<td className="new"><Icon icon="plus" /></td>
-											<td className="disabled" colSpan={ parsedData.datasets.length + 1 }></td>
-										</tr>
-									</tbody>
-								</table>
-							</Modal>
+							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
 						) }
 					</div>
 				</div>
