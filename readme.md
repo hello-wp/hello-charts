@@ -2,9 +2,16 @@
 
 A library of blocks that make it super easy to add dynamic charts to your WordPress pages and posts.
 
+## Getting Started
+
+- Clone this repository into your `wp-content/plugins` folder
+- Install Composer dependencies with `composer install`
+- Install npm dependencies with `npm install`
+- Build the project with `npm run build`
+
 ## Contributing
 
-### 👉  `npm start`
+### 👉  `npm run dev`
 - Use to compile and run the block in development mode.
 - Watches for any changes and reports back any errors in your code.
 
