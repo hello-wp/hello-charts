@@ -18,6 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get plugin version.
+ */
+function hello_charts_version() {
+	return '1.0.0';
+}
+
+/**
  * Block Initializer.
  */
 require_once plugin_dir_path( __FILE__ ) . 'src/init.php';

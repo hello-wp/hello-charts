@@ -32,7 +32,6 @@
         th,
         td {
             border: 1px solid #dcdcde;
-            padding: 0.4em;
         }
 
         thead th {
@@ -62,5 +61,9 @@
         .dashicons {
             vertical-align: middle;
         }
+
+		input[type="number"] {
+			border: none;
+		}
     }
 }
