@@ -43,6 +43,7 @@
 
 			button.components-dropdown-menu__toggle {
 				padding: 0;
+				opacity: 0;
 
 				.dashicon {
 					margin: 0;
@@ -53,6 +54,11 @@
 				}
 			}
         }
+		thead th:hover {
+			button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+		}
 
         tbody th {
             text-align: right;
