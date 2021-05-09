@@ -32,15 +32,32 @@
         th,
         td {
             border: 1px solid #dcdcde;
+			padding: 0;
         }
 
         thead th {
-          border-top: 0;
-          text-align: left;
+			border-top: 0;
+			text-align: left;
+			padding-right: 8px;
+			padding-left: 8px;
+
+			button.components-dropdown-menu__toggle {
+				padding: 0;
+
+				.dashicon {
+					margin: 0;
+					font-size: 14px;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+				}
+			}
         }
 
         tbody th {
             text-align: right;
+			padding-right: 8px;
+			padding-left: 8px;
         }
 
         .title {
@@ -62,7 +79,24 @@
             vertical-align: middle;
         }
 
-		input[type="number"] {
+		input[type="number"].components-input-control__input:hover {
+			background-color: #f4f4f4;
+			cursor: default;
+		}
+
+		input[type="number"].components-input-control__input:focus {
+			box-shadow: rgb(59 130 246) 0px 0px 0px 2px !important;
+    		z-index: 10 !important;
+			outline: none !important;
+			cursor: auto;
+		}
+
+		input[type="number"].components-input-control__input {
+			height: 36px;
+			border-radius: 0;
+		}
+
+		input[type="number"]+.components-input-control__backdrop {
 			border: none;
 		}
     }
