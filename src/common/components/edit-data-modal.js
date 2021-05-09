@@ -112,7 +112,7 @@ export default class EditDataModal extends Component {
 				<table>
 					<thead>
 						<tr>
-							<th key="-1" className="title"></th>
+							<th key="-1" className="title hello-charts-table-th"></th>
 							{ parsedData.datasets.map( ( dataset, index ) => (
 								<th
 									key={ index }
@@ -145,7 +145,7 @@ export default class EditDataModal extends Component {
 									</Flex>
 								</th>
 							) ) }
-							<th key="new" className="new">
+							<th key="new" className="new hello-charts-table-th">
 								<Button onClick={ () => newDataset() } label={ __( 'New Dataset' ) }><Icon icon="table-col-after" /></Button>
 							</th>
 						</tr>
@@ -153,7 +153,7 @@ export default class EditDataModal extends Component {
 					<tbody>
 						{ parsedData.labels.map( ( label, row ) => (
 							<tr key={ row }>
-								<th className="title">
+								<th className="title hello-charts-table-th">
 									<RichText
 										tagName="span"
 										value={ label }
@@ -163,13 +163,8 @@ export default class EditDataModal extends Component {
 									/>
 								</th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
-									<td key={ `${ row }-${ index }` }>
-										<NumberControl
-											hideHTMLArrows={ true }
-											isDragEnabled={ false }
-											value={ parsedData.datasets[ index ].data[ row ] }
-											onChange={ ( value ) => updateData( value, index, row ) }
-										/>
+									<td className="hello-charts-table-cell" key={ `${ row }-${ index }` }>
+										<input type="number"></input>
 									</td>
 								) ) }
 								<td className="disabled">
@@ -189,7 +184,7 @@ export default class EditDataModal extends Component {
 							</tr>
 						) ) }
 						<tr>
-							<td className="new">
+							<td className="new hello-charts-table-th">
 								<Button onClick={ () => newRow() } label={ __( 'New Row' ) }><Icon icon="table-row-after" /></Button>
 							</td>
 							<td className="disabled" colSpan={ parsedData.datasets.length + 1 }></td>

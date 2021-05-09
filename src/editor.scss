@@ -14,6 +14,9 @@
 }
 
 .hello-charts-data-editor {
+	width: 100%;
+	height: 100%;
+	background-color: #f7f7f7;
     > div {
         padding: 0;
     }
@@ -27,10 +30,8 @@
         border-collapse: collapse;
         border-spacing: 0;
         table-layout: fixed;
-        width: 100%;
 
-        th,
-        td {
+        th {
             border: 1px solid #dcdcde;
 			padding: 0;
         }
@@ -67,11 +68,11 @@
         }
 
         .title {
-            width: 15%;
+            // width: 15%;
         }
 
         .new {
-            width: 10%;
+            // width: 10%;
             text-align: center;
         }
 
@@ -84,26 +85,38 @@
         .dashicons {
             vertical-align: middle;
         }
-
-		input[type="number"].components-input-control__input:hover {
-			background-color: #f4f4f4;
-			cursor: default;
-		}
-
-		input[type="number"].components-input-control__input:focus {
-			box-shadow: rgb(59 130 246) 0px 0px 0px 2px !important;
-    		z-index: 10 !important;
-			outline: none !important;
-			cursor: auto;
-		}
-
-		input[type="number"].components-input-control__input {
-			height: 36px;
-			border-radius: 0;
-		}
-
-		input[type="number"]+.components-input-control__backdrop {
-			border: none;
-		}
     }
+}
+.hello-charts-table-th {
+	width: 100px;
+	background-color: #f1f1f1;
+}cursor: default;
+}
+
+.hello-charts-table-cell {
+	width: 100px;
+	border: 1px solid #dcdcde;
+	padding: 0;
+	position: relative;
+	padding-right: 1px;
+}
+
+.hello-charts-table-cell input[type="number"] {
+	position: relative;
+	height: 36px;
+	border: none;
+	width: 100%;
+	border-radius: 0;
+}
+
+.hello-charts-table-cell input[type="number"]:hover {
+	background-color: #f4f4f4;
+	cursor: default;
+}
+
+.hello-charts-table-cell input[type="number"]:focus {
+	box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
+	z-index: 10;
+	outline: none;
+	cursor: auto;
 }
