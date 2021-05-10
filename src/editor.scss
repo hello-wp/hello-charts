@@ -51,7 +51,7 @@
 					font-size: 14px;
 					display: flex;
 					align-items: center;
-					justify-content: flex-end;
+					justify-content: center;
 				}
 			}
         }
@@ -87,6 +87,11 @@
         }
     }
 }
+
+.hello-charts-table-row {
+
+}
+
 .hello-charts-table-th {
 	width: 100px;
 	background-color: #f1f1f1;
@@ -118,4 +123,20 @@
 	z-index: 10;
 	outline: none;
 	cursor: auto;
+}
+
+.hello-charts-delete-row-cell button {
+	opacity: 0;
+
+	.dashicon {
+		margin: 0;
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.hello-charts-table-row:hover .hello-charts-delete-row-cell button {
+	opacity: 1;
 }

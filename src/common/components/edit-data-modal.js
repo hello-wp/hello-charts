@@ -152,7 +152,7 @@ export default class EditDataModal extends Component {
 					</thead>
 					<tbody>
 						{ parsedData.labels.map( ( label, row ) => (
-							<tr key={ row }>
+							<tr className="hello-charts-table-row" key={ row }>
 								<th className="title hello-charts-table-th">
 									<RichText
 										tagName="span"
@@ -167,7 +167,7 @@ export default class EditDataModal extends Component {
 										<input type="number"></input>
 									</td>
 								) ) }
-								<td className="disabled">
+								<td className="disabled hello-charts-delete-row-cell">
 									<DropdownMenu
 										icon="ellipsis"
 										label={ __( 'Row Actions' ) }
