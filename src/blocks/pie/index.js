@@ -2,9 +2,17 @@
  * BLOCK: Pie Chart
  */
 
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { Card } = wp.components;
+/**
+ * WordPress dependencies.
+ */
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
+
+/**
+ * Components and dependencies.
+ */
+import { Edit, Save } from './components';
+
 /**
  * Registers this as a block.
  *
@@ -18,43 +26,52 @@ registerBlockType( 'hello-charts/block-pie', {
 	title: __( 'Pie Chart' ),
 	icon: 'chart-pie',
 	category: 'charts',
-	keywords: [ __( 'charts' ), __( 'graph' ), __( 'data' ) ],
-
-	/**
-	 * The edit function describes the structure of your block in the context of the editor.
-	 * This represents what the editor will render when the block is used.
-	 *
-	 * The "edit" property must be a valid function.
-	 *
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
-	 *
-	 * @param {Object} props Props.
-	 * @return {*} JSX Component.
-	 */
-	edit: ( props ) => {
-		return (
-			<Card className={ props.className }>
-				<p>Pie Chart</p>
-			</Card>
-		);
+	keywords: [ __( 'graph' ), __( 'doughnut' ), __( 'donut' ) ],
+	attributes: {
+		blockId: {
+			type: 'string',
+			default: '',
+		},
+		title: {
+			type: 'string',
+			default: '',
+		},
+		chartType: {
+			type: 'string',
+		},
+		chartData: {
+			type: 'string',
+			default: JSON.stringify( {
+				labels: [ 'A', 'B', 'C' ],
+				datasets: [
+					{
+						label: 'Data',
+						data: [ 'generate' ],
+						cutout: '0%',
+					},
+				],
+			} ),
+		},
+		chartOptions: {
+			type: 'string',
+			default: JSON.stringify( {
+				legend: {
+					display: true,
+					position: 'top',
+					align: 'center',
+				},
+			} ),
+		},
 	},
 
-	/**
-	 * The save function defines the way in which the different attributes should be combined
-	 * into the final markup, which is then serialized by Gutenberg into post_content.
-	 *
-	 * The "save" property must be specified and must be a valid function.
-	 *
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
-	 *
-	 * @param {Object} props Props.
-	 * @return {*} JSX Frontend HTML.
-	 */
+	/* Render the block components. */
+	edit: ( props ) => {
+		return <Edit { ...props } />;
+	},
+
+	/* Save the block markup. */
 	save: ( props ) => {
-		return (
-			<Card className={ props.className }>
-				<p>Pie Chart</p>
-			</Card>
-		);
+		return <Save { ...props } />;
 	},
 } );
+

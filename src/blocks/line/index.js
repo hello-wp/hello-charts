@@ -26,7 +26,7 @@ registerBlockType( 'hello-charts/block-line', {
 	title: __( 'Line Chart' ),
 	icon: 'chart-line',
 	category: 'charts',
-	keywords: [ __( 'charts' ), __( 'graph' ), __( 'data' ) ],
+	keywords: [ __( 'graph' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',
