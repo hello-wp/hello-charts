@@ -5,7 +5,7 @@
 /**
  * Components and dependencies.
  */
-import { Pie } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-3';
 import { ChartStyles, DataStyles } from '.';
 import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
 import { randomColor, randomValues } from '../../../common/helpers';
