@@ -71,7 +71,7 @@ module.exports = {
 				patterns: [
 					{
 						from: 'Chart.min.*',
-						to: './build/lib/chart.js/chart.min.[ext]',
+						to: './build/lib/chart.js/chart.min[ext]',
 						context: './node_modules/chart.js/dist/'
 					},
 				],
