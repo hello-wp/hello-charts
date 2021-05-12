@@ -47,11 +47,7 @@ add_filter( 'block_categories_all', 'hello_charts_block_categories' );
  * @since 1.0.0
  */
 function hello_charts_block_assets() {
-	$version = get_file_data(
-		plugins_url( '/hello-charts.php', dirname( __FILE__ ) ),
-		[ 'Version' ],
-		'plugin'
-	);
+	$version = hello_charts_version();
 
 	// Register block styles for both frontend + backend.
 	wp_register_style(
