@@ -1,7 +1,7 @@
 /**
  * Helpers.
  */
-import { hex2rgba, randomColor } from '../helpers';
+import { hex2rgba, randomColors } from '../helpers';
 
 /**
  * WordPress dependencies.
@@ -64,7 +64,7 @@ export default class EditDataModal extends Component {
 		function newDataset() {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
-			const color = randomColor();
+			const color = randomColors( 1 ).shift();
 			const dataset = { ...data.datasets[ 0 ] };
 
 			dataset.label = __( 'New Dataset' );

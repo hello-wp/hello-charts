@@ -8,7 +8,7 @@
 import { Line } from 'react-chartjs-2';
 import { ChartStyles, DataStyles } from '.';
 import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
-import { hex2rgba, randomColor, randomValues } from '../../../common/helpers';
+import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
 
 /**
  * WordPress dependencies.
@@ -29,19 +29,19 @@ export default class Edit extends Component {
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
+		const themeColors = randomColors( parsedData.datasets.length );
 
 		this.state = { editorOpen: false };
 
-		parsedData.datasets.forEach( ( dataset ) => {
+		parsedData.datasets.forEach( ( dataset, index ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
 				dataset.data = randomValues();
 			}
 
-			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
-				const color = randomColor();
-				dataset.borderColor = color;
-				dataset.pointBackgroundColor = color;
-				dataset.backgroundColor = hex2rgba( color, 0.6 );
+			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
+				dataset.borderColor = themeColors[ index ];
+				dataset.pointBackgroundColor = themeColors[ index ];
+				dataset.backgroundColor = hex2rgba( themeColors[ index ], 0.6 );
 			}
 		} );
 

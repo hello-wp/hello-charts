@@ -8,7 +8,7 @@
 import { Pie } from 'react-chartjs-2';
 import { ChartStyles, DataStyles } from '.';
 import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
-import { randomColor, randomValues } from '../../../common/helpers';
+import { randomColors, randomValues } from '../../../common/helpers';
 
 /**
  * WordPress dependencies.
@@ -34,16 +34,16 @@ export default class Edit extends Component {
 
 		parsedData.datasets.forEach( ( dataset ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 3, 1, 10 );
+				dataset.data = randomValues( 30, 1, 10 );
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
+				const themeColors = randomColors( dataset.data.length );
 				dataset.borderColor = [];
 				dataset.backgroundColor = [];
-				dataset.data.forEach( () => {
-					const color = randomColor();
-					dataset.borderColor.push( color );
-					dataset.backgroundColor.push( color );
+				dataset.data.forEach( ( data, index ) => {
+					dataset.borderColor.push( themeColors[ index ] );
+					dataset.backgroundColor.push( themeColors[ index ] );
 				} );
 			}
 		} );
