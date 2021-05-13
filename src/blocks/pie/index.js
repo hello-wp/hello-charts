@@ -55,6 +55,7 @@ registerBlockType( 'hello-charts/block-pie', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
+				animation: false,
 				legend: {
 					display: true,
 					position: 'top',

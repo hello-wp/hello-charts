@@ -72,6 +72,7 @@ registerBlockType( 'hello-charts/block-line', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
+				animation: false,
 				legend: {
 					display: true,
 					position: 'top',

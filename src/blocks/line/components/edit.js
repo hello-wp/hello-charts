@@ -5,7 +5,7 @@
 /**
  * Components and dependencies.
  */
-import { Line } from 'react-chartjs-3';
+import { Line } from 'react-chartjs-2';
 import { ChartStyles, DataStyles } from '.';
 import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
 import { hex2rgba, randomColor, randomValues } from '../../../common/helpers';
