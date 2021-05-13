@@ -34,7 +34,7 @@ export default class Edit extends Component {
 
 		parsedData.datasets.forEach( ( dataset ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 30, 1, 10 );
+				dataset.data = randomValues( 4, 1, 10 );
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {

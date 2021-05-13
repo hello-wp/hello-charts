@@ -42,7 +42,7 @@ registerBlockType( 'hello-charts/block-pie', {
 		chartData: {
 			type: 'string',
 			default: JSON.stringify( {
-				labels: [ 'A', 'B', 'C' ],
+				labels: [ 'A', 'B', 'C', 'D' ],
 				datasets: [
 					{
 						label: 'Data',
