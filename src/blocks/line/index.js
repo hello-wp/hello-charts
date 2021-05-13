@@ -73,26 +73,24 @@ registerBlockType( 'hello-charts/block-line', {
 			type: 'string',
 			default: JSON.stringify( {
 				animation: false,
-				legend: {
-					display: true,
-					position: 'top',
-					align: 'center',
+				plugins: {
+					legend: {
+						display: true,
+						position: 'top',
+						align: 'center',
+					},
 				},
 				scales: {
-					xAxes: [
-						{
-							gridLines: {
-								display: true,
-							},
+					x: {
+						grid: {
+							display: true,
 						},
-					],
-					yAxes: [
-						{
-							gridLines: {
-								display: true,
-							},
+					},
+					y: {
+						grid: {
+							display: true,
 						},
-					],
+					},
 				},
 			} ),
 		},
