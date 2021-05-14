@@ -26,7 +26,7 @@ registerBlockType( 'hello-charts/block-line', {
 	title: __( 'Line Chart' ),
 	icon: 'chart-line',
 	category: 'charts',
-	keywords: [ __( 'charts' ), __( 'graph' ), __( 'data' ) ],
+	keywords: [ __( 'graph' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',
@@ -72,26 +72,25 @@ registerBlockType( 'hello-charts/block-line', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
-				legend: {
-					display: true,
-					position: 'top',
-					align: 'center',
+				animation: false,
+				plugins: {
+					legend: {
+						display: true,
+						position: 'top',
+						align: 'center',
+					},
 				},
 				scales: {
-					xAxes: [
-						{
-							gridLines: {
-								display: true,
-							},
+					x: {
+						grid: {
+							display: true,
 						},
-					],
-					yAxes: [
-						{
-							gridLines: {
-								display: true,
-							},
+					},
+					y: {
+						grid: {
+							display: true,
 						},
-					],
+					},
 				},
 			} ),
 		},

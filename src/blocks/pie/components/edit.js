@@ -1,14 +1,14 @@
 /**
- * BLOCK: Line Chart
+ * BLOCK: Pie Chart
  */
 
 /**
  * Components and dependencies.
  */
-import { Line } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import { ChartStyles, DataStyles } from '.';
 import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
-import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
+import { randomColors, randomValues } from '../../../common/helpers';
 
 /**
  * WordPress dependencies.
@@ -29,24 +29,27 @@ export default class Edit extends Component {
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
-		const themeColors = randomColors( parsedData.datasets.length );
 
 		this.state = { editorOpen: false };
 
-		parsedData.datasets.forEach( ( dataset, index ) => {
+		parsedData.datasets.forEach( ( dataset ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 6 );
+				dataset.data = randomValues( 4, 1, 10 );
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				dataset.borderColor = themeColors[ index ];
-				dataset.pointBackgroundColor = themeColors[ index ];
-				dataset.backgroundColor = hex2rgba( themeColors[ index ], 0.6 );
+				const themeColors = randomColors( dataset.data.length );
+				dataset.borderColor = [];
+				dataset.backgroundColor = [];
+				dataset.data.forEach( ( data, index ) => {
+					dataset.borderColor.push( themeColors[ index ] );
+					dataset.backgroundColor.push( themeColors[ index ] );
+				} );
 			}
 		} );
 
 		setAttributes( {
-			chartType: 'line',
+			chartType: 'pie',
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 		} );
@@ -88,7 +91,7 @@ export default class Edit extends Component {
 					<div className="wrapper">
 						<RichText
 							tagName="h3"
-							placeholder={ __( 'Line Chart' ) }
+							placeholder={ __( 'Pie Chart' ) }
 							value={ title }
 							allowedFormats={ [] }
 							withoutInteractiveFormatting={ true }
@@ -96,7 +99,7 @@ export default class Edit extends Component {
 						/>
 						{ ! this.state.editorOpen && (
 							<div className="chart">
-								<Line id={ blockId } data={ parsedData } options={ parsedOptions } />
+								<Pie id={ blockId } data={ parsedData } options={ parsedOptions } />
 							</div>
 						) }
 						{ this.state.editorOpen && (

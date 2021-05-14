@@ -1,5 +1,5 @@
 /**
- * BLOCK: Pie Chart
+ * BLOCK: Bar Chart
  */
 
 /**
@@ -22,11 +22,11 @@ import { Edit, Save } from './components';
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'hello-charts/block-pie', {
-	title: __( 'Pie Chart' ),
-	icon: 'chart-pie',
+registerBlockType( 'hello-charts/block-bar', {
+	title: __( 'Bar Chart' ),
+	icon: 'chart-bar',
 	category: 'charts',
-	keywords: [ __( 'graph' ), __( 'doughnut' ), __( 'donut' ) ],
+	keywords: [ __( 'graph' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',
@@ -42,12 +42,11 @@ registerBlockType( 'hello-charts/block-pie', {
 		chartData: {
 			type: 'string',
 			default: JSON.stringify( {
-				labels: [ 'A', 'B', 'C', 'D' ],
+				labels: [ '1', '2', '3', '4', '5', '6', '7', '8' ],
 				datasets: [
 					{
-						label: 'Data',
+						label: 'A',
 						data: [ 'generate' ],
-						cutout: '0%',
 					},
 				],
 			} ),
@@ -58,9 +57,21 @@ registerBlockType( 'hello-charts/block-pie', {
 				animation: false,
 				plugins: {
 					legend: {
-						display: true,
+						display: false,
 						position: 'top',
 						align: 'center',
+					},
+				},
+				scales: {
+					x: {
+						grid: {
+							display: true,
+						},
+					},
+					y: {
+						grid: {
+							display: true,
+						},
 					},
 				},
 			} ),
@@ -77,4 +88,3 @@ registerBlockType( 'hello-charts/block-pie', {
 		return <Save { ...props } />;
 	},
 } );
-
