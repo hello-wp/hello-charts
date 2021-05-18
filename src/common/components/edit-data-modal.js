@@ -108,6 +108,7 @@ export default class EditDataModal extends Component {
 							<th key="-1" className="title hello-charts-table-th"></th>
 							{ parsedData.datasets.map( ( dataset, index ) => (
 								<th
+									className="hello-charts-table-th"
 									key={ index }
 									style={ { backgroundColor: dataset.backgroundColor } }
 								>
