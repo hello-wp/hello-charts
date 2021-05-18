@@ -38,11 +38,11 @@ export default class ChartStyles extends Component {
 			const options = JSON.parse( chartOptions );
 
 			if ( 'x' === axis ) {
-				options.scales.xAxes[ 0 ].gridLines.display = state;
+				options.scales.x.grid.display = state;
 			}
 
 			if ( 'y' === axis ) {
-				options.scales.yAxes[ 0 ].gridLines.display = state;
+				options.scales.y.grid.display = state;
 			}
 
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
@@ -80,14 +80,14 @@ export default class ChartStyles extends Component {
 				<ToggleControl
 					label="Show X Axis Grid Lines"
 					checked={
-						parsedOptions.scales.xAxes[ 0 ].gridLines.display
+						parsedOptions.scales.x.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'x' ) }
 				/>
 				<ToggleControl
 					label="Show Y Axis Grid Lines"
 					checked={
-						parsedOptions.scales.yAxes[ 0 ].gridLines.display
+						parsedOptions.scales.y.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
 				/>

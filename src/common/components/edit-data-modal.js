@@ -1,7 +1,7 @@
 /**
  * Helpers.
  */
-import { hex2rgba, randomColor } from '../helpers';
+import { hex2rgba, randomColors } from '../helpers';
 
 /**
  * WordPress dependencies.
@@ -9,7 +9,6 @@ import { hex2rgba, randomColor } from '../helpers';
 const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
-	__experimentalNumberControl,
 	Button,
 	DropdownMenu,
 	Flex,
@@ -19,12 +18,6 @@ const {
 	Modal,
 } = wp.components;
 const { RichText } = wp.blockEditor;
-
-let { NumberControl } = wp.components;
-
-if ( typeof NumberControl === 'undefined' ) {
-	NumberControl = __experimentalNumberControl;
-}
 
 export default class EditDataModal extends Component {
 	render() {
@@ -64,7 +57,7 @@ export default class EditDataModal extends Component {
 		function newDataset() {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
-			const color = randomColor();
+			const color = randomColors( 1 ).shift();
 			const dataset = { ...data.datasets[ 0 ] };
 
 			dataset.label = __( 'New Dataset' );
@@ -164,7 +157,11 @@ export default class EditDataModal extends Component {
 								</th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
 									<td className="hello-charts-table-cell" key={ `${ row }-${ index }` }>
-										<input type="number"></input>
+										<input
+											type="number"
+											value={ parsedData.datasets[ index ].data[ row ] }
+											onChange={ ( event ) => updateData( event.target.value, index, row ) }
+										/>
 									</td>
 								) ) }
 								<td className="disabled hello-charts-delete-row-cell">

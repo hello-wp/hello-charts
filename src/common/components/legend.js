@@ -19,19 +19,19 @@ export default class Legend extends Component {
 
 		function updateShowLegend( state ) {
 			const options = JSON.parse( chartOptions );
-			options.legend.display = state;
+			options.plugins.legend.display = state;
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
 		function updateLegendPosition( position ) {
 			const options = JSON.parse( chartOptions );
-			options.legend.position = position;
+			options.plugins.legend.position = position;
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
 		function updateLegendAlign( align ) {
 			const options = JSON.parse( chartOptions );
-			options.legend.align = align;
+			options.plugins.legend.align = align;
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
@@ -39,13 +39,13 @@ export default class Legend extends Component {
 			<PanelBody title="Legend" initialOpen={ false }>
 				<ToggleControl
 					label="Show Legend"
-					checked={ parsedOptions.legend.display }
+					checked={ parsedOptions.plugins.legend.display }
 					onChange={ ( state ) => updateShowLegend( state ) }
 				/>
-				{ parsedOptions.legend.display && (
+				{ parsedOptions.plugins.legend.display && (
 					<SelectControl
 						label="Legend Position"
-						value={ parsedOptions.legend.position }
+						value={ parsedOptions.plugins.legend.position }
 						options={ [
 							{ label: 'Top', value: 'top' },
 							{ label: 'Left', value: 'left' },
@@ -57,10 +57,10 @@ export default class Legend extends Component {
 						}
 					/>
 				) }
-				{ parsedOptions.legend.display && (
+				{ parsedOptions.plugins.legend.display && (
 					<SelectControl
 						label="Legend Align"
-						value={ parsedOptions.legend.align }
+						value={ parsedOptions.plugins.legend.align }
 						options={ [
 							{ label: 'Start', value: 'start' },
 							{ label: 'Center', value: 'center' },

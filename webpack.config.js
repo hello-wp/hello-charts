@@ -18,8 +18,11 @@ module.exports = {
 		filename: '[name].js',
 	},
 	externals: {
-		// Prevents an editor crash. See https://github.com/WordPress/gutenberg/issues/4043#issuecomment-633081315.
-		'lodash': 'lodash'
+		// Externalizing lodash prevents an editor crash.
+		// @see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-633081315.
+		'lodash': 'lodash',
+		'react': 'React',
+		'react-dom': 'ReactDOM'
 	},
 	optimization: {
 		splitChunks: {
@@ -70,15 +73,12 @@ module.exports = {
 			{
 				patterns: [
 					{
-						from: 'Chart.min.*',
-						to: './build/lib/chart.js/chart.min.[ext]',
+						from: 'chart.min.*',
+						to: './build/lib/chart.js/chart.min[ext]',
 						context: './node_modules/chart.js/dist/'
 					},
 				],
 			}
 		),
 	],
-	externals: {
-	   'lodash': 'lodash'
-	},
 };
