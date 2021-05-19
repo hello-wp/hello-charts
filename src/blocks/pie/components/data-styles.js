@@ -1,4 +1,9 @@
 /**
+ * Components and dependencies.
+ */
+import { randomColors } from '../../../common/helpers';
+
+/**
  * WordPress dependencies.
  */
 const { Component } = wp.element;
@@ -37,11 +42,24 @@ export default class DataStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function updateDatasetColor( color, dataset, row ) {
+		function updateSegmentColor( color, dataset, row ) {
 			const data = JSON.parse( chartData );
 			data.datasets[ dataset ].borderColor[ row ] = color;
 			data.datasets[ dataset ].backgroundColor[ row ] = color;
 			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function getColor( dataset, row ) {
+			// If there is no set color, pick one at random.
+			if ( ! ( row in parsedData.datasets[ dataset ].borderColor ) ) {
+				const data = JSON.parse( chartData );
+				const color = randomColors( 1 ).shift();
+				data.datasets[ dataset ].borderColor[ row ] = color;
+				data.datasets[ dataset ].backgroundColor[ row ] = color;
+				setAttributes( { chartData: JSON.stringify( data ) } );
+			}
+
+			return parsedData.datasets[ dataset ].borderColor[ row ];
 		}
 
 		return (
@@ -67,9 +85,9 @@ export default class DataStyles extends Component {
 										id={ `inspect-chart-pie-border-color-${ clientId }-${ row }` }
 									>
 										<ColorPalette
-											value={ parsedData.datasets[ this.state.activeDataset ].borderColor[ row ] }
+											value={ getColor( this.state.activeDataset, row ) }
 											clearable={ false }
-											onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset, row ) }
+											onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
 										/>
 									</BaseControl>
 								) ) }

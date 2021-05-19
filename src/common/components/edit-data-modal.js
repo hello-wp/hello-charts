@@ -50,15 +50,6 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function newRow() {
-			const data = JSON.parse( chartData );
-			data.labels.push( __( 'New Row' ) );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].data.push( 0 );
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
 		function newDataset() {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
@@ -69,6 +60,16 @@ export default class EditDataModal extends Component {
 			onNewDataset( dataset );
 
 			data.datasets.push( dataset );
+
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function newRow() {
+			const data = JSON.parse( chartData );
+			data.labels.push( __( 'New Row' ) );
+			data.datasets.forEach( ( dataset, index ) => {
+				data.datasets[ index ].data.push( 1 );
+			} );
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
