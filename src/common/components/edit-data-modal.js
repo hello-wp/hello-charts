@@ -101,7 +101,7 @@ export default class EditDataModal extends Component {
 							{ parsedData.datasets.map( ( dataset, index ) => (
 								<th
 									key={ index }
-									style={ { backgroundColor: dataset.backgroundColor } }
+									style={ typeof dataset.backgroundColor === 'string' ? { backgroundColor: dataset.backgroundColor } : {} }
 								>
 									<Flex>
 										<FlexBlock>
