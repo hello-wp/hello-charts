@@ -55,6 +55,16 @@ export default class Edit extends Component {
 		} );
 	}
 
+	datasetDefaults( data ) {
+		const colors = randomColors( data.labels.length );
+
+		return {
+			label: __( 'New Dataset' ),
+			borderColor: colors,
+			backgroundColor: colors,
+		};
+	}
+
 	toggleEditor() {
 		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
 	}
@@ -103,7 +113,7 @@ export default class Edit extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
+							<EditDataModal toggleEditor={ this.toggleEditor } datasetDefaults={ this.datasetDefaults } { ...this.props } />
 						) }
 					</div>
 				</div>

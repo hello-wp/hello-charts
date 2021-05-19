@@ -52,6 +52,17 @@ export default class Edit extends Component {
 		} );
 	}
 
+	datasetDefaults() {
+		const color = randomColors( 1 ).shift();
+
+		return {
+			label: __( 'New Dataset' ),
+			borderColor: color,
+			pointBackgroundColor: color,
+			backgroundColor: hex2rgba( color, 0.6 ),
+		};
+	}
+
 	toggleEditor() {
 		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
 	}
@@ -72,6 +83,7 @@ export default class Edit extends Component {
 		const parsedOptions = JSON.parse( chartOptions );
 
 		this.toggleEditor = this.toggleEditor.bind( this );
+		this.datasetDefaults = this.datasetDefaults.bind( this );
 
 		return (
 			<>
@@ -100,7 +112,7 @@ export default class Edit extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
+							<EditDataModal toggleEditor={ this.toggleEditor } datasetDefaults={ this.datasetDefaults } { ...this.props } />
 						) }
 					</div>
 				</div>
