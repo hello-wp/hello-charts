@@ -29,20 +29,17 @@ export default class Edit extends Component {
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
+		const themeColors = randomColors( parsedData.datasets.length );
 
 		this.state = { editorOpen: false };
 
-		parsedData.datasets.forEach( ( dataset ) => {
+		parsedData.datasets.forEach( ( dataset, index ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
 				dataset.data = randomValues( 8 );
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				const themeColors = randomColors( dataset.data.length );
-				dataset.backgroundColor = [];
-				dataset.data.forEach( ( data, index ) => {
-					dataset.backgroundColor.push( themeColors[ index ] );
-				} );
+				dataset.backgroundColor = themeColors[ index ];
 			}
 		} );
 
