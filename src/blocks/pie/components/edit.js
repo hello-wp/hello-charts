@@ -55,14 +55,12 @@ export default class Edit extends Component {
 		} );
 	}
 
-	datasetDefaults( data ) {
-		const colors = randomColors( data.labels.length );
+	onNewDataset( dataset ) {
+		const colors = randomColors( dataset.data.length );
 
-		return {
-			label: __( 'New Dataset' ),
-			borderColor: colors,
-			backgroundColor: colors,
-		};
+		dataset.label = __( 'New Dataset' );
+		dataset.borderColor = colors;
+		dataset.backgroundColor = colors;
 	}
 
 	toggleEditor() {
@@ -113,7 +111,7 @@ export default class Edit extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } datasetDefaults={ this.datasetDefaults } { ...this.props } />
+							<EditDataModal toggleEditor={ this.toggleEditor } onNewDataset={ this.onNewDataset } { ...this.props } />
 						) }
 					</div>
 				</div>

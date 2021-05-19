@@ -22,7 +22,7 @@ export default class EditDataModal extends Component {
 			},
 			setAttributes,
 			toggleEditor,
-			datasetDefaults,
+			onNewDataset,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -62,10 +62,11 @@ export default class EditDataModal extends Component {
 		function newDataset() {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
-			const defaults = datasetDefaults( data );
-			const dataset = { ...data.datasets[ 0 ], ...defaults };
+			const dataset = { ...data.datasets[ 0 ] };
 
 			dataset.data = new Array( rows ).fill( 1 );
+
+			onNewDataset( dataset );
 
 			data.datasets.push( dataset );
 
