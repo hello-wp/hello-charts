@@ -140,7 +140,7 @@ export default class EditDataModal extends Component {
 								</th>
 							) ) }
 							<th key="new" className="new hello-charts-table-th">
-								<Button onClick={ () => newDataset() } label={ __( 'New Dataset' ) }><Icon icon="table-col-after" /></Button>
+								<Button className="hello-charts-add-col-button" onClick={ () => newDataset() } label={ __( 'New Dataset' ) }><Icon icon="table-col-after" /></Button>
 							</th>
 						</tr>
 					</thead>
@@ -181,14 +181,9 @@ export default class EditDataModal extends Component {
 								</td>
 							</tr>
 						) ) }
-						<tr>
-							<td className="new hello-charts-table-th">
-								<Button onClick={ () => newRow() } label={ __( 'New Row' ) }><Icon icon="table-row-after" /></Button>
-							</td>
-							<td className="disabled" colSpan={ parsedData.datasets.length + 1 }></td>
-						</tr>
 					</tbody>
 				</table>
+				<Button className="hello-charts-add-row-button" onClick={ () => newRow() } label={ __( 'New Row' ) }><Icon icon="table-row-after" /></Button>
 			</Modal>
 		);
 	}
