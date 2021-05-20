@@ -55,6 +55,7 @@ registerBlockType( 'hello-charts/block-bar', {
 			type: 'string',
 			default: JSON.stringify( {
 				animation: false,
+				indexAxis: 'x',
 				plugins: {
 					legend: {
 						display: false,
