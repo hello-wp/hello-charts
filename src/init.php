@@ -30,7 +30,7 @@ function hello_charts_block_categories( $categories ) {
 		]
 	);
 }
-add_filter( 'block_categories_all', 'hello_charts_block_categories' );
+add_filter( 'block_categories', 'hello_charts_block_categories' );
 
 /**
  * Enqueue Gutenberg block assets for both frontend + backend.

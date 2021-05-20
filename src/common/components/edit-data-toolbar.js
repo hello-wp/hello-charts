@@ -6,6 +6,7 @@ const { Component } = wp.element;
 const {
 	Toolbar,
 	ToolbarButton,
+	ToolbarGroup,
 } = wp.components;
 
 export default class EditDataToolbar extends Component {
@@ -14,11 +15,13 @@ export default class EditDataToolbar extends Component {
 
 		return (
 			<Toolbar>
-				<ToolbarButton
-					icon="editor-table"
-					label={ __( 'Edit Chart Data' ) }
-					onClick={ toggleEditor }
-				/>
+				<ToolbarGroup className="edit-data-toolbar" label={ __( 'Chart Options' ) }>
+					<ToolbarButton
+						icon="editor-table"
+						label={ __( 'Edit Chart Data' ) }
+						onClick={ toggleEditor }
+					/>
+				</ToolbarGroup>
 			</Toolbar>
 		);
 	}
