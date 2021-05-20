@@ -12,3 +12,4 @@
 import './blocks/bar';
 import './blocks/line';
 import './blocks/pie';
+import './blocks/radar';
