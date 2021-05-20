@@ -104,7 +104,6 @@ export default class EditDataModal extends Component {
 								<th
 									className="hello-charts-table-th"
 									key={ index }
-									style={ typeof dataset.backgroundColor === 'string' ? { backgroundColor: dataset.backgroundColor } : {} }
 								>
 									<Flex>
 										<FlexBlock>
