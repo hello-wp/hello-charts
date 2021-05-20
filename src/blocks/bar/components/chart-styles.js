@@ -1,9 +1,11 @@
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
+	SelectControl,
 	ToggleControl,
 } = wp.components;
 
@@ -15,6 +17,12 @@ export default class ChartStyles extends Component {
 		} = this.props;
 
 		const parsedOptions = JSON.parse( chartOptions );
+
+		function updateIndexAxis( axis ) {
+			const options = JSON.parse( chartOptions );
+			options.indexAxis = axis;
+			setAttributes( { chartOptions: JSON.stringify( options ) } );
+		}
 
 		function updateShowGridLines( state, axis ) {
 			const options = JSON.parse( chartOptions );
@@ -32,6 +40,15 @@ export default class ChartStyles extends Component {
 
 		return (
 			<PanelBody title="Chart Styles" initialOpen={ true }>
+				<SelectControl
+					label={ __( 'Bar Direction' ) }
+					value={ parsedOptions.indexAxis }
+					onChange={ ( axis ) => updateIndexAxis( axis ) }
+					options={ [
+						{ label: __( 'Vertical' ), value: 'x' },
+						{ label: __( 'Horizontal' ), value: 'y' },
+					] }
+				/>
 				<ToggleControl
 					label="Show X Axis Grid Lines"
 					checked={
