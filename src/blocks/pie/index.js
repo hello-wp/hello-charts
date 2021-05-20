@@ -45,7 +45,7 @@ registerBlockType( 'hello-charts/block-pie', {
 				labels: [ 'A', 'B', 'C', 'D' ],
 				datasets: [
 					{
-						label: 'Data',
+						label: 'Dataset',
 						data: [ 'generate' ],
 						cutout: '0%',
 					},

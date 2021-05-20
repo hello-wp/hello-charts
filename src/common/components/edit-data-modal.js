@@ -1,9 +1,4 @@
 /**
- * Helpers.
- */
-import { hex2rgba, randomColors } from '../helpers';
-
-/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -27,6 +22,7 @@ export default class EditDataModal extends Component {
 			},
 			setAttributes,
 			toggleEditor,
+			onNewDataset,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -57,14 +53,11 @@ export default class EditDataModal extends Component {
 		function newDataset() {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
-			const color = randomColors( 1 ).shift();
 			const dataset = { ...data.datasets[ 0 ] };
 
-			dataset.label = __( 'New Dataset' );
-			dataset.data = new Array( rows ).fill( 0 );
-			dataset.borderColor = color;
-			dataset.pointBackgroundColor = color;
-			dataset.backgroundColor = hex2rgba( color, 0.6 );
+			dataset.data = new Array( rows ).fill( 1 );
+
+			onNewDataset( dataset );
 
 			data.datasets.push( dataset );
 
@@ -75,8 +68,9 @@ export default class EditDataModal extends Component {
 			const data = JSON.parse( chartData );
 			data.labels.push( __( 'New Row' ) );
 			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].data.push( 0 );
+				data.datasets[ index ].data.push( 1 );
 			} );
+
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
@@ -110,7 +104,7 @@ export default class EditDataModal extends Component {
 								<th
 									className="hello-charts-table-th"
 									key={ index }
-									style={ { backgroundColor: dataset.backgroundColor } }
+									style={ typeof dataset.backgroundColor === 'string' ? { backgroundColor: dataset.backgroundColor } : {} }
 								>
 									<Flex>
 										<FlexBlock>

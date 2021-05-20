@@ -39,9 +39,7 @@ export default class DataStyles extends Component {
 
 		function updateDatasetColor( color, index ) {
 			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset ) => {
-				dataset.backgroundColor[ index ] = color;
-			} );
+			data.datasets[ index ].backgroundColor = color;
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 

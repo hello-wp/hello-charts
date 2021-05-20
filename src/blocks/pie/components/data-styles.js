@@ -1,7 +1,7 @@
 /**
  * Components and dependencies.
  */
-import { hex2rgba } from '../../../common/helpers';
+import { randomColors } from '../../../common/helpers';
 
 /**
  * WordPress dependencies.
@@ -42,12 +42,24 @@ export default class DataStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function updateDatasetColor( color, index ) {
+		function updateSegmentColor( color, dataset, row ) {
 			const data = JSON.parse( chartData );
-			data.datasets[ index ].borderColor = color;
-			data.datasets[ index ].pointBackgroundColor = color;
-			data.datasets[ index ].backgroundColor = hex2rgba( color, 0.6 );
+			data.datasets[ dataset ].borderColor[ row ] = color;
+			data.datasets[ dataset ].backgroundColor[ row ] = color;
 			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function getColor( dataset, row ) {
+			// If there is no set color, pick one at random.
+			if ( ! ( row in parsedData.datasets[ dataset ].borderColor ) ) {
+				const data = JSON.parse( chartData );
+				const color = randomColors( 1 ).shift();
+				data.datasets[ dataset ].borderColor[ row ] = color;
+				data.datasets[ dataset ].backgroundColor[ row ] = color;
+				setAttributes( { chartData: JSON.stringify( data ) } );
+			}
+
+			return parsedData.datasets[ dataset ].borderColor[ row ];
 		}
 
 		return (
@@ -64,16 +76,23 @@ export default class DataStyles extends Component {
 						</Flex>
 					</CardHeader>
 					<CardBody>
-						<BaseControl
-							label="Color"
-							id={ `inspect-chart-pie-border-color-${ clientId }` }
-						>
-							<ColorPalette
-								value={ parsedData.datasets[ this.state.activeDataset ].borderColor }
-								clearable={ false }
-								onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
-							/>
-						</BaseControl>
+						{ parsedData.datasets[ this.state.activeDataset ].borderColor && (
+							<>
+								{ parsedData.labels.map( ( label, row ) => (
+									<BaseControl
+										key={ row }
+										label={ label + ' Color' }
+										id={ `inspect-chart-pie-border-color-${ clientId }-${ row }` }
+									>
+										<ColorPalette
+											value={ getColor( this.state.activeDataset, row ) }
+											clearable={ false }
+											onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
+										/>
+									</BaseControl>
+								) ) }
+							</>
+						) }
 					</CardBody>
 				</Card>
 				<Flex>

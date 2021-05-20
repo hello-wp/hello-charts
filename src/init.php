@@ -160,4 +160,6 @@ function hello_charts_block_render( $block_content, $block ) {
 
 	return $block_content;
 }
+add_filter( 'render_block_hello-charts/block-bar', 'hello_charts_block_render', 10, 2 );
 add_filter( 'render_block_hello-charts/block-line', 'hello_charts_block_render', 10, 2 );
+add_filter( 'render_block_hello-charts/block-pie', 'hello_charts_block_render', 10, 2 );
