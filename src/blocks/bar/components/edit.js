@@ -29,20 +29,17 @@ export default class Edit extends Component {
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
+		const themeColors = randomColors( parsedData.datasets.length );
 
 		this.state = { editorOpen: false };
 
-		parsedData.datasets.forEach( ( dataset ) => {
+		parsedData.datasets.forEach( ( dataset, index ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
 				dataset.data = randomValues( 8 );
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				const themeColors = randomColors( dataset.data.length );
-				dataset.backgroundColor = [];
-				dataset.data.forEach( ( data, index ) => {
-					dataset.backgroundColor.push( themeColors[ index ] );
-				} );
+				dataset.backgroundColor = themeColors[ index ];
 			}
 		} );
 
@@ -51,6 +48,13 @@ export default class Edit extends Component {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 		} );
+	}
+
+	onNewDataset( dataset ) {
+		const color = randomColors( 1 ).shift();
+
+		dataset.label = __( 'New Dataset' );
+		dataset.backgroundColor = color;
 	}
 
 	toggleEditor() {
@@ -73,6 +77,7 @@ export default class Edit extends Component {
 		const parsedOptions = JSON.parse( chartOptions );
 
 		this.toggleEditor = this.toggleEditor.bind( this );
+		this.onNewDataset = this.onNewDataset.bind( this );
 
 		return (
 			<>
@@ -101,7 +106,7 @@ export default class Edit extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
+							<EditDataModal toggleEditor={ this.toggleEditor } onNewDataset={ this.onNewDataset } { ...this.props } />
 						) }
 					</div>
 				</div>
