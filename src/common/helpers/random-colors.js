@@ -1,3 +1,5 @@
+/* global helloCharts */
+
 /**
  * Chooses a random theme colors.
  *
@@ -15,20 +17,25 @@ const randomColors = ( length ) => {
 		'white',
 	];
 
-	const settings = wp.data.select( 'core/block-editor' ).getSettings();
+	// Retrieve the default WordPress colors.
+	let colorsObject = wp.data.select( 'core/block-editor' ).getSettings().colors;
 
-	// If the theme doesn't have any defined colors, just return black.
-	if ( ! settings.hasOwnProperty( 'colors' ) ) {
-		return new Array( length ).fill( '#000000' );
+	// Use the theme colours instead, if they're defined.
+	if (
+		'undefined' !== typeof helloCharts &&
+		helloCharts.hasOwnProperty( 'themeColors' ) &&
+		helloCharts.themeColors[ 0 ].length > 0
+	) {
+		colorsObject = helloCharts.themeColors[ 0 ];
 	}
 
 	// Remove boring colors, like black & white.
-	const themeColors = settings.colors.filter(
+	const filteredColors = colorsObject.filter(
 		( color ) => ! boringColors.find( ( boring ) => boring === color.slug )
 	);
 
 	// Get an array of color values only, without names or slugs.
-	let colorValues = themeColors.map( ( color ) => ( color.color ) );
+	let colorValues = filteredColors.map( ( color ) => ( color.color ) );
 
 	// Shuffle the colors.
 	colorValues = colorValues.sort( () => Math.random() - 0.5 );
