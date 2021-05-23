@@ -32,6 +32,15 @@
 
     .components-modal__header {
         margin: 0;
+
+		h1 {
+			flex-grow: 1;
+			line-height: 36px;
+
+			button {
+				float: right;
+			}
+		}
     }
 
     table {
