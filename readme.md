@@ -5,7 +5,6 @@ Hello charts is a WordPress plugin that makes it super easy to add data rich cha
 The plugin is designed and built to be "block editor first", so that your chart creation experience, lives right within your native WordPress content creation experience.
 For those that are embracing the block editor (aka Gutenberg), this plugin "just feels right"!
 
-
 ## Multiple Chart Types
 
 Content creator can choose for four different chart types, right from within the block editor. These chart types are:
@@ -14,7 +13,6 @@ Content creator can choose for four different chart types, right from within the
 - Bar (and column) chart
 - Line chart
 - Radio chart
-
 
 ## Easy data entry
 
@@ -35,34 +33,21 @@ GPLv3
 
 ## Getting Started
 
-  
-
 - Clone this repository into your `wp-content/plugins` folder
-
 - Install Composer dependencies with `composer install`
-
 - Install npm dependencies with `npm install`
-
 - Build the project with `npm run build`
 
-  
-
 ## Contributing
-
-  
 
 ### 👉 `npm run dev`
 
 - Use to compile and run the block in development mode.
-
 - Watches for any changes and reports back any errors in your code.
-
-  
 
 ### 👉 `npm run build`
 
 - Use to build production code for your block inside `dist` folder.
-
 - Runs once and reports back the gzip file sizes of the produced code.
 
 You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
