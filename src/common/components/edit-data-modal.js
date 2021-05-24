@@ -91,10 +91,16 @@ export default class EditDataModal extends Component {
 
 		return (
 			<Modal
-				title={ __( 'Edit Chart Data' ) }
+				title={ (
+					<>
+						{ __( 'Edit Chart Data' ) }
+						<Button isPrimary className="data-editor-done" onClick={ toggleEditor }>{ __( 'Done' ) }</Button>
+					</>
+				) }
 				className="hello-charts-data-editor"
 				onRequestClose={ toggleEditor }
-				shouldCloseOnClickOutside={ false }
+				shouldCloseOnClickOutside={ true }
+				isDismissible={ false }
 			>
 				<table>
 					<thead>
