@@ -42,6 +42,7 @@ registerBlockType( 'hello-charts/block-line', {
 		chartData: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				labels: [ '1', '2', '3', '4', '5', '6' ],
 				datasets: [
 					{
@@ -72,6 +73,7 @@ registerBlockType( 'hello-charts/block-line', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				animation: false,
 				plugins: {
 					legend: {
