@@ -10,6 +10,8 @@ const {
 	FlexBlock,
 	FlexItem,
 	Icon,
+	MenuGroup,
+	MenuItem,
 	Modal,
 } = wp.components;
 const { RichText } = wp.blockEditor;
@@ -89,6 +91,22 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
+		/**
+		 * This is tied to the onBlur event of MenuItems inside DropDownMenus.
+		 * This workaround is needed due to a bug affecting DropDownMenus.
+		 * The default behaviour is to hide the DropDown's Popover when it
+		 * loses focus, but this doesn't work in a Modal.
+		 *
+		 * @param {Event}			event	The triggering event.
+		 * @param {function():void}	close	The callback function.
+		 * @see https://github.com/WordPress/gutenberg/issues/32128
+		 */
+		function maybeClose( event, close ) {
+			if ( 'menuitem' !== event.relatedTarget.getAttribute( 'role' ) ) {
+				setTimeout( close, 100 );
+			}
+		}
+
 		return (
 			<Modal
 				title={ (
@@ -125,15 +143,19 @@ export default class EditDataModal extends Component {
 											<DropdownMenu
 												icon="ellipsis"
 												label={ __( 'Dataset Actions' ) }
-												controls={ [
-													{
-														title: __( 'Delete Dataset' ),
-														label: __( 'Delete Dataset' ),
-														icon: 'table-col-delete',
-														onClick: () => removeDataset( index ),
-													},
-												] }
-											/>
+											>
+												{ ( { onClose } ) => (
+													<MenuGroup>
+														<MenuItem
+															icon="table-col-delete"
+															onClick={ () => removeDataset( index ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Delete Dataset' ) }
+														</MenuItem>
+													</MenuGroup>
+												) }
+											</DropdownMenu>
 										</FlexItem>
 									</Flex>
 								</th>
@@ -168,15 +190,19 @@ export default class EditDataModal extends Component {
 									<DropdownMenu
 										icon="ellipsis"
 										label={ __( 'Row Actions' ) }
-										controls={ [
-											{
-												title: __( 'Delete Row' ),
-												label: __( 'Delete Row' ),
-												icon: 'table-row-delete',
-												onClick: () => removeRow( row ),
-											},
-										] }
-									/>
+									>
+										{ ( { onClose } ) => (
+											<MenuGroup>
+												<MenuItem
+													icon="table-row-delete"
+													onClick={ () => removeRow( row ) }
+													onBlur={ ( event ) => maybeClose( event, onClose ) }
+												>
+													{ __( 'Delete Row' ) }
+												</MenuItem>
+											</MenuGroup>
+										) }
+									</DropdownMenu>
 								</td>
 							</tr>
 						) ) }

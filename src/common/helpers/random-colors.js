@@ -1,7 +1,7 @@
 /**
  * Chooses a random theme colors.
  *
- * @param {number} length The number of random colors to return.
+ * @param {number}	length	The number of random colors to return.
  * @return {Array} The colors.
  */
 const randomColors = ( length ) => {

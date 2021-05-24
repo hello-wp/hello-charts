@@ -1,8 +1,8 @@
 /**
  * Converts a hex code to an RGBA value.
  *
- * @param {string} hex The hex code (works with and without a # at the beginning).
- * @param {number} a The alpha value of the RGBA output.
+ * @param {string}	hex	The hex code (works with and without a # at the beginning).
+ * @param {number}	a	The alpha value of the RGBA output.
  * @return {string} An RGBA value.
  */
 const hex2rgba = ( hex, a ) => {
