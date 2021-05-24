@@ -124,7 +124,7 @@ add_action( 'init', 'hello_charts_block_assets' );
  * @param array  $block         The full block, including name and attributes.
  * @return string Modified block content.
  */
-function hello_charts_block_render( $block_content, $block ) {
+function hello_charts_render_block( $block_content, $block ) {
 	if ( is_admin() ) {
 		return $block_content;
 	}
@@ -162,7 +162,8 @@ function hello_charts_block_render( $block_content, $block ) {
 
 	return $block_content;
 }
-add_filter( 'render_block_hello-charts/block-bar', 'hello_charts_block_render', 10, 2 );
-add_filter( 'render_block_hello-charts/block-line', 'hello_charts_block_render', 10, 2 );
-add_filter( 'render_block_hello-charts/block-pie', 'hello_charts_block_render', 10, 2 );
-add_filter( 'render_block_hello-charts/block-radar', 'hello_charts_block_render', 10, 2 );
+add_filter( 'render_block_hello-charts/block-bar', 'hello_charts_render_block', 10, 2 );
+add_filter( 'render_block_hello-charts/block-line', 'hello_charts_render_block', 10, 2 );
+add_filter( 'render_block_hello-charts/block-pie', 'hello_charts_render_block', 10, 2 );
+add_filter( 'render_block_hello-charts/block-radar', 'hello_charts_render_block', 10, 2 );
+add_filter( 'render_block_hello-charts/block-radar', 'hello_charts_render_block', 10, 2 );

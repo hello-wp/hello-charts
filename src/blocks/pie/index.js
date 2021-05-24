@@ -42,6 +42,7 @@ registerBlockType( 'hello-charts/block-pie', {
 		chartData: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				labels: [ 'A', 'B', 'C', 'D' ],
 				datasets: [
 					{
@@ -55,6 +56,7 @@ registerBlockType( 'hello-charts/block-pie', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				animation: false,
 				plugins: {
 					legend: {

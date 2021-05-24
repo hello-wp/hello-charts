@@ -42,6 +42,7 @@ registerBlockType( 'hello-charts/block-radar', {
 		chartData: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ],
 				datasets: [
 					{
@@ -61,6 +62,7 @@ registerBlockType( 'hello-charts/block-radar', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				animation: false,
 				plugins: {
 					legend: {

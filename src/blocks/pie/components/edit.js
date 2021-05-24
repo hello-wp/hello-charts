@@ -23,14 +23,21 @@ export default class Edit extends Component {
 
 		// Setup the attributes
 		const {
-			attributes: { chartData },
+			attributes: {
+				chartData,
+				chartOptions,
+			},
 			clientId,
 			setAttributes,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
+		const parsedOptions = JSON.parse( chartOptions );
 
 		this.state = { editorOpen: false };
+
+		parsedData.init = true;
+		parsedOptions.init = true;
 
 		parsedData.datasets.forEach( ( dataset ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
@@ -52,6 +59,7 @@ export default class Edit extends Component {
 			chartType: 'pie',
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
+			chartOptions: JSON.stringify( parsedOptions ),
 		} );
 	}
 

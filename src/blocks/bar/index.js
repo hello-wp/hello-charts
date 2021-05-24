@@ -42,6 +42,7 @@ registerBlockType( 'hello-charts/block-bar', {
 		chartData: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				labels: [ '1', '2', '3', '4', '5', '6', '7', '8' ],
 				datasets: [
 					{
@@ -54,6 +55,7 @@ registerBlockType( 'hello-charts/block-bar', {
 		chartOptions: {
 			type: 'string',
 			default: JSON.stringify( {
+				init: false,
 				animation: false,
 				indexAxis: 'x',
 				plugins: {
