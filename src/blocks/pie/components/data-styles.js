@@ -76,23 +76,19 @@ export default class DataStyles extends Component {
 						</Flex>
 					</CardHeader>
 					<CardBody>
-						{ parsedData.datasets[ this.state.activeDataset ].borderColor && (
-							<>
-								{ parsedData.labels.map( ( label, row ) => (
-									<BaseControl
-										key={ row }
-										label={ label + ' Color' }
-										id={ `inspect-chart-pie-border-color-${ clientId }-${ row }` }
-									>
-										<ColorPalette
-											value={ getColor( this.state.activeDataset, row ) }
-											clearable={ false }
-											onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
-										/>
-									</BaseControl>
-								) ) }
-							</>
-						) }
+						{ parsedData.labels.map( ( label, row ) => (
+							<BaseControl
+								key={ row }
+								label={ label + ' Color' }
+								id={ `inspect-chart-pie-border-color-${ clientId }-${ row }` }
+							>
+								<ColorPalette
+									value={ getColor( this.state.activeDataset, row ) }
+									clearable={ false }
+									onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
+								/>
+							</BaseControl>
+						) ) }
 					</CardBody>
 				</Card>
 				<Flex>
