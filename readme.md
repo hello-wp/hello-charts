@@ -22,7 +22,7 @@ Editing your chart's data is a breeze! Simply click the Edit Data button, and wo
 Visit [hellocharts.co](https://hellocharts.co) for more information, product demos, and user documentation.
 
 ## Support
-If you're a license holder, you can access support from our team at hellocharts.co/support
+If you're a license holder, you can access support from our team at [hellocharts.co/support](https://hellocharts.co/support).
 
 ## Social
 - Twitter: [@hellocharts](https://twitter.com/hellocharts) 
