@@ -70,37 +70,30 @@ export default class DataStyles extends Component {
 							</FlexBlock>
 						</Flex>
 					</CardHeader>
-					{ ( parsedData.datasets[ this.state.activeDataset ].pointRadius > 0 ||
-						parsedData.datasets[ this.state.activeDataset ].showLine ) && (
-						<CardBody>
-							{ parsedData.datasets[ this.state.activeDataset ].pointRadius > 0 && (
-								<SelectControl
-									label="Point Style"
-									value={ parsedData.datasets[ this.state.activeDataset ].pointStyle }
-									options={ [
-										{ label: 'Circle', value: 'circle' },
-										{ label: 'Rectangle', value: 'rect' },
-										{ label: 'Rounded Rectangle', value: 'rectRounded' },
-										{ label: 'Diamond', value: 'rectRot' },
-										{ label: 'Triangle', value: 'triangle' },
-									] }
-									onChange={ ( style ) => updateDatasetPointStyle( style, this.state.activeDataset ) }
-								/>
-							) }
-							{ parsedData.datasets[ this.state.activeDataset ].showLine && (
-								<BaseControl
-									label="Color"
-									id={ `inspect-chart-line-border-color-${ clientId }` }
-								>
-									<ColorPalette
-										value={ parsedData.datasets[ this.state.activeDataset ].borderColor }
-										clearable={ false }
-										onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
-									/>
-								</BaseControl>
-							) }
-						</CardBody>
-					) }
+					<CardBody>
+						<SelectControl
+							label="Point Style"
+							value={ parsedData.datasets[ this.state.activeDataset ].pointStyle }
+							options={ [
+								{ label: 'Circle', value: 'circle' },
+								{ label: 'Rectangle', value: 'rect' },
+								{ label: 'Rounded Rectangle', value: 'rectRounded' },
+								{ label: 'Diamond', value: 'rectRot' },
+								{ label: 'Triangle', value: 'triangle' },
+							] }
+							onChange={ ( style ) => updateDatasetPointStyle( style, this.state.activeDataset ) }
+						/>
+						<BaseControl
+							label="Color"
+							id={ `inspect-chart-line-border-color-${ clientId }` }
+						>
+							<ColorPalette
+								value={ parsedData.datasets[ this.state.activeDataset ].borderColor }
+								clearable={ false }
+								onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
+							/>
+						</BaseControl>
+					</CardBody>
 				</Card>
 				<Flex>
 					<FlexItem>
