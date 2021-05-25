@@ -13,7 +13,7 @@ Content creators can choose from four different chart types, right from within t
 - Line chart
 - Radio chart
 
-## Easy data entry
+## Easy Data Entry
 
 If adding a chart is easy, editing the data is a breeze! Simply click the data edit button work within a very familiar spreadsheet/table style environment. Add rows and columns to easily fine-tune your data-sets and convert your rich data in to easy-to-understand charts for your readers.
 
