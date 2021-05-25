@@ -6,7 +6,7 @@ The plugin is designed and built to be "block editor first", so that your chart 
 
 ## Multiple Chart Types
 
-Content creator can choose for four different chart types, right from within the block editor. These chart types are:
+Content creators can choose from four different chart types, right from within the block editor. These chart types are:
 
 - Pie chart
 - Bar (and column) chart
