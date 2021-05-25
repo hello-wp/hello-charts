@@ -3,7 +3,6 @@
 
 Hello charts is a WordPress plugin that makes it super easy to add data rich charts to your WordPress pages and posts.
 The plugin is designed and built to be "block editor first", so that your chart creation experience lives right within your native WordPress content creation flow.
-For those that are embracing the block editor (aka Gutenberg), this plugin "just feels right"!
 
 ## Multiple Chart Types
 
