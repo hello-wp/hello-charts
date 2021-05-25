@@ -5,7 +5,6 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { RichText } = wp.blockEditor;
 
@@ -19,7 +18,7 @@ export default class Save extends Component {
 
 		return (
 			<div className={ className }>
-				<RichText.Content tagName="h3" placeholder={ __( 'Radar Chart' ) } value={ title } />
+				<RichText.Content tagName="h3" className="chart-title" value={ title } />
 				<canvas id={ `chart-${ blockId }` }></canvas>
 			</div>
 		);
