@@ -91,6 +91,12 @@ function hello_charts_block_assets() {
 		true
 	);
 
+	wp_localize_script(
+		'hello-charts-block-js',
+		'helloCharts',
+		[ 'themeColors' => get_theme_support( 'editor-color-palette' ) ]
+	);
+
 	$block_type_args = [
 		'style'         => 'hello-charts-style-css',
 		'script'        => 'chart-js',

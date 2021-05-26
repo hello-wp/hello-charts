@@ -8,18 +8,23 @@
 .wp-block-hello-charts-block-line,
 .wp-block-hello-charts-block-pie,
 .wp-block-hello-charts-block-radar  {
-  background: white;
-  color: black;
-  margin: 0 auto;
-  text-align: center;
-  padding: 1px;
+	background: white;
+	color: black;
+	margin: 0 auto;
+	text-align: center;
+	padding: 1px;
 
-  .wrapper {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
+	.wrapper {
+		border: 1px solid #ddd;
+		border-radius: 4px;
+	}
 
-  canvas {
-    padding: 0 1em 0.5em;
-  }
+	canvas {
+		margin-bottom: 20px;
+	}
+
+	h3.chart-title {
+		margin-top: 1em;
+		margin-bottom: 0;
+	}
 }

@@ -62,9 +62,12 @@ registerBlockType( 'hello-charts/block-pie', {
 				plugins: {
 					legend: {
 						display: true,
-						position: 'top',
+						position: 'bottom',
 						align: 'center',
 					},
+				},
+				layout: {
+					padding: 20,
 				},
 			} ),
 		},

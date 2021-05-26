@@ -95,6 +95,9 @@ registerBlockType( 'hello-charts/block-line', {
 						},
 					},
 				},
+				layout: {
+					padding: 20,
+				},
 			} ),
 		},
 	},

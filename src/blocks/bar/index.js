@@ -78,6 +78,9 @@ registerBlockType( 'hello-charts/block-bar', {
 						},
 					},
 				},
+				layout: {
+					padding: 20,
+				},
 			} ),
 		},
 	},

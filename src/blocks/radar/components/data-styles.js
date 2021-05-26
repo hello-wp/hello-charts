@@ -71,20 +71,18 @@ export default class DataStyles extends Component {
 						</Flex>
 					</CardHeader>
 					<CardBody>
-						{ parsedData.datasets[ this.state.activeDataset ].pointRadius > 0 && (
-							<SelectControl
-								label="Point Style"
-								value={ parsedData.datasets[ this.state.activeDataset ].pointStyle }
-								options={ [
-									{ label: 'Circle', value: 'circle' },
-									{ label: 'Rectangle', value: 'rect' },
-									{ label: 'Rounded Rectangle', value: 'rectRounded' },
-									{ label: 'Diamond', value: 'rectRot' },
-									{ label: 'Triangle', value: 'triangle' },
-								] }
-								onChange={ ( style ) => updateDatasetPointStyle( style, this.state.activeDataset ) }
-							/>
-						) }
+						<SelectControl
+							label="Point Style"
+							value={ parsedData.datasets[ this.state.activeDataset ].pointStyle }
+							options={ [
+								{ label: 'Circle', value: 'circle' },
+								{ label: 'Rectangle', value: 'rect' },
+								{ label: 'Rounded Rectangle', value: 'rectRounded' },
+								{ label: 'Diamond', value: 'rectRot' },
+								{ label: 'Triangle', value: 'triangle' },
+							] }
+							onChange={ ( style ) => updateDatasetPointStyle( style, this.state.activeDataset ) }
+						/>
 						<BaseControl
 							label="Color"
 							id={ `inspect-chart-line-border-color-${ clientId }` }

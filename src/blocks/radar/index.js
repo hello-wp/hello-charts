@@ -88,6 +88,9 @@ registerBlockType( 'hello-charts/block-radar', {
 						},
 					},
 				},
+				layout: {
+					padding: 20,
+				},
 			} ),
 		},
 	},

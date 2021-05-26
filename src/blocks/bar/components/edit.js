@@ -102,6 +102,7 @@ export default class Edit extends Component {
 					<div className="wrapper">
 						<RichText
 							tagName="h3"
+							className="chart-title"
 							placeholder={ __( 'Bar Chart' ) }
 							value={ title }
 							allowedFormats={ [] }
