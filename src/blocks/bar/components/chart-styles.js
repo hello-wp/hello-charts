@@ -39,25 +39,25 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title="Chart Styles" initialOpen={ true }>
+			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<SelectControl
-					label={ __( 'Bar Direction' ) }
+					label={ __( 'Bar Direction', 'hello-charts' ) }
 					value={ parsedOptions.indexAxis }
 					onChange={ ( axis ) => updateIndexAxis( axis ) }
 					options={ [
-						{ label: __( 'Vertical' ), value: 'x' },
-						{ label: __( 'Horizontal' ), value: 'y' },
+						{ label: __( 'Vertical', 'hello-charts' ), value: 'x' },
+						{ label: __( 'Horizontal', 'hello-charts' ), value: 'y' },
 					] }
 				/>
 				<ToggleControl
-					label="Show X Axis Grid Lines"
+					label={ __( 'Show X Axis Grid Lines', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.x.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'x' ) }
 				/>
 				<ToggleControl
-					label="Show Y Axis Grid Lines"
+					label={ __( 'Show Y Axis Grid Lines', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.y.grid.display
 					}

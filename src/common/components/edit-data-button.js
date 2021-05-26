@@ -18,10 +18,10 @@ export default class EditDataButton extends Component {
 				<CardBody className="edit-data-card-body">
 					<Button
 						isSecondary
-						label={ __( 'Toggle Data Editor' ) }
+						label={ __( 'Toggle Data Editor', 'hello-charts' ) }
 						onClick={ toggleEditor }
 					>
-						{ __( 'Edit Chart Data' ) }
+						{ __( 'Edit Chart Data', 'hello-charts' ) }
 					</Button>
 				</CardBody>
 			</Card>

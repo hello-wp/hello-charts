@@ -23,10 +23,10 @@ import { Edit, Save } from './components';
  *                             registered; otherwise `undefined`.
  */
 registerBlockType( 'hello-charts/block-line', {
-	title: __( 'Line Chart' ),
+	title: __( 'Line Chart', 'hello-charts' ),
 	icon: 'chart-line',
 	category: 'charts',
-	keywords: [ __( 'graph' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',
