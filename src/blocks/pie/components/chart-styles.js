@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
@@ -25,9 +26,9 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title="Chart Styles" initialOpen={ true }>
+			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<RangeControl
-					label="Cutout"
+					label={ __( 'Cutout', 'hello-charts' ) }
 					value={ parseInt( parsedData.datasets[ 0 ].cutout ) }
 					onChange={ ( cutout ) => updateCutout( cutout ) }
 					min={ 0 }

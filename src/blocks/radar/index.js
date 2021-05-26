@@ -23,10 +23,10 @@ import { Edit, Save } from './components';
  *                             registered; otherwise `undefined`.
  */
 registerBlockType( 'hello-charts/block-radar', {
-	title: __( 'Radar Chart' ),
+	title: __( 'Radar Chart', 'hello-charts' ),
 	icon: 'admin-site-alt3',
 	category: 'charts',
-	keywords: [ __( 'graph' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',
@@ -46,7 +46,7 @@ registerBlockType( 'hello-charts/block-radar', {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ],
 				datasets: [
 					{
-						label: 'Dataset',
+						label: __( 'Dataset', 'hello-charts' ),
 						fill: true,
 						borderWidth: 3,
 						pointRadius: 3,

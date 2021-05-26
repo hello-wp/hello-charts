@@ -66,7 +66,7 @@ export default class Edit extends Component {
 	onNewDataset( dataset ) {
 		const colors = randomColors( dataset.data.length );
 
-		dataset.label = __( 'New Dataset' );
+		dataset.label = __( 'New Dataset', 'hello-charts' );
 		dataset.borderColor = colors;
 		dataset.backgroundColor = colors;
 	}
@@ -108,7 +108,7 @@ export default class Edit extends Component {
 						<RichText
 							tagName="h3"
 							className="chart-title"
-							placeholder={ __( 'Pie Chart' ) }
+							placeholder={ __( 'Pie Chart', 'hello-charts' ) }
 							value={ title }
 							allowedFormats={ [] }
 							withoutInteractiveFormatting={ true }

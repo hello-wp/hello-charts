@@ -23,10 +23,10 @@ import { Edit, Save } from './components';
  *                             registered; otherwise `undefined`.
  */
 registerBlockType( 'hello-charts/block-pie', {
-	title: __( 'Pie Chart' ),
+	title: __( 'Pie Chart', 'hello-charts' ),
 	icon: 'chart-pie',
 	category: 'charts',
-	keywords: [ __( 'graph' ), __( 'doughnut' ), __( 'donut' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ), __( 'doughnut', 'hello-charts' ), __( 'donut', 'hello-charts' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',
@@ -46,7 +46,7 @@ registerBlockType( 'hello-charts/block-pie', {
 				labels: [ 'A', 'B', 'C', 'D' ],
 				datasets: [
 					{
-						label: 'Dataset',
+						label: __( 'Dataset', 'hello-charts' ),
 						data: [ 'generate' ],
 						cutout: '0%',
 					},

@@ -68,7 +68,7 @@ export default class EditDataModal extends Component {
 
 		function newRow() {
 			const data = JSON.parse( chartData );
-			data.labels.push( __( 'New Row' ) );
+			data.labels.push( __( 'New Row', 'hello-charts' ) );
 			data.datasets.forEach( ( dataset, index ) => {
 				data.datasets[ index ].data.push( 1 );
 			} );
@@ -111,8 +111,8 @@ export default class EditDataModal extends Component {
 			<Modal
 				title={ (
 					<>
-						{ __( 'Edit Chart Data' ) }
-						<Button isPrimary className="data-editor-done" onClick={ toggleEditor }>{ __( 'Done' ) }</Button>
+						{ __( 'Edit Chart Data', 'hello-charts' ) }
+						<Button isPrimary className="data-editor-done" onClick={ toggleEditor }>{ __( 'Done', 'hello-charts' ) }</Button>
 					</>
 				) }
 				className="hello-charts-data-editor"
@@ -142,7 +142,7 @@ export default class EditDataModal extends Component {
 										<FlexItem>
 											<DropdownMenu
 												icon="ellipsis"
-												label={ __( 'Dataset Actions' ) }
+												label={ __( 'Dataset Actions', 'hello-charts' ) }
 											>
 												{ ( { onClose } ) => (
 													<MenuGroup>
@@ -151,7 +151,7 @@ export default class EditDataModal extends Component {
 															onClick={ () => removeDataset( index ) }
 															onBlur={ ( event ) => maybeClose( event, onClose ) }
 														>
-															{ __( 'Delete Dataset' ) }
+															{ __( 'Delete Dataset', 'hello-charts' ) }
 														</MenuItem>
 													</MenuGroup>
 												) }
@@ -161,7 +161,7 @@ export default class EditDataModal extends Component {
 								</th>
 							) ) }
 							<th key="new" className="new hello-charts-table-th">
-								<Button className="hello-charts-add-col-button" onClick={ () => newDataset() } label={ __( 'New Dataset' ) }><Icon icon="table-col-after" /></Button>
+								<Button className="hello-charts-add-col-button" onClick={ () => newDataset() } label={ __( 'New Dataset', 'hello-charts' ) }><Icon icon="table-col-after" /></Button>
 							</th>
 						</tr>
 					</thead>
@@ -189,7 +189,7 @@ export default class EditDataModal extends Component {
 								<td className="disabled hello-charts-delete-row-cell">
 									<DropdownMenu
 										icon="ellipsis"
-										label={ __( 'Row Actions' ) }
+										label={ __( 'Row Actions', 'hello-charts' ) }
 									>
 										{ ( { onClose } ) => (
 											<MenuGroup>
@@ -198,7 +198,7 @@ export default class EditDataModal extends Component {
 													onClick={ () => removeRow( row ) }
 													onBlur={ ( event ) => maybeClose( event, onClose ) }
 												>
-													{ __( 'Delete Row' ) }
+													{ __( 'Delete Row', 'hello-charts' ) }
 												</MenuItem>
 											</MenuGroup>
 										) }
@@ -208,7 +208,7 @@ export default class EditDataModal extends Component {
 						) ) }
 					</tbody>
 				</table>
-				<Button className="hello-charts-add-row-button" onClick={ () => newRow() } label={ __( 'New Row' ) }><Icon icon="table-row-after" /></Button>
+				<Button className="hello-charts-add-row-button" onClick={ () => newRow() } label={ __( 'New Row', 'hello-charts' ) }><Icon icon="table-row-after" /></Button>
 			</Modal>
 		);
 	}
