@@ -12,6 +12,7 @@ const { registerBlockType } = wp.blocks;
  * Components and dependencies.
  */
 import { Edit, Save } from './components';
+import { icons } from '../../common/helpers';
 
 /**
  * Registers this as a block.
@@ -24,7 +25,7 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-pie', {
 	title: __( 'Pie Chart' ),
-	icon: 'chart-pie',
+	icon: icons.pie,
 	category: 'charts',
 	keywords: [ __( 'graph' ), __( 'doughnut' ), __( 'donut' ) ],
 	attributes: {

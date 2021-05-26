@@ -12,6 +12,7 @@ const { registerBlockType } = wp.blocks;
  * Components and dependencies.
  */
 import { Edit, Save } from './components';
+import { icons } from '../../common/helpers';
 
 /**
  * Registers this as a block.
@@ -24,7 +25,7 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-radar', {
 	title: __( 'Radar Chart' ),
-	icon: 'admin-site-alt3',
+	icon: icons.radar,
 	category: 'charts',
 	keywords: [ __( 'graph' ) ],
 	attributes: {
