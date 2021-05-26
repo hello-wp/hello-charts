@@ -27,4 +27,10 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: WordPress package linting (js, php, pkg-json) 
-        run: npm run lint
+
+      # Runs a set of commands using the runners shell
+      - name: WordPress package linting (js, php, pkg-json) 
+        run: |
+          npm install
+          composer install
+          npm run lint
