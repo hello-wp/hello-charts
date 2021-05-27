@@ -11,10 +11,8 @@ const { registerBlockType } = wp.blocks;
 /**
  * Components and dependencies.
  */
-import { ChartStyles, DataStyles } from './components';
-import { Pie } from 'react-chartjs-2';
-import { Edit, Save } from '../../common/components';
-import { randomColors, randomValues } from '../../common/helpers';
+import { Edit } from './components';
+import { Save } from '../../common/components';
 
 /**
  * Registers this as a block.
@@ -119,38 +117,7 @@ registerBlockType( 'hello-charts/block-pie', {
 
 	/* Render the block components. */
 	edit: ( props ) => {
-		const {
-			attributes: {
-				blockId,
-				chartData,
-				chartOptions,
-				height,
-				width,
-			},
-		} = props;
-
-		const parsedData = JSON.parse( chartData );
-		const parsedOptions = JSON.parse( chartOptions );
-
-		return (
-			<Edit
-				{ ...props }
-				ChartStyles={ ChartStyles }
-				DataStyles={ DataStyles }
-				chartType="pie"
-				maybeGenerateData={ maybeGenerateData }
-				onNewDataset={ onNewDataset }
-				titlePlaceholder={ __( 'Pie Chart', 'hello-charts' ) }
-			>
-				<Pie
-					height={ height }
-					width={ width }
-					id={ blockId }
-					data={ parsedData }
-					options={ parsedOptions }
-				/>
-			</Edit>
-		);
+		return <Edit { ...props } />;
 	},
 
 	/* Save the block markup. */
@@ -158,29 +125,3 @@ registerBlockType( 'hello-charts/block-pie', {
 		return <Save { ...props } />;
 	},
 } );
-
-const maybeGenerateData = ( datasets ) => {
-	datasets.forEach( ( dataset ) => {
-		if ( 'generate' === dataset.data[ 0 ] ) {
-			dataset.data = randomValues( 4, 1, 10 );
-		}
-
-		if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-			const themeColors = randomColors( dataset.data.length );
-			dataset.borderColor = [];
-			dataset.backgroundColor = [];
-			dataset.data.forEach( ( data, index ) => {
-				dataset.borderColor.push( themeColors[ index ] );
-				dataset.backgroundColor.push( themeColors[ index ] );
-			} );
-		}
-	} );
-};
-
-const onNewDataset = ( dataset ) => {
-	const colors = randomColors( dataset.data.length );
-
-	dataset.label = __( 'New Data Set', 'hello-charts' );
-	dataset.borderColor = colors;
-	dataset.backgroundColor = colors;
-};

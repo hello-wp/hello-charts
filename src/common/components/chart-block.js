@@ -15,7 +15,7 @@ import {
 const { Component } = wp.element;
 const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
 
-export default class Edit extends Component {
+export default class ChartBlock extends Component {
 	constructor( props ) {
 		super( props );
 
