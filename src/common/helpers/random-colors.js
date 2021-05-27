@@ -1,5 +1,3 @@
-/* global helloCharts */
-
 /**
  * Chooses a random theme colors.
  *
@@ -17,17 +15,8 @@ const randomColors = ( length ) => {
 		'white',
 	];
 
-	// Retrieve the default WordPress colors.
-	let colorsObject = wp.data.select( 'core/block-editor' ).getSettings().colors;
-
-	// Use the theme colours instead, if they're defined.
-	if (
-		'undefined' !== typeof helloCharts &&
-		helloCharts.hasOwnProperty( 'themeColors' ) &&
-		helloCharts.themeColors[ 0 ].length > 0
-	) {
-		colorsObject = helloCharts.themeColors[ 0 ];
-	}
+	// Retrieve the active color scheme.
+	const colorsObject = wp.data.select( 'core/block-editor' ).getSettings().colors;
 
 	// Remove boring colors, like black & white.
 	const filteredColors = colorsObject.filter(
