@@ -63,7 +63,7 @@ export default class Edit extends Component {
 	onNewDataset( dataset ) {
 		const color = randomColors( 1 ).shift();
 
-		dataset.label = __( 'New Dataset' );
+		dataset.label = __( 'New Data Set' );
 		dataset.borderColor = color;
 		dataset.pointBackgroundColor = color;
 		dataset.backgroundColor = hex2rgba( color, 0.6 );
@@ -76,10 +76,12 @@ export default class Edit extends Component {
 	render() {
 		const {
 			attributes: {
-				title,
 				blockId,
 				chartData,
 				chartOptions,
+				height,
+				title,
+				width,
 			},
 			className,
 			setAttributes,
@@ -115,7 +117,7 @@ export default class Edit extends Component {
 						/>
 						{ ! this.state.editorOpen && (
 							<div className="chart">
-								<Radar id={ blockId } data={ parsedData } options={ parsedOptions } />
+								<Radar height={ height } width={ width } id={ blockId } data={ parsedData } options={ parsedOptions } />
 							</div>
 						) }
 						{ this.state.editorOpen && (
