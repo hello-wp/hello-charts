@@ -72,7 +72,7 @@ export default class Edit extends Component {
 	onNewDataset( dataset ) {
 		const colors = randomColors( dataset.data.length );
 
-		dataset.label = __( 'New Dataset', 'hello-charts' );
+		dataset.label = __( 'New Data Set', 'hello-charts' );
 		dataset.borderColor = colors;
 		dataset.backgroundColor = colors;
 	}
@@ -84,11 +84,13 @@ export default class Edit extends Component {
 	render() {
 		const {
 			attributes: {
-				title,
 				blockId,
 				chartData,
 				chartOptions,
+				height,
 				showChartTitle,
+				title,
+				width,
 			},
 			className,
 			setAttributes,
@@ -126,7 +128,7 @@ export default class Edit extends Component {
 						) }
 						{ ! this.state.editorOpen && (
 							<div className="chart">
-								<Pie id={ blockId } data={ parsedData } options={ parsedOptions } />
+								<Pie height={ height } width={ width } id={ blockId } data={ parsedData } options={ parsedOptions } />
 							</div>
 						) }
 						{ this.state.editorOpen && (

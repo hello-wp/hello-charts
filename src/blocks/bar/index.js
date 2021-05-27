@@ -24,6 +24,7 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-bar', {
 	title: __( 'Bar Chart', 'hello-charts' ),
+	description: __( 'Use a Bar Chart to display your data in vertical (or horizontal) bars. Bar Charts are great for comparing data sets side by side.', 'hello-charts' ),
 	icon: 'chart-bar',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ) ],
@@ -39,6 +40,12 @@ registerBlockType( 'hello-charts/block-bar', {
 		showChartTitle: {
 			type: 'boolean',
 			default: true,
+		},
+		height: {
+			type: 'number',
+		},
+		width: {
+			type: 'number',
 		},
 		chartType: {
 			type: 'string',
@@ -83,6 +90,32 @@ registerBlockType( 'hello-charts/block-bar', {
 				},
 				layout: {
 					padding: 20,
+				},
+			} ),
+		},
+	},
+	example: {
+		attributes: {
+			title: __( 'Bar Chart', 'hello-charts' ),
+			height: 280,
+			width: 450,
+			chartData: JSON.stringify( {
+				labels: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun' ],
+				datasets: [
+					{
+						label: 'A',
+						data: [ 10, 19, 6, 3, 12, 15 ],
+						backgroundColor: '#0693e3',
+					},
+				],
+			} ),
+			chartOptions: JSON.stringify( {
+				animation: false,
+				responsive: false,
+				plugins: {
+					legend: {
+						display: false,
+					},
 				},
 			} ),
 		},
