@@ -11,7 +11,8 @@ const { registerBlockType } = wp.blocks;
 /**
  * Components and dependencies.
  */
-import { Edit, Save } from './components';
+import { Edit } from './components';
+import { Save } from '../../common/components';
 
 /**
  * Registers this as a block.
@@ -38,6 +39,10 @@ registerBlockType( 'hello-charts/block-radar', {
 			default: '',
 		},
 		showChartTitle: {
+			type: 'boolean',
+			default: true,
+		},
+		showChartBackground: {
 			type: 'boolean',
 			default: true,
 		},

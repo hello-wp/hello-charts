@@ -5,16 +5,17 @@
  */
 
 .wp-block-hello-charts  {
-	background: white;
 	color: black;
 	margin: 0 auto;
 	text-align: center;
 	padding: 1px;
 
 	.wrapper {
-		border: 1px solid #ddd;
-		border-radius: 4px;
 		padding-top: 24px;
+
+		&.has-chart-background {
+			background: white;
+		}
 	}
 
 	h3.chart-title {

@@ -11,7 +11,7 @@ const {
 export default class EditDataToolbar extends Component {
 	render() {
 		const {
-			attributes: { showChartTitle },
+			attributes: { showChartTitle, showChartBackground },
 			setAttributes,
 		} = this.props;
 
@@ -22,6 +22,13 @@ export default class EditDataToolbar extends Component {
 					label={ showChartTitle ? __( 'Hide Chart Title', 'hello-charts' ) : __( 'Show Chart Title', 'hello-charts' ) }
 					onClick={
 						() => setAttributes( { showChartTitle: showChartTitle ? false : true } )
+					}
+				/>
+				<ToolbarButton
+					icon="analytics"
+					label={ showChartBackground ? __( 'Hide Chart Background', 'hello-charts' ) : __( 'Show Chart Background', 'hello-charts' ) }
+					onClick={
+						() => setAttributes( { showChartBackground: showChartBackground ? false : true } )
 					}
 				/>
 			</ToolbarGroup>

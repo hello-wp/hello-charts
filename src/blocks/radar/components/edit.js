@@ -91,6 +91,7 @@ export default class Edit extends Component {
 				chartOptions,
 				height,
 				showChartTitle,
+				showChartBackground,
 				title,
 				width,
 			},
@@ -117,7 +118,7 @@ export default class Edit extends Component {
 					<ChartFormattingToolbar { ...this.props } />
 				</BlockControls>
 				<div className={ className } key="preview">
-					<div className="wrapper">
+					<div className={ showChartBackground ? 'wrapper has-chart-background' : 'wrapper' }>
 						{ showChartTitle && (
 							<RichText
 								tagName="h3"
