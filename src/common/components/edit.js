@@ -1,25 +1,17 @@
 /**
- * BLOCK: Pie Chart
- */
-
-/**
  * Components and dependencies.
  */
-import { Pie } from 'react-chartjs-2';
-import { ChartStyles, DataStyles } from '.';
 import {
 	ChartFormattingToolbar,
 	EditDataButton,
 	EditDataModal,
 	EditDataToolbar,
 	Legend,
-} from '../../../common/components';
-import { randomColors, randomValues } from '../../../common/helpers';
+} from '.';
 
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
 
@@ -33,8 +25,10 @@ export default class Edit extends Component {
 				chartData,
 				chartOptions,
 			},
+			chartType,
 			clientId,
 			setAttributes,
+			maybeGenerateData,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -45,36 +39,14 @@ export default class Edit extends Component {
 		parsedData.init = true;
 		parsedOptions.init = true;
 
-		parsedData.datasets.forEach( ( dataset ) => {
-			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 4, 1, 10 );
-			}
-
-			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				const themeColors = randomColors( dataset.data.length );
-				dataset.borderColor = [];
-				dataset.backgroundColor = [];
-				dataset.data.forEach( ( data, index ) => {
-					dataset.borderColor.push( themeColors[ index ] );
-					dataset.backgroundColor.push( themeColors[ index ] );
-				} );
-			}
-		} );
+		maybeGenerateData( parsedData.datasets );
 
 		setAttributes( {
-			chartType: 'pie',
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 			chartOptions: JSON.stringify( parsedOptions ),
+			chartType,
 		} );
-	}
-
-	onNewDataset( dataset ) {
-		const colors = randomColors( dataset.data.length );
-
-		dataset.label = __( 'New Data Set', 'hello-charts' );
-		dataset.borderColor = colors;
-		dataset.backgroundColor = colors;
 	}
 
 	toggleEditor() {
@@ -83,23 +55,22 @@ export default class Edit extends Component {
 
 	render() {
 		const {
+			ChartStyles,
+			DataStyles,
 			attributes: {
-				blockId,
-				chartData,
-				chartOptions,
-				height,
 				showChartTitle,
+				showChartBackground,
 				title,
-				width,
 			},
+			children,
 			className,
+			onNewDataset,
 			setAttributes,
+			titlePlaceholder,
 		} = this.props;
 
-		const parsedData = JSON.parse( chartData );
-		const parsedOptions = JSON.parse( chartOptions );
-
 		this.toggleEditor = this.toggleEditor.bind( this );
+		this.onNewDataset = onNewDataset.bind( this );
 
 		return (
 			<>
@@ -114,12 +85,12 @@ export default class Edit extends Component {
 					<ChartFormattingToolbar { ...this.props } />
 				</BlockControls>
 				<div className={ className } key="preview">
-					<div className="wrapper">
+					<div className={ showChartBackground ? 'wrapper has-chart-background' : 'wrapper' }>
 						{ showChartTitle && (
 							<RichText
 								tagName="h3"
 								className="chart-title"
-								placeholder={ __( 'Pie Chart', 'hello-charts' ) }
+								placeholder={ titlePlaceholder }
 								value={ title }
 								allowedFormats={ [] }
 								withoutInteractiveFormatting={ true }
@@ -128,7 +99,7 @@ export default class Edit extends Component {
 						) }
 						{ ! this.state.editorOpen && (
 							<div className="chart">
-								<Pie height={ height } width={ width } id={ blockId } data={ parsedData } options={ parsedOptions } />
+								{ children }
 							</div>
 						) }
 						{ this.state.editorOpen && (

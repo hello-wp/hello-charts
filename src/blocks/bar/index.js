@@ -11,8 +11,10 @@ const { registerBlockType } = wp.blocks;
 /**
  * Components and dependencies.
  */
-import { Edit } from './components';
-import { Save } from '../../common/components';
+import { ChartStyles, DataStyles } from './components';
+import { Bar } from 'react-chartjs-2';
+import { Edit, Save } from '../../common/components';
+import { randomColors, randomValues } from '../../common/helpers';
 
 /**
  * Registers this as a block.
@@ -128,7 +130,38 @@ registerBlockType( 'hello-charts/block-bar', {
 
 	/* Render the block components. */
 	edit: ( props ) => {
-		return <Edit { ...props } />;
+		const {
+			attributes: {
+				blockId,
+				chartData,
+				chartOptions,
+				height,
+				width,
+			},
+		} = props;
+
+		const parsedData = JSON.parse( chartData );
+		const parsedOptions = JSON.parse( chartOptions );
+
+		return (
+			<Edit
+				{ ...props }
+				ChartStyles={ ChartStyles }
+				DataStyles={ DataStyles }
+				chartType="bar"
+				maybeGenerateData={ maybeGenerateData }
+				onNewDataset={ onNewDataset }
+				titlePlaceholder={ __( 'Bar Chart', 'hello-charts' ) }
+			>
+				<Bar
+					height={ height }
+					width={ width }
+					id={ blockId }
+					data={ parsedData }
+					options={ parsedOptions }
+				/>
+			</Edit>
+		);
 	},
 
 	/* Save the block markup. */
@@ -136,3 +169,25 @@ registerBlockType( 'hello-charts/block-bar', {
 		return <Save { ...props } />;
 	},
 } );
+
+const maybeGenerateData = ( datasets ) => {
+	const themeColors = randomColors( datasets.length );
+
+	datasets.forEach( ( dataset, index ) => {
+		if ( 'generate' === dataset.data[ 0 ] ) {
+			dataset.data = randomValues( 8 );
+		}
+
+		if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
+			dataset.backgroundColor = themeColors[ index ];
+		}
+	} );
+};
+
+const onNewDataset = ( dataset ) => {
+	const color = randomColors( 1 ).shift();
+
+	dataset.label = __( 'New Data Set', 'hello-charts' );
+	dataset.backgroundColor = color;
+};
+
