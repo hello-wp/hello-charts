@@ -115,7 +115,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						pointBorderWidth: 0,
 						tension: 0,
 						pointStyle: 'circle',
-						data: [ 10, 19, 6, 3, 12, 15 ],
+						data: [ 5, 19, 14, 15, 6, 15 ],
 						borderColor: '#0693e3',
 						pointBackgroundColor: '#0693e3',
 						backgroundColor: 'rgba(6, 147, 227, 0.6)',
@@ -138,6 +138,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						ticks: {
 							display: false,
 						},
+						suggestedMin: 0,
 					},
 				},
 			} ),
