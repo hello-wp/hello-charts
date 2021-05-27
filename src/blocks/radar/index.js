@@ -85,6 +85,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						ticks: {
 							display: true,
 						},
+						suggestedMin: null,
 					},
 				},
 				layout: {
