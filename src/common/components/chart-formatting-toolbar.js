@@ -19,7 +19,7 @@ export default class EditDataToolbar extends Component {
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
 				<ToolbarButton
 					icon="heading"
-					label={ __( 'Toggle Chart Title', 'hello-charts' ) }
+					label={ showChartTitle ? __( 'Hide Chart Title', 'hello-charts' ) : __( 'Show Chart Title', 'hello-charts' ) }
 					onClick={
 						() => setAttributes( { showChartTitle: showChartTitle ? false : true } )
 					}
