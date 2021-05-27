@@ -24,10 +24,10 @@ import { icons } from '../../common/helpers';
  *                             registered; otherwise `undefined`.
  */
 registerBlockType( 'hello-charts/block-bar', {
-	title: __( 'Bar Chart' ),
+	title: __( 'Bar Chart', 'hello-charts' ),
 	icon: icons.bar,
 	category: 'charts',
-	keywords: [ __( 'graph' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',

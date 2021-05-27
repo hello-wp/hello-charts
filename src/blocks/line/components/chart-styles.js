@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
@@ -66,40 +67,40 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title="Chart Styles" initialOpen={ true }>
+			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<ToggleControl
-					label="Show Line"
+					label={ __( 'Show Line', 'hello-charts' ) }
 					checked={ parsedData.datasets[ 0 ].showLine }
 					onChange={ ( state ) => updateShowLine( state ) }
 				/>
 				<ToggleControl
-					label="Show Background"
+					label={ __( 'Show Background', 'hello-charts' ) }
 					checked={ parsedData.datasets[ 0 ].fill }
 					onChange={ ( state ) => updateShowBackground( state ) }
 				/>
 				<ToggleControl
-					label="Show X Axis Grid Lines"
+					label={ __( 'Show X Axis Grid Lines', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.x.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'x' ) }
 				/>
 				<ToggleControl
-					label="Show Y Axis Grid Lines"
+					label={ __( 'Show Y Axis Grid Lines', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.y.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
 				/>
 				<RangeControl
-					label="Point Size"
+					label={ __( 'Point Size', 'hello-charts' ) }
 					value={ parsedData.datasets[ 0 ].pointRadius }
 					onChange={ ( radius ) => updatePointRadius( radius ) }
 					min={ 0 }
 					max={ 10 }
 				/>
 				<RangeControl
-					label="Curve"
+					label={ __( 'Curve', 'hello-charts' ) }
 					value={ parsedData.datasets[ 0 ].lineTension * 20 }
 					onChange={ ( tension ) => updateLineTension( tension / 20 ) }
 					min={ 0 }

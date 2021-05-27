@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
@@ -76,47 +77,47 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title="Chart Styles" initialOpen={ true }>
+			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<ToggleControl
-					label="Show Line"
+					label={ __( 'Show Line', 'hello-charts' ) }
 					checked={ parsedData.datasets[ 0 ].borderWidth > 0 }
 					onChange={ ( state ) => updateShowLine( state ) }
 				/>
 				<ToggleControl
-					label="Show Background"
+					label={ __( 'Show Background', 'hello-charts' ) }
 					checked={ parsedData.datasets[ 0 ].fill }
 					onChange={ ( state ) => updateShowBackground( state ) }
 				/>
 				<ToggleControl
-					label="Show Angle Lines"
+					label={ __( 'Show Angle Lines', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.r.angleLines.display
 					}
 					onChange={ ( state ) => updateShowAngleLines( state ) }
 				/>
 				<ToggleControl
-					label="Show Grid Lines"
+					label={ __( 'Show Grid Lines', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.r.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state ) }
 				/>
 				<ToggleControl
-					label="Show Scale Labels"
+					label={ __( 'Show Scale Labels', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.r.ticks.display
 					}
 					onChange={ ( state ) => updateShowTicks( state ) }
 				/>
 				<ToggleControl
-					label="Show Point Labels"
+					label={ __( 'Show Point Labels', 'hello-charts' ) }
 					checked={
 						parsedOptions.scales.r.pointLabels.display
 					}
 					onChange={ ( state ) => updateShowPointLabels( state ) }
 				/>
 				<RangeControl
-					label="Point Size"
+					label={ __( 'Point Size', 'hello-charts' ) }
 					value={ parsedData.datasets[ 0 ].pointRadius }
 					onChange={ ( radius ) => updatePointRadius( radius ) }
 					min={ 0 }
@@ -125,7 +126,7 @@ export default class ChartStyles extends Component {
 				{ ( parsedData.datasets[ 0 ].borderWidth > 0 ||
 					parsedData.datasets[ 0 ].fill ) && (
 					<RangeControl
-						label="Curve"
+						label={ __( 'Curve', 'hello-charts' ) }
 						value={ parsedData.datasets[ 0 ].tension * 20 }
 						onChange={ ( tension ) => updateTension( tension / 20 ) }
 						min={ 0 }

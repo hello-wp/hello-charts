@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
@@ -36,21 +37,21 @@ export default class Legend extends Component {
 		}
 
 		return (
-			<PanelBody title="Legend" initialOpen={ false }>
+			<PanelBody title={ __( 'Legend', 'hello-charts' ) } initialOpen={ false }>
 				<ToggleControl
-					label="Show Legend"
+					label={ __( 'Show Legend', 'hello-charts' ) }
 					checked={ parsedOptions.plugins.legend.display }
 					onChange={ ( state ) => updateShowLegend( state ) }
 				/>
 				{ parsedOptions.plugins.legend.display && (
 					<SelectControl
-						label="Legend Position"
+						label={ __( 'Legend Position', 'hello-charts' ) }
 						value={ parsedOptions.plugins.legend.position }
 						options={ [
-							{ label: 'Top', value: 'top' },
-							{ label: 'Left', value: 'left' },
-							{ label: 'Bottom', value: 'bottom' },
-							{ label: 'Right', value: 'right' },
+							{ label: __( 'Top', 'hello-charts' ), value: 'top' },
+							{ label: __( 'Left', 'hello-charts' ), value: 'left' },
+							{ label: __( 'Bottom', 'hello-charts' ), value: 'bottom' },
+							{ label: __( 'Right', 'hello-charts' ), value: 'right' },
 						] }
 						onChange={ ( position ) =>
 							updateLegendPosition( position )
@@ -59,12 +60,12 @@ export default class Legend extends Component {
 				) }
 				{ parsedOptions.plugins.legend.display && (
 					<SelectControl
-						label="Legend Align"
+						label={ __( 'Legend Align', 'hello-charts' ) }
 						value={ parsedOptions.plugins.legend.align }
 						options={ [
-							{ label: 'Start', value: 'start' },
-							{ label: 'Center', value: 'center' },
-							{ label: 'End', value: 'end' },
+							{ label: __( 'Start', 'hello-charts' ), value: 'start' },
+							{ label: __( 'Center', 'hello-charts' ), value: 'center' },
+							{ label: __( 'End', 'hello-charts' ), value: 'end' },
 						] }
 						onChange={ ( align ) => updateLegendAlign( align ) }
 					/>
