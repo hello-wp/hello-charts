@@ -7,7 +7,13 @@
  */
 import { Bar } from 'react-chartjs-2';
 import { ChartStyles, DataStyles } from '.';
-import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
+import {
+	ChartFormattingToolbar,
+	EditDataButton,
+	EditDataModal,
+	EditDataToolbar,
+	Legend,
+} from '../../../common/components';
 import { randomColors, randomValues } from '../../../common/helpers';
 
 /**
@@ -76,6 +82,7 @@ export default class Edit extends Component {
 				blockId,
 				chartData,
 				chartOptions,
+				showChartTitle,
 			},
 			className,
 			setAttributes,
@@ -97,18 +104,21 @@ export default class Edit extends Component {
 				</InspectorControls>
 				<BlockControls>
 					<EditDataToolbar toggleEditor={ this.toggleEditor } />
+					<ChartFormattingToolbar { ...this.props } />
 				</BlockControls>
 				<div className={ className } key="preview">
 					<div className="wrapper">
-						<RichText
-							tagName="h3"
-							className="chart-title"
-							placeholder={ __( 'Bar Chart', 'hello-charts' ) }
-							value={ title }
-							allowedFormats={ [] }
-							withoutInteractiveFormatting={ true }
-							onChange={ ( value ) => setAttributes( { title: value } ) }
-						/>
+						{ showChartTitle && (
+							<RichText
+								tagName="h3"
+								className="chart-title"
+								placeholder={ __( 'Bar Chart', 'hello-charts' ) }
+								value={ title }
+								allowedFormats={ [] }
+								withoutInteractiveFormatting={ true }
+								onChange={ ( value ) => setAttributes( { title: value } ) }
+							/>
+						) }
 						{ ! this.state.editorOpen && (
 							<div className="chart">
 								<Bar id={ blockId } data={ parsedData } options={ parsedOptions } />

@@ -36,6 +36,10 @@ registerBlockType( 'hello-charts/block-bar', {
 			type: 'string',
 			default: '',
 		},
+		showChartTitle: {
+			type: 'boolean',
+			default: true,
+		},
 		chartType: {
 			type: 'string',
 		},

@@ -13,7 +13,7 @@ export default class EditDataToolbar extends Component {
 		const { toggleEditor } = this.props;
 
 		return (
-			<ToolbarGroup className="edit-data-toolbar" label={ __( 'Chart Options', 'hello-charts' ) }>
+			<ToolbarGroup className="edit-data-toolbar" label={ __( 'Chart Data', 'hello-charts' ) }>
 				<ToolbarButton
 					icon="editor-table"
 					label={ __( 'Edit Chart Data', 'hello-charts' ) }
