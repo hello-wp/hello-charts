@@ -82,6 +82,15 @@ registerBlockType( 'hello-charts/block-pie', {
 		attributes: {
 			title: __( 'Pie Chart', 'hello-charts' ),
 			height: 280,
+			chartData: JSON.stringify( {
+				datasets: [
+					{
+						data: [ 6, 4, 9, 10 ],
+						borderColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0' ],
+						backgroundColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0' ],
+					},
+				],
+			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
 				responsive: false,

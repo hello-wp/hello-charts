@@ -95,6 +95,16 @@ registerBlockType( 'hello-charts/block-bar', {
 			title: __( 'Bar Chart', 'hello-charts' ),
 			height: 280,
 			width: 450,
+			chartData: JSON.stringify( {
+				labels: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun' ],
+				datasets: [
+					{
+						label: 'A',
+						data: [ 10, 19, 6, 3, 12, 15 ],
+						backgroundColor: '#0693e3',
+					},
+				],
+			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
 				responsive: false,

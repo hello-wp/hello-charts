@@ -104,6 +104,24 @@ registerBlockType( 'hello-charts/block-radar', {
 		attributes: {
 			title: __( 'Radar Chart', 'hello-charts' ),
 			height: 280,
+			chartData: JSON.stringify( {
+				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
+				datasets: [
+					{
+						fill: true,
+						borderWidth: 3,
+						pointRadius: 3,
+						hoverRadius: 3,
+						pointBorderWidth: 0,
+						tension: 0,
+						pointStyle: 'circle',
+						data: [ 10, 19, 6, 3, 12, 15 ],
+						borderColor: '#0693e3',
+						pointBackgroundColor: '#0693e3',
+						backgroundColor: 'rgba(6, 147, 227, 0.6)',
+					},
+				],
+			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
 				responsive: false,
