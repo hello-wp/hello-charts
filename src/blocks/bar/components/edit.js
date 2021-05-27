@@ -61,7 +61,7 @@ export default class Edit extends Component {
 	onNewDataset( dataset ) {
 		const color = randomColors( 1 ).shift();
 
-		dataset.label = __( 'New Dataset', 'hello-charts' );
+		dataset.label = __( 'New Data Set', 'hello-charts' );
 		dataset.backgroundColor = color;
 	}
 

@@ -24,6 +24,7 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-line', {
 	title: __( 'Line Chart', 'hello-charts' ),
+	description: __( 'Use a Line Chart to plot data points along a line. Line Charts are useful for showing trend data, or comparing data sets.', 'hello-charts' ),
 	icon: 'chart-line',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ) ],

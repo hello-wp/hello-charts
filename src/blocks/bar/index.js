@@ -24,6 +24,7 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-bar', {
 	title: __( 'Bar Chart', 'hello-charts' ),
+	description: __( 'Use a Bar Chart to display your data in vertical (or horizontal) bars. Bar Charts are great for comparing data sets side by side.', 'hello-charts' ),
 	icon: 'chart-bar',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ) ],

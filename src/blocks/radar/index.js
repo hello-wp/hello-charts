@@ -24,9 +24,10 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-radar', {
 	title: __( 'Radar Chart', 'hello-charts' ),
+	description: __( 'Use a Radar Chart to plot data points in a radial "spider web" pattern. Line Charts are useful for highlighting variations between data sets.', 'hello-charts' ),
 	icon: 'admin-site-alt3',
 	category: 'charts',
-	keywords: [ __( 'graph', 'hello-charts' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ), __( 'web', 'hello-charts' ), __( 'spider', 'hello-charts' ) ],
 	attributes: {
 		blockId: {
 			type: 'string',

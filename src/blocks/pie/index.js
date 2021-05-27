@@ -24,6 +24,7 @@ import { Edit, Save } from './components';
  */
 registerBlockType( 'hello-charts/block-pie', {
 	title: __( 'Pie Chart', 'hello-charts' ),
+	description: __( 'Use a Pie Chart to plot data in a segmented circle (or doughnut). Pie Charts are excellent for showing the relational proportions of data.', 'hello-charts' ),
 	icon: 'chart-pie',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ), __( 'doughnut', 'hello-charts' ), __( 'donut', 'hello-charts' ) ],
