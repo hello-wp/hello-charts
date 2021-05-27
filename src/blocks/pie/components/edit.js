@@ -78,10 +78,12 @@ export default class Edit extends Component {
 	render() {
 		const {
 			attributes: {
-				title,
 				blockId,
 				chartData,
 				chartOptions,
+				height,
+				title,
+				width,
 			},
 			className,
 			setAttributes,
@@ -116,7 +118,7 @@ export default class Edit extends Component {
 						/>
 						{ ! this.state.editorOpen && (
 							<div className="chart">
-								<Pie id={ blockId } data={ parsedData } options={ parsedOptions } />
+								<Pie height={ height } width={ width } id={ blockId } data={ parsedData } options={ parsedOptions } />
 							</div>
 						) }
 						{ this.state.editorOpen && (

@@ -37,6 +37,12 @@ registerBlockType( 'hello-charts/block-pie', {
 			type: 'string',
 			default: '',
 		},
+		height: {
+			type: 'number',
+		},
+		width: {
+			type: 'number',
+		},
 		chartType: {
 			type: 'string',
 		},
@@ -68,6 +74,24 @@ registerBlockType( 'hello-charts/block-pie', {
 				},
 				layout: {
 					padding: 20,
+				},
+			} ),
+		},
+	},
+	example: {
+		attributes: {
+			title: __( 'Pie Chart', 'hello-charts' ),
+			height: 280,
+			chartOptions: JSON.stringify( {
+				animation: false,
+				responsive: false,
+				layout: {
+					padding: 0,
+				},
+				plugins: {
+					legend: {
+						display: false,
+					},
 				},
 			} ),
 		},

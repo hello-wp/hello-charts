@@ -37,6 +37,12 @@ registerBlockType( 'hello-charts/block-radar', {
 			type: 'string',
 			default: '',
 		},
+		height: {
+			type: 'number',
+		},
+		width: {
+			type: 'number',
+		},
 		chartType: {
 			type: 'string',
 		},
@@ -90,6 +96,31 @@ registerBlockType( 'hello-charts/block-radar', {
 				},
 				layout: {
 					padding: 20,
+				},
+			} ),
+		},
+	},
+	example: {
+		attributes: {
+			title: __( 'Radar Chart', 'hello-charts' ),
+			height: 280,
+			chartOptions: JSON.stringify( {
+				animation: false,
+				responsive: false,
+				plugins: {
+					legend: {
+						display: false,
+					},
+				},
+				scales: {
+					r: {
+						pointLabels: {
+							display: false,
+						},
+						ticks: {
+							display: false,
+						},
+					},
 				},
 			} ),
 		},

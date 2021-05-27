@@ -37,6 +37,12 @@ registerBlockType( 'hello-charts/block-line', {
 			type: 'string',
 			default: '',
 		},
+		height: {
+			type: 'number',
+		},
+		width: {
+			type: 'number',
+		},
 		chartType: {
 			type: 'string',
 		},
@@ -97,6 +103,22 @@ registerBlockType( 'hello-charts/block-line', {
 				},
 				layout: {
 					padding: 20,
+				},
+			} ),
+		},
+	},
+	example: {
+		attributes: {
+			title: __( 'Line Chart', 'hello-charts' ),
+			height: 280,
+			width: 450,
+			chartOptions: JSON.stringify( {
+				animation: false,
+				responsive: false,
+				plugins: {
+					legend: {
+						display: false,
+					},
 				},
 			} ),
 		},
