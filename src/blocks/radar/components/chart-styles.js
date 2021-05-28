@@ -59,6 +59,12 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
+		function updateSuggestedMin( state ) {
+			const options = JSON.parse( chartOptions );
+			options.scales.r.suggestedMin = state ? 0 : null;
+			setAttributes( { chartOptions: JSON.stringify( options ) } );
+		}
+
 		function updatePointRadius( radius ) {
 			const data = JSON.parse( chartData );
 			data.datasets.forEach( ( dataset, index ) => {
@@ -115,6 +121,13 @@ export default class ChartStyles extends Component {
 						parsedOptions.scales.r.pointLabels.display
 					}
 					onChange={ ( state ) => updateShowPointLabels( state ) }
+				/>
+				<ToggleControl
+					label={ __( 'Zero At Centre', 'hello-charts' ) }
+					checked={
+						parsedOptions.scales.r.suggestedMin === 0
+					}
+					onChange={ ( state ) => updateSuggestedMin( state ) }
 				/>
 				<RangeControl
 					label={ __( 'Point Size', 'hello-charts' ) }

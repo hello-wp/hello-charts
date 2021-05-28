@@ -1,5 +1,5 @@
 /**
- * Assigns random values to a given dataset.
+ * Assigns random values to a given data set.
  *
  * @param {number}	length	The length of the random data.
  * @param {number}	min		The lowest possible value in the random data.

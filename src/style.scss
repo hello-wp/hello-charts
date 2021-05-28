@@ -4,27 +4,21 @@
  * CSS for both Frontend+Backend.
  */
 
-.wp-block-hello-charts-block-bar,
-.wp-block-hello-charts-block-line,
-.wp-block-hello-charts-block-pie,
-.wp-block-hello-charts-block-radar  {
-	background: white;
+.wp-block-hello-charts  {
 	color: black;
 	margin: 0 auto;
 	text-align: center;
 	padding: 1px;
 
 	.wrapper {
-		border: 1px solid #ddd;
-		border-radius: 4px;
-	}
+		padding-top: 24px;
 
-	canvas {
-		margin-bottom: 20px;
+		&.has-chart-background {
+			background: white;
+		}
 	}
 
 	h3.chart-title {
-		margin-top: 1em;
-		margin-bottom: 0;
+		margin: 0;
 	}
 }

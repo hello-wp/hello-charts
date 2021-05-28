@@ -1,46 +1,22 @@
 /**
- * BLOCK: Line Chart
- */
-
-/**
- * Components and dependencies.
- */
-import { Line } from 'react-chartjs-2';
-import { ChartStyles, DataStyles } from '.';
-import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
-import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
-
-/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
 const { Component } = wp.element;
-const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
+
+/**
+ * Components and dependencies.
+ */
+import { ChartStyles, DataStyles } from '.';
+import { Line } from 'react-chartjs-2';
+import { ChartBlock } from '../../../common/components';
+import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
-	constructor( props ) {
-		super( props );
+	maybeGenerateData( datasets ) {
+		const themeColors = randomColors( datasets.length );
 
-		// Setup the attributes
-		const {
-			attributes: {
-				chartData,
-				chartOptions,
-			},
-			clientId,
-			setAttributes,
-		} = this.props;
-
-		const parsedData = JSON.parse( chartData );
-		const parsedOptions = JSON.parse( chartOptions );
-		const themeColors = randomColors( parsedData.datasets.length );
-
-		this.state = { editorOpen: false };
-
-		parsedData.init = true;
-		parsedOptions.init = true;
-
-		parsedData.datasets.forEach( ( dataset, index ) => {
+		datasets.forEach( ( dataset, index ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
 				dataset.data = randomValues( 6 );
 			}
@@ -51,79 +27,49 @@ export default class Edit extends Component {
 				dataset.backgroundColor = hex2rgba( themeColors[ index ], 0.6 );
 			}
 		} );
-
-		setAttributes( {
-			chartType: 'line',
-			blockId: clientId,
-			chartData: JSON.stringify( parsedData ),
-			chartOptions: JSON.stringify( parsedOptions ),
-		} );
 	}
 
 	onNewDataset( dataset ) {
 		const color = randomColors( 1 ).shift();
 
-		dataset.label = __( 'New Dataset', 'hello-charts' );
+		dataset.label = __( 'New Data Set', 'hello-charts' );
 		dataset.borderColor = color;
 		dataset.pointBackgroundColor = color;
 		dataset.backgroundColor = hex2rgba( color, 0.6 );
 	}
 
-	toggleEditor() {
-		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
-	}
-
 	render() {
 		const {
 			attributes: {
-				title,
 				blockId,
 				chartData,
 				chartOptions,
+				height,
+				width,
 			},
-			className,
-			setAttributes,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		this.toggleEditor = this.toggleEditor.bind( this );
-		this.onNewDataset = this.onNewDataset.bind( this );
-
 		return (
-			<>
-				<InspectorControls key="inspector">
-					<EditDataButton toggleEditor={ this.toggleEditor } />
-					<ChartStyles { ...this.props } />
-					<DataStyles { ...this.props } />
-					<Legend { ...this.props } />
-				</InspectorControls>
-				<BlockControls>
-					<EditDataToolbar toggleEditor={ this.toggleEditor } />
-				</BlockControls>
-				<div className={ className } key="preview">
-					<div className="wrapper">
-						<RichText
-							tagName="h3"
-							className="chart-title"
-							placeholder={ __( 'Line Chart', 'hello-charts' ) }
-							value={ title }
-							allowedFormats={ [] }
-							withoutInteractiveFormatting={ true }
-							onChange={ ( value ) => setAttributes( { title: value } ) }
-						/>
-						{ ! this.state.editorOpen && (
-							<div className="chart">
-								<Line id={ blockId } data={ parsedData } options={ parsedOptions } />
-							</div>
-						) }
-						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } onNewDataset={ this.onNewDataset } { ...this.props } />
-						) }
-					</div>
-				</div>
-			</>
+			<ChartBlock
+				{ ...this.props }
+				ChartStyles={ ChartStyles }
+				DataStyles={ DataStyles }
+				chartType="line"
+				maybeGenerateData={ this.maybeGenerateData }
+				onNewDataset={ this.onNewDataset }
+				titlePlaceholder={ __( 'Line Chart', 'hello-charts' ) }
+			>
+				<Line
+					height={ height }
+					width={ width }
+					id={ blockId }
+					data={ parsedData }
+					options={ parsedOptions }
+				/>
+			</ChartBlock>
 		);
 	}
 }

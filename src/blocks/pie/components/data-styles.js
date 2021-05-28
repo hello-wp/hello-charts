@@ -50,9 +50,15 @@ export default class DataStyles extends Component {
 		}
 
 		function getColor( dataset, row ) {
+			const data = JSON.parse( chartData );
+
+			// If there's no colors at all, return null. We're not properly intialized.
+			if ( ! data.datasets[ dataset ].borderColor ) {
+				return;
+			}
+
 			// If there is no set color, pick one at random.
-			if ( ! ( row in parsedData.datasets[ dataset ].borderColor ) ) {
-				const data = JSON.parse( chartData );
+			if ( ! data.datasets[ dataset ].borderColor[ row ] ) {
 				const color = randomColors( 1 ).shift();
 				data.datasets[ dataset ].borderColor[ row ] = color;
 				data.datasets[ dataset ].backgroundColor[ row ] = color;

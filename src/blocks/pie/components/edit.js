@@ -1,45 +1,20 @@
 /**
- * BLOCK: Pie Chart
- */
-
-/**
- * Components and dependencies.
- */
-import { Pie } from 'react-chartjs-2';
-import { ChartStyles, DataStyles } from '.';
-import { EditDataButton, EditDataModal, EditDataToolbar, Legend } from '../../../common/components';
-import { randomColors, randomValues } from '../../../common/helpers';
-
-/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
 const { Component } = wp.element;
-const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
+
+/**
+ * Components and dependencies.
+ */
+import { ChartStyles, DataStyles } from '.';
+import { Pie } from 'react-chartjs-2';
+import { ChartBlock } from '../../../common/components';
+import { randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
-	constructor( props ) {
-		super( props );
-
-		// Setup the attributes
-		const {
-			attributes: {
-				chartData,
-				chartOptions,
-			},
-			clientId,
-			setAttributes,
-		} = this.props;
-
-		const parsedData = JSON.parse( chartData );
-		const parsedOptions = JSON.parse( chartOptions );
-
-		this.state = { editorOpen: false };
-
-		parsedData.init = true;
-		parsedOptions.init = true;
-
-		parsedData.datasets.forEach( ( dataset ) => {
+	maybeGenerateData( datasets ) {
+		datasets.forEach( ( dataset ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
 				dataset.data = randomValues( 4, 1, 10 );
 			}
@@ -54,77 +29,48 @@ export default class Edit extends Component {
 				} );
 			}
 		} );
-
-		setAttributes( {
-			chartType: 'pie',
-			blockId: clientId,
-			chartData: JSON.stringify( parsedData ),
-			chartOptions: JSON.stringify( parsedOptions ),
-		} );
 	}
 
 	onNewDataset( dataset ) {
 		const colors = randomColors( dataset.data.length );
 
-		dataset.label = __( 'New Dataset', 'hello-charts' );
+		dataset.label = __( 'New Data Set', 'hello-charts' );
 		dataset.borderColor = colors;
 		dataset.backgroundColor = colors;
-	}
-
-	toggleEditor() {
-		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
 	}
 
 	render() {
 		const {
 			attributes: {
-				title,
 				blockId,
 				chartData,
 				chartOptions,
+				height,
+				width,
 			},
-			className,
-			setAttributes,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		this.toggleEditor = this.toggleEditor.bind( this );
-
 		return (
-			<>
-				<InspectorControls key="inspector">
-					<EditDataButton toggleEditor={ this.toggleEditor } />
-					<ChartStyles { ...this.props } />
-					<DataStyles { ...this.props } />
-					<Legend { ...this.props } />
-				</InspectorControls>
-				<BlockControls>
-					<EditDataToolbar toggleEditor={ this.toggleEditor } />
-				</BlockControls>
-				<div className={ className } key="preview">
-					<div className="wrapper">
-						<RichText
-							tagName="h3"
-							className="chart-title"
-							placeholder={ __( 'Pie Chart', 'hello-charts' ) }
-							value={ title }
-							allowedFormats={ [] }
-							withoutInteractiveFormatting={ true }
-							onChange={ ( value ) => setAttributes( { title: value } ) }
-						/>
-						{ ! this.state.editorOpen && (
-							<div className="chart">
-								<Pie id={ blockId } data={ parsedData } options={ parsedOptions } />
-							</div>
-						) }
-						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } onNewDataset={ this.onNewDataset } { ...this.props } />
-						) }
-					</div>
-				</div>
-			</>
+			<ChartBlock
+				{ ...this.props }
+				ChartStyles={ ChartStyles }
+				DataStyles={ DataStyles }
+				chartType="pie"
+				maybeGenerateData={ this.maybeGenerateData }
+				onNewDataset={ this.onNewDataset }
+				titlePlaceholder={ __( 'Pie Chart', 'hello-charts' ) }
+			>
+				<Pie
+					height={ height }
+					width={ width }
+					id={ blockId }
+					data={ parsedData }
+					options={ parsedOptions }
+				/>
+			</ChartBlock>
 		);
 	}
 }

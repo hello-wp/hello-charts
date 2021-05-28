@@ -1,5 +1,5 @@
 /**
- * BLOCK: Line Chart
+ * BLOCK: Radar Chart
  */
 
 /**
@@ -11,7 +11,8 @@ const { registerBlockType } = wp.blocks;
 /**
  * Components and dependencies.
  */
-import { Edit, Save } from './components';
+import { Edit } from './components';
+import { Save } from '../../common/components';
 import { icons } from '../../common/helpers';
 
 /**
@@ -25,9 +26,13 @@ import { icons } from '../../common/helpers';
  */
 registerBlockType( 'hello-charts/block-radar', {
 	title: __( 'Radar Chart', 'hello-charts' ),
+	description: __( 'Use a Radar Chart to plot data points in a radial "spider web" pattern. Line Charts are useful for highlighting variations between data sets.', 'hello-charts' ),
 	icon: icons.radar,
 	category: 'charts',
-	keywords: [ __( 'graph', 'hello-charts' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ), __( 'web', 'hello-charts' ), __( 'spider', 'hello-charts' ) ],
+	supports: {
+		align: [ 'wide', 'full' ],
+	},
 	attributes: {
 		blockId: {
 			type: 'string',
@@ -36,6 +41,20 @@ registerBlockType( 'hello-charts/block-radar', {
 		title: {
 			type: 'string',
 			default: '',
+		},
+		showChartTitle: {
+			type: 'boolean',
+			default: true,
+		},
+		showChartBackground: {
+			type: 'boolean',
+			default: true,
+		},
+		height: {
+			type: 'number',
+		},
+		width: {
+			type: 'number',
 		},
 		chartType: {
 			type: 'string',
@@ -86,10 +105,55 @@ registerBlockType( 'hello-charts/block-radar', {
 						ticks: {
 							display: true,
 						},
+						suggestedMin: null,
 					},
 				},
 				layout: {
 					padding: 20,
+				},
+			} ),
+		},
+	},
+	example: {
+		attributes: {
+			title: __( 'Radar Chart', 'hello-charts' ),
+			height: 280,
+			chartData: JSON.stringify( {
+				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
+				datasets: [
+					{
+						fill: true,
+						borderWidth: 3,
+						pointRadius: 3,
+						hoverRadius: 3,
+						pointBorderWidth: 0,
+						tension: 0,
+						pointStyle: 'circle',
+						data: [ 5, 19, 14, 15, 6, 15 ],
+						borderColor: '#0693e3',
+						pointBackgroundColor: '#0693e3',
+						backgroundColor: 'rgba(6, 147, 227, 0.6)',
+					},
+				],
+			} ),
+			chartOptions: JSON.stringify( {
+				animation: false,
+				responsive: false,
+				plugins: {
+					legend: {
+						display: false,
+					},
+				},
+				scales: {
+					r: {
+						pointLabels: {
+							display: false,
+						},
+						ticks: {
+							display: false,
+						},
+						suggestedMin: 0,
+					},
 				},
 			} ),
 		},

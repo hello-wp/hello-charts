@@ -15,7 +15,7 @@ Content creators can choose from four different chart types, right from within t
 
 ## Easy Data Entry
 
-Editing your chart's data is a breeze! Simply click the Edit Data button, and work within a very familiar spreadsheet / table style interface. Add rows and columns to easily fine-tune your datasets and create easy-to-understand visualisations for your readers.
+Editing your chart's data is a breeze! Simply click the Edit Data button, and work within a very familiar spreadsheet / table style interface. Add rows and columns to easily fine-tune your data sets and create easy-to-understand visualisations for your readers.
 
 ## Learn More
 
@@ -25,7 +25,7 @@ Visit [hellocharts.co](https://hellocharts.co) for more information, product dem
 If you're a license holder, you can access support from our team at [hellocharts.co/support](https://hellocharts.co/support).
 
 ## Social
-- Twitter: [@hellocharts](https://twitter.com/hellocharts) 
+- Twitter: [@hellocharts](https://twitter.com/hellocharts)
 
 ## License
 GPLv3

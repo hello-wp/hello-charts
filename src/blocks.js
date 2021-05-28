@@ -13,3 +13,6 @@ import './blocks/bar';
 import './blocks/line';
 import './blocks/pie';
 import './blocks/radar';
+
+// WordPress filter hooks.
+import './common/helpers/filters';
