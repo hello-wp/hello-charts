@@ -1,8 +1,4 @@
 /**
- * BLOCK: Line Chart
- */
-
-/**
  * WordPress dependencies.
  */
 const { Component } = wp.element;
@@ -12,14 +8,16 @@ export default class Save extends Component {
 	render() {
 		// Setup the attributes
 		const {
-			attributes: { title, blockId },
+			attributes: { title, blockId, showChartBackground },
 			className,
 		} = this.props;
 
 		return (
 			<div className={ className }>
-				<RichText.Content tagName="h3" className="chart-title" value={ title } />
-				<canvas id={ `chart-${ blockId }` }></canvas>
+				<div className={ showChartBackground ? 'wrapper has-chart-background' : 'wrapper' }>
+					<RichText.Content tagName="h3" className="chart-title" value={ title } />
+					<canvas id={ `chart-${ blockId }` }></canvas>
+				</div>
 			</div>
 		);
 	}
