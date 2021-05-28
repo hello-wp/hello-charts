@@ -28,6 +28,9 @@ registerBlockType( 'hello-charts/block-pie', {
 	icon: 'chart-pie',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ), __( 'doughnut', 'hello-charts' ), __( 'donut', 'hello-charts' ) ],
+	supports: {
+		align: [ 'wide', 'full' ],
+	},
 	attributes: {
 		blockId: {
 			type: 'string',

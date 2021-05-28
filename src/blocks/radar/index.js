@@ -28,6 +28,9 @@ registerBlockType( 'hello-charts/block-radar', {
 	icon: 'admin-site-alt3',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ), __( 'web', 'hello-charts' ), __( 'spider', 'hello-charts' ) ],
+	supports: {
+		align: [ 'wide', 'full' ],
+	},
 	attributes: {
 		blockId: {
 			type: 'string',

@@ -28,6 +28,9 @@ registerBlockType( 'hello-charts/block-line', {
 	icon: 'chart-line',
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ) ],
+	supports: {
+		align: [ 'wide', 'full' ],
+	},
 	attributes: {
 		blockId: {
 			type: 'string',
