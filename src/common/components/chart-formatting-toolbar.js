@@ -8,6 +8,11 @@ const {
 	ToolbarGroup,
 } = wp.components;
 
+/**
+ * Components and dependencies.
+ */
+import { icons } from '../../common/helpers';
+
 export default class EditDataToolbar extends Component {
 	render() {
 		const {
@@ -18,14 +23,14 @@ export default class EditDataToolbar extends Component {
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
 				<ToolbarButton
-					icon="heading"
+					icon={ showChartTitle ? icons.chartTitleOn : icons.chartTitleOff }
 					label={ showChartTitle ? __( 'Hide Chart Title', 'hello-charts' ) : __( 'Show Chart Title', 'hello-charts' ) }
 					onClick={
 						() => setAttributes( { showChartTitle: showChartTitle ? false : true } )
 					}
 				/>
 				<ToolbarButton
-					icon="analytics"
+					icon={ showChartBackground ? icons.chartBackgroundOn : icons.chartBackgroundOff }
 					label={ showChartBackground ? __( 'Hide Chart Background', 'hello-charts' ) : __( 'Show Chart Background', 'hello-charts' ) }
 					onClick={
 						() => setAttributes( { showChartBackground: showChartBackground ? false : true } )
