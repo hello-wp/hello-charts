@@ -1,5 +1,11 @@
 /**
- * Components and dependencies.
+ * WordPress dependencies.
+ */
+const { Component } = wp.element;
+const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
+
+/**
+ * Internal dependencies.
  */
 import {
 	ChartFormattingToolbar,
@@ -8,12 +14,6 @@ import {
 	EditDataToolbar,
 	Legend,
 } from '.';
-
-/**
- * WordPress dependencies.
- */
-const { Component } = wp.element;
-const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
 
 export default class ChartBlock extends Component {
 	constructor( props ) {

@@ -9,7 +9,7 @@ const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 
 /**
- * Components and dependencies.
+ * Internal dependencies.
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';

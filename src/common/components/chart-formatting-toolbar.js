@@ -9,7 +9,7 @@ const {
 } = wp.components;
 
 /**
- * Components and dependencies.
+ * Internal dependencies.
  */
 import { icons } from '../../common/helpers';
 
