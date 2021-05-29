@@ -6,6 +6,7 @@ import { randomColors } from '../../../common/helpers';
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { ColorPalette, RichText } = wp.blockEditor;
 const {
@@ -69,7 +70,7 @@ export default class DataStyles extends Component {
 		}
 
 		return (
-			<PanelBody title="Data Styles" initialOpen={ false }>
+			<PanelBody title={ __( 'Data Styles', 'hello-charts' ) } initialOpen={ false }>
 				<Card>
 					<CardHeader>
 						<Flex>
@@ -85,7 +86,7 @@ export default class DataStyles extends Component {
 						{ parsedData.labels.map( ( label, row ) => (
 							<BaseControl
 								key={ row }
-								label={ label + ' Color' }
+								label={ label + ' ' + __( 'Color', 'hello-charts' ) }
 								id={ `inspect-chart-pie-border-color-${ clientId }-${ row }` }
 							>
 								<ColorPalette
@@ -103,7 +104,7 @@ export default class DataStyles extends Component {
 							disabled={ 0 === this.state.activeDataset }
 							isSmal={ true }
 							icon="arrow-left-alt2"
-							label="Previous Dataset"
+							label={ __( 'Previous Data Set', 'hello-charts' ) }
 							onClick={ () => this.setState( { activeDataset: this.state.activeDataset - 1 } ) }
 						/>
 					</FlexItem>
@@ -118,7 +119,7 @@ export default class DataStyles extends Component {
 							disabled={ this.state.activeDataset === parsedData.datasets.length - 1 }
 							isSmall={ true }
 							icon="arrow-right-alt2"
-							label="Next Dataset"
+							label={ __( 'Next Data Set', 'hello-charts' ) }
 							onClick={ () => this.setState( { activeDataset: this.state.activeDataset + 1 } ) }
 						/>
 					</FlexItem>
