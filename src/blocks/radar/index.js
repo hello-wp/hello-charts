@@ -66,7 +66,7 @@ registerBlockType( 'hello-charts/block-radar', {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ],
 				datasets: [
 					{
-						label: __( 'Dataset', 'hello-charts' ),
+						label: __( 'Data Set', 'hello-charts' ),
 						fill: true,
 						borderWidth: 3,
 						pointRadius: 3,

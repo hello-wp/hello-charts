@@ -142,7 +142,7 @@ export default class EditDataModal extends Component {
 										<FlexItem>
 											<DropdownMenu
 												icon="ellipsis"
-												label={ __( 'Dataset Actions', 'hello-charts' ) }
+												label={ __( 'Data Set Actions', 'hello-charts' ) }
 											>
 												{ ( { onClose } ) => (
 													<MenuGroup>
@@ -151,7 +151,7 @@ export default class EditDataModal extends Component {
 															onClick={ () => removeDataset( index ) }
 															onBlur={ ( event ) => maybeClose( event, onClose ) }
 														>
-															{ __( 'Delete Dataset', 'hello-charts' ) }
+															{ __( 'Delete Data Set', 'hello-charts' ) }
 														</MenuItem>
 													</MenuGroup>
 												) }
@@ -161,7 +161,7 @@ export default class EditDataModal extends Component {
 								</th>
 							) ) }
 							<th key="new" className="new hello-charts-table-th">
-								<Button className="hello-charts-add-col-button" onClick={ () => newDataset() } label={ __( 'New Dataset', 'hello-charts' ) }><Icon icon="table-col-after" /></Button>
+								<Button className="hello-charts-add-col-button" onClick={ () => newDataset() } label={ __( 'New Data Set', 'hello-charts' ) }><Icon icon="table-col-after" /></Button>
 							</th>
 						</tr>
 					</thead>
