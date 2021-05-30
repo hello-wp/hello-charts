@@ -64,6 +64,11 @@ export default class EditDataModal extends Component {
 			data.datasets.splice( index, 0, dataset );
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
+
+			setTimeout( () => {
+				const thead = document.querySelector( '.hello-charts-data-editor table thead' );
+				thead.firstChild.children[ index + 1 ].querySelector( 'input,[contenteditable="true"]' ).focus();
+			}, 10 );
 		}
 
 		function newRow( row ) {
@@ -74,6 +79,11 @@ export default class EditDataModal extends Component {
 			} );
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
+
+			setTimeout( () => {
+				const tbody = document.querySelector( '.hello-charts-data-editor table tbody' );
+				tbody.children[ row ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
+			}, 10 );
 		}
 
 		function duplicateDataset( index ) {
@@ -83,30 +93,59 @@ export default class EditDataModal extends Component {
 			data.datasets.splice( index, 0, dataset );
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
+
+			setTimeout( () => {
+				const thead = document.querySelector( '.hello-charts-data-editor table thead' );
+				thead.firstChild.children[ index + 2 ].querySelector( 'input,[contenteditable="true"]' ).focus();
+			}, 10 );
 		}
 
 		function duplicateRow( row ) {
 			const data = JSON.parse( chartData );
+
 			data.labels.splice( row, 0, data.labels[ row ] );
 			data.datasets.forEach( ( dataset ) => {
 				dataset.data.splice( row, 0, dataset.data[ row ] );
 			} );
+
 			setAttributes( { chartData: JSON.stringify( data ) } );
+
+			setTimeout( () => {
+				const tbody = document.querySelector( '.hello-charts-data-editor table tbody' );
+				tbody.children[ row + 1 ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
+			}, 10 );
 		}
 
 		function removeDataset( index ) {
 			const data = JSON.parse( chartData );
+			const thead = document.querySelector( '.hello-charts-data-editor table thead' );
+
 			data.datasets.splice( index, 1 );
 			setAttributes( { chartData: JSON.stringify( data ) } );
+
+			if ( thead.firstChild.children[ index + 1 ] && thead.firstChild.children[ index + 2 ] !== thead.firstChild.lastChild ) {
+				thead.firstChild.children[ index + 1 ].querySelector( 'input,[contenteditable="true"]' ).focus();
+			} else if ( thead.firstChild.children[ index ] ) {
+				thead.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+			}
 		}
 
 		function removeRow( row ) {
 			const data = JSON.parse( chartData );
+			const tbody = document.querySelector( '.hello-charts-data-editor table tbody' );
+
 			data.labels.splice( row, 1 );
 			data.datasets.forEach( ( dataset ) => {
 				dataset.data.splice( row, 1 );
 			} );
+
 			setAttributes( { chartData: JSON.stringify( data ) } );
+
+			if ( tbody.children[ row ] && tbody.children[ row ] !== tbody.lastChild ) {
+				tbody.children[ row ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
+			} else if ( tbody.children[ row - 1 ] ) {
+				tbody.children[ row - 1 ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
+			}
 		}
 
 		function handleFocus( event ) {
