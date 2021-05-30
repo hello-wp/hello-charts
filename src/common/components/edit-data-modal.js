@@ -6,9 +6,6 @@ const { Component } = wp.element;
 const {
 	Button,
 	DropdownMenu,
-	Flex,
-	FlexBlock,
-	FlexItem,
 	Icon,
 	KeyboardShortcuts,
 	MenuGroup,
@@ -150,10 +147,9 @@ export default class EditDataModal extends Component {
 			event.preventDefault();
 			clearTimeout( focusTimeout );
 
-			const thead = event.target.closest( 'table' ).firstChild;
 			const cell = event.target.closest( 'td,th' );
 
-			if ( cell.previousSibling && cell.previousSibling !== thead.firstChild.firstChild ) {
+			if ( cell.previousSibling ) {
 				cell.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
@@ -183,7 +179,6 @@ export default class EditDataModal extends Component {
 			clearTimeout( focusTimeout );
 
 			const thead = event.target.closest( 'table' ).firstChild;
-			const tbody = thead.nextSibling;
 			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
 			const index = Array.prototype.indexOf.call( row.children, cell );
@@ -224,41 +219,49 @@ export default class EditDataModal extends Component {
 					<table>
 						<thead>
 							<tr>
-								<th key="-1" className="title"></th>
+								<th key="-1">
+									<RichText
+										value=""
+										multiline={ false }
+										allowedFormats={ [] }
+										withoutInteractiveFormatting={ true }
+										preserveWhiteSpace={ false }
+										onChange={ () => {
+											return false;
+										} }
+										onKeyPress={ ( event ) => {
+											event.preventDefault();
+										} }
+									/>
+								</th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
 									<th key={ index }>
-										<Flex>
-											<FlexBlock>
-												<RichText
-													value={ dataset.label }
-													multiline={ false }
-													allowedFormats={ [] }
-													withoutInteractiveFormatting={ true }
-													preserveWhiteSpace={ false }
-													onChange={ ( text ) => updateDatasetLabel( text, index ) }
-													onFocus={ ( event ) => handleFocus( event ) }
-													style={ { whiteSpace: 'nowrap' } }
-												/>
-											</FlexBlock>
-											<FlexItem>
-												<DropdownMenu
-													icon="ellipsis"
-													label={ __( 'Data Set Actions', 'hello-charts' ) }
-												>
-													{ ( { onClose } ) => (
-														<MenuGroup>
-															<MenuItem
-																icon="table-col-delete"
-																onClick={ () => removeDataset( index ) }
-																onBlur={ ( event ) => maybeClose( event, onClose ) }
-															>
-																{ __( 'Delete Data Set', 'hello-charts' ) }
-															</MenuItem>
-														</MenuGroup>
-													) }
-												</DropdownMenu>
-											</FlexItem>
-										</Flex>
+										<DropdownMenu
+											icon="ellipsis"
+											label={ __( 'Data Set Actions', 'hello-charts' ) }
+										>
+											{ ( { onClose } ) => (
+												<MenuGroup>
+													<MenuItem
+														icon="table-col-delete"
+														onClick={ () => removeDataset( index ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Delete Data Set', 'hello-charts' ) }
+													</MenuItem>
+												</MenuGroup>
+											) }
+										</DropdownMenu>
+										<RichText
+											value={ dataset.label }
+											multiline={ false }
+											allowedFormats={ [] }
+											withoutInteractiveFormatting={ true }
+											preserveWhiteSpace={ false }
+											onChange={ ( text ) => updateDatasetLabel( text, index ) }
+											onFocus={ ( event ) => handleFocus( event ) }
+											style={ { whiteSpace: 'nowrap' } }
+										/>
 									</th>
 								) ) }
 								<th key="new" className="new">
@@ -274,7 +277,7 @@ export default class EditDataModal extends Component {
 						<tbody>
 							{ parsedData.labels.map( ( label, row ) => (
 								<tr key={ row }>
-									<th className="title">
+									<th>
 										<RichText
 											value={ label }
 											multiline={ false }
@@ -328,7 +331,7 @@ export default class EditDataModal extends Component {
 								</th>
 								<td
 									className="disabled"
-									colspan={ parsedData.datasets.length }
+									colSpan={ parsedData.datasets.length }
 								></td>
 							</tr>
 						</tfoot>

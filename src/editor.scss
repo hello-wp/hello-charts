@@ -49,15 +49,47 @@
         border-spacing: 0;
         table-layout: fixed;
 
+        thead th {
+			border-top: 0;
+			text-align: left;
+			position: relative;
+
+			&:first-child div[contenteditable="true"] {
+				color: transparent;
+			}
+
+			div[contenteditable="true"] {
+				padding-right: 36px;
+			}
+
+			.components-dropdown-menu {
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+        }
+
+        tbody th {
+            text-align: right;
+
+        }
+
         th {
             border: 1px solid #dcdcde;
-			padding-left: 8px;
-			padding-right: 8px;
 			width: 120px;
 			background-color: #f1f1f1;
+			padding: 2px;
 
 			div[contenteditable="true"] {
 				white-space: nowrap !important;
+				padding: 7px 6px;
+
+				&:focus {
+					box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
+					z-index: 10;
+					outline: none;
+					cursor: auto;
+				}
 			}
         }
 
@@ -67,20 +99,36 @@
 			padding: 0;
 			position: relative;
 			padding-right: 1px;
+
+			input[type="number"] {
+				position: relative;
+				height: 36px;
+				border: none;
+				width: 100%;
+				border-radius: 0;
+
+				&:hover {
+					background-color: #f4f4f4;
+					cursor: default;
+				}
+
+				&:focus {
+					box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
+					z-index: 10;
+					outline: none;
+					cursor: auto;
+				}
+			}
 		}
 
-        thead th {
-			border-top: 0;
-			text-align: left;
+		td:hover,
+		th:hover {
+			button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+		}
 
-        }
-
-        tbody th {
-            text-align: right;
-
-        }
-
-		button.components-dropdown-menu__toggle {
+		.components-dropdown-menu__toggle {
 			padding: 0;
 			opacity: 0;
 
@@ -95,33 +143,6 @@
 				align-items: center;
 				justify-content: center;
 			}
-		}
-
-		td:hover,
-		th:hover {
-			button.components-dropdown-menu__toggle {
-				opacity: 1;
-			}
-		}
-
-		td input[type="number"] {
-			position: relative;
-			height: 36px;
-			border: none;
-			width: 100%;
-			border-radius: 0;
-		}
-
-		td input[type="number"]:hover {
-			background-color: #f4f4f4;
-			cursor: default;
-		}
-
-		td input[type="number"]:focus {
-			box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
-			z-index: 10;
-			outline: none;
-			cursor: auto;
 		}
 
         .new {
