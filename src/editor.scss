@@ -67,12 +67,24 @@
 				right: 0;
 				top: 0;
 			}
+
+			&:hover button.components-dropdown-menu__toggle,
+			&:focus-within button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
         }
 
-        tbody th {
-            text-align: right;
-
+        tbody {
+			th {
+	            text-align: right;
+			}
         }
+
+		tbody tr:hover button.components-dropdown-menu__toggle,
+		tbody td:focus-within button.components-dropdown-menu__toggle,
+		button.components-dropdown-menu__toggle.is-opened {
+			opacity: 1;
+		}
 
         th {
             border: 1px solid #dcdcde;
@@ -118,13 +130,6 @@
 					outline: none;
 					cursor: auto;
 				}
-			}
-		}
-
-		td:hover,
-		th:hover {
-			button.components-dropdown-menu__toggle {
-				opacity: 1;
 			}
 		}
 

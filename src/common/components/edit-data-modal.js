@@ -138,7 +138,11 @@ export default class EditDataModal extends Component {
 				newDataset();
 			}
 
-			if ( cell.nextSibling && cell.nextSibling !== row.lastChild ) {
+			if ( event.target.previousSibling && 'ArrowRight' === event.key ) {
+				event.target.previousSibling.querySelector( 'button' ).focus();
+			} else if ( cell.nextSibling === row.lastChild && 'ArrowRight' === event.key ) {
+				cell.nextSibling.querySelector( 'button' ).focus();
+			} else if ( cell.nextSibling && cell.nextSibling !== row.lastChild ) {
 				cell.nextSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
@@ -155,10 +159,16 @@ export default class EditDataModal extends Component {
 		}
 
 		function nextRow( event ) {
-			event.preventDefault();
 			clearTimeout( focusTimeout );
 
+			if ( 'BUTTON' === event.target.tagName && 'Enter' === event.key ) {
+				return;
+			}
+
+			event.preventDefault();
+
 			const tbody = event.target.closest( 'table' ).firstChild.nextSibling;
+			const tfoot = event.target.closest( 'table' ).lastChild;
 			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
 			const index = Array.prototype.indexOf.call( row.children, cell );
@@ -168,25 +178,46 @@ export default class EditDataModal extends Component {
 			}
 
 			if ( row.nextSibling ) {
-				row.nextSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				if ( row.lastChild === cell ) {
+					row.nextSibling.children[ index ].querySelector( 'button' ).focus();
+				} else {
+					row.nextSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				}
 			} else if ( row.closest( 'thead' ) ) {
-				tbody.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				if ( row.lastChild === cell ) {
+					tbody.firstChild.children[ index ].querySelector( 'button' ).focus();
+				} else {
+					tbody.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				}
+			} else if ( row.closest( 'tbody' ) && row.firstChild === cell ) {
+				tfoot.firstChild.children[ index ].querySelector( 'button' ).focus();
 			}
 		}
 
 		function previousRow( event ) {
-			event.preventDefault();
 			clearTimeout( focusTimeout );
+			event.preventDefault();
 
+			const tbody = event.target.closest( 'table' ).firstChild.nextSibling;
 			const thead = event.target.closest( 'table' ).firstChild;
 			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
 			const index = Array.prototype.indexOf.call( row.children, cell );
 
 			if ( row.previousSibling ) {
-				row.previousSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				if ( row.lastChild === cell ) {
+					row.previousSibling.children[ index ].querySelector( 'button' ).focus();
+				} else {
+					row.previousSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				}
 			} else if ( row.closest( 'tbody' ) ) {
-				thead.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				if ( row.lastChild === cell ) {
+					thead.firstChild.children[ index ].querySelector( 'button' ).focus();
+				} else {
+					thead.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+				}
+			} else if ( row.closest( 'tfoot' ) ) {
+				tbody.lastChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
 
