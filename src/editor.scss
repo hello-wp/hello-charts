@@ -60,9 +60,17 @@
 			padding-right: 8px;
 			padding-left: 8px;
 
+			div[contenteditable="true"] {
+				white-space: nowrap !important;
+			}
+
 			button.components-dropdown-menu__toggle {
 				padding: 0;
 				opacity: 0;
+
+				&:focus {
+					opacity: 1;
+				}
 
 				.dashicon {
 					margin: 0;
@@ -73,6 +81,7 @@
 				}
 			}
         }
+
 		thead th:hover {
 			button.components-dropdown-menu__toggle {
 				opacity: 1;
@@ -83,6 +92,10 @@
             text-align: right;
 			padding-right: 8px;
 			padding-left: 8px;
+
+			div[contenteditable="true"] {
+				white-space: nowrap !important;
+			}
         }
 
         .title {
@@ -140,6 +153,10 @@
 		.hello-charts-delete-row-cell button {
 			opacity: 0;
 
+			&:focus {
+				opacity: 1;
+			}
+
 			.dashicon {
 				margin: 0;
 				font-size: 14px;
@@ -149,8 +166,10 @@
 			}
 		}
 
-		.hello-charts-table-row:hover .hello-charts-delete-row-cell button {
-			opacity: 1;
+		.hello-charts-table-row:hover {
+			.hello-charts-delete-row-cell button {
+				opacity: 1;
+			}
 		}
 
 		.hello-charts-add-row-button {
