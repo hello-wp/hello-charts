@@ -177,7 +177,12 @@
 			font-size: 16px;
 		}
     }
+}
 
+.popover-slot {
+	.components-menu-item__item {
+		padding-right: 1em;
+	}
 }
 
 .block-editor-block-preview__content .wp-block-hello-charts {

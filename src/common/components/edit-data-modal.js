@@ -51,27 +51,46 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function newDataset() {
+		function newDataset( index ) {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
 			const dataset = { ...data.datasets[ 0 ] };
 
-			dataset.data = new Array( rows ).fill( 1 );
+			dataset.data = new Array( rows ).fill( '' );
+			dataset.label = '';
 
 			onNewDataset( dataset );
 
-			data.datasets.push( dataset );
+			data.datasets.splice( index, 0, dataset );
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function newRow() {
+		function newRow( row ) {
 			const data = JSON.parse( chartData );
-			data.labels.push( __( 'New Row', 'hello-charts' ) );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].data.push( 1 );
+			data.labels.splice( row, 0, '' );
+			data.datasets.forEach( ( dataset ) => {
+				dataset.data.splice( row, 0, '' );
 			} );
 
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function duplicateDataset( index ) {
+			const data = JSON.parse( chartData );
+			const dataset = { ...data.datasets[ index ] };
+
+			data.datasets.splice( index, 0, dataset );
+
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function duplicateRow( row ) {
+			const data = JSON.parse( chartData );
+			data.labels.splice( row, 0, data.labels[ row ] );
+			data.datasets.forEach( ( dataset ) => {
+				dataset.data.splice( row, 0, dataset.data[ row ] );
+			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
@@ -84,8 +103,8 @@ export default class EditDataModal extends Component {
 		function removeRow( row ) {
 			const data = JSON.parse( chartData );
 			data.labels.splice( row, 1 );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].data.splice( row, 1 );
+			data.datasets.forEach( ( dataset ) => {
+				dataset.data.splice( row, 1 );
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
@@ -122,8 +141,8 @@ export default class EditDataModal extends Component {
 		 * @see https://github.com/WordPress/gutenberg/issues/32128
 		 */
 		function maybeClose( event, close ) {
-			if ( 'menuitem' !== event.relatedTarget.getAttribute( 'role' ) ) {
-				setTimeout( close, 100 );
+			if ( ! event.relatedTarget || 'menuitem' !== event.relatedTarget.getAttribute( 'role' ) ) {
+				setTimeout( close, 200 );
 			}
 		}
 
@@ -135,7 +154,7 @@ export default class EditDataModal extends Component {
 			const row = event.target.closest( 'tr' );
 
 			if ( cell.nextSibling === row.lastChild && 'Tab' === event.key ) {
-				newDataset();
+				newDataset( parsedData.datasets.length );
 			}
 
 			if ( event.target.previousSibling && 'ArrowRight' === event.key ) {
@@ -174,7 +193,7 @@ export default class EditDataModal extends Component {
 			const index = Array.prototype.indexOf.call( row.children, cell );
 
 			if ( row === tbody.lastChild && 'Enter' === event.key ) {
-				newRow();
+				newRow( parsedData.datasets[ 0 ].data.length );
 			}
 
 			if ( row.nextSibling ) {
@@ -274,6 +293,27 @@ export default class EditDataModal extends Component {
 											{ ( { onClose } ) => (
 												<MenuGroup>
 													<MenuItem
+														icon="table-col-after"
+														onClick={ () => duplicateDataset( index ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Duplicate Data Set', 'hello-charts' ) }
+													</MenuItem>
+													<MenuItem
+														icon="table-col-before"
+														onClick={ () => newDataset( index ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Insert Data Set Before', 'hello-charts' ) }
+													</MenuItem>
+													<MenuItem
+														icon="table-col-after"
+														onClick={ () => newDataset( index + 1 ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Insert Data Set After', 'hello-charts' ) }
+													</MenuItem>
+													<MenuItem
 														icon="table-col-delete"
 														onClick={ () => removeDataset( index ) }
 														onBlur={ ( event ) => maybeClose( event, onClose ) }
@@ -297,7 +337,7 @@ export default class EditDataModal extends Component {
 								) ) }
 								<th key="new" className="new">
 									<Button
-										onClick={ () => newDataset() }
+										onClick={ () => newDataset( parsedData.datasets.length ) }
 										label={ __( 'New Data Set', 'hello-charts' ) }
 									>
 										<Icon icon="table-col-after" />
@@ -337,6 +377,27 @@ export default class EditDataModal extends Component {
 											{ ( { onClose } ) => (
 												<MenuGroup>
 													<MenuItem
+														icon="table-row-after"
+														onClick={ () => duplicateRow( row ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Duplicate Row', 'hello-charts' ) }
+													</MenuItem>
+													<MenuItem
+														icon="table-row-before"
+														onClick={ () => newRow( row ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Insert Row Before', 'hello-charts' ) }
+													</MenuItem>
+													<MenuItem
+														icon="table-row-after"
+														onClick={ () => newRow( row + 1 ) }
+														onBlur={ ( event ) => maybeClose( event, onClose ) }
+													>
+														{ __( 'Insert Row After', 'hello-charts' ) }
+													</MenuItem>
+													<MenuItem
 														icon="table-row-delete"
 														onClick={ () => removeRow( row ) }
 														onBlur={ ( event ) => maybeClose( event, onClose ) }
@@ -354,7 +415,7 @@ export default class EditDataModal extends Component {
 							<tr>
 								<th key="new" className="new">
 									<Button
-										onClick={ () => newRow() }
+										onClick={ () => newRow( parsedData.datasets[ 0 ].data.length ) }
 										label={ __( 'New Row', 'hello-charts' ) }
 									>
 										<Icon icon="table-row-after" />
