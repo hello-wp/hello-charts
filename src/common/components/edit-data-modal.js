@@ -134,19 +134,15 @@ export default class EditDataModal extends Component {
 			event.preventDefault();
 			clearTimeout( focusTimeout );
 
-			const thead = event.target.closest( 'table' ).firstChild;
-			const tbody = event.target.closest( 'table' ).lastChild;
-			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
+			const row = event.target.closest( 'tr' );
+
+			if ( cell.nextSibling === row.lastChild && 'Tab' === event.key ) {
+				newDataset();
+			}
 
 			if ( cell.nextSibling && cell.nextSibling !== row.lastChild ) {
 				cell.nextSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( row.nextSibling ) {
-				row.nextSibling.firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( row.closest( 'thead' ) ) {
-				tbody.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else {
-				thead.querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
 
@@ -155,18 +151,10 @@ export default class EditDataModal extends Component {
 			clearTimeout( focusTimeout );
 
 			const thead = event.target.closest( 'table' ).firstChild;
-			const tbody = event.target.closest( 'table' ).lastChild;
-			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
 
 			if ( cell.previousSibling && cell.previousSibling !== thead.firstChild.firstChild ) {
 				cell.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( row.previousSibling ) {
-				row.previousSibling.lastChild.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( row.closest( 'thead' ) ) {
-				tbody.lastChild.lastChild.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else {
-				thead.firstChild.lastChild.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
 
@@ -174,20 +162,19 @@ export default class EditDataModal extends Component {
 			event.preventDefault();
 			clearTimeout( focusTimeout );
 
-			const thead = event.target.closest( 'table' ).firstChild;
-			const tbody = event.target.closest( 'table' ).lastChild;
+			const tbody = event.target.closest( 'table' ).firstChild.nextSibling;
 			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
 			const index = Array.prototype.indexOf.call( row.children, cell );
+
+			if ( row === tbody.lastChild && 'Enter' === event.key ) {
+				newRow();
+			}
 
 			if ( row.nextSibling ) {
 				row.nextSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
 			} else if ( row.closest( 'thead' ) ) {
 				tbody.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( thead.firstChild.children[ index + 1 ] !== thead.firstChild.lastChild ) {
-				thead.firstChild.children[ index + 1 ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else {
-				tbody.firstChild.firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
 
@@ -196,19 +183,15 @@ export default class EditDataModal extends Component {
 			clearTimeout( focusTimeout );
 
 			const thead = event.target.closest( 'table' ).firstChild;
-			const tbody = event.target.closest( 'table' ).lastChild;
+			const tbody = thead.nextSibling;
 			const row = event.target.closest( 'tr' );
 			const cell = event.target.closest( 'td,th' );
 			const index = Array.prototype.indexOf.call( row.children, cell );
 
 			if ( row.previousSibling ) {
 				row.previousSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( row.closest( 'thead' ) ) {
-				tbody.lastChild.children[ index - 1 ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( thead.firstChild.children[ index ] !== thead.firstChild.firstChild ) {
+			} else if ( row.closest( 'tbody' ) ) {
 				thead.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else {
-				tbody.lastChild.lastChild.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
 			}
 		}
 
@@ -228,21 +211,22 @@ export default class EditDataModal extends Component {
 				<KeyboardShortcuts
 					shortcuts={ {
 						tab: nextCell,
+						right: nextCell,
 						enter: nextRow,
+						down: nextRow,
 						'shift+tab': previousCell,
+						left: previousCell,
 						'shift+enter': previousRow,
+						up: previousRow,
 					} }
 					bindGlobal={ true }
 				>
 					<table>
 						<thead>
 							<tr>
-								<th key="-1" className="title hello-charts-table-th"></th>
+								<th key="-1" className="title"></th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
-									<th
-										className="hello-charts-table-th"
-										key={ index }
-									>
+									<th key={ index }>
 										<Flex>
 											<FlexBlock>
 												<RichText
@@ -277,9 +261,8 @@ export default class EditDataModal extends Component {
 										</Flex>
 									</th>
 								) ) }
-								<th key="new" className="new hello-charts-table-th">
+								<th key="new" className="new">
 									<Button
-										className="hello-charts-add-col-button"
 										onClick={ () => newDataset() }
 										label={ __( 'New Data Set', 'hello-charts' ) }
 									>
@@ -290,8 +273,8 @@ export default class EditDataModal extends Component {
 						</thead>
 						<tbody>
 							{ parsedData.labels.map( ( label, row ) => (
-								<tr className="hello-charts-table-row" key={ row }>
-									<th className="title hello-charts-table-th">
+								<tr key={ row }>
+									<th className="title">
 										<RichText
 											value={ label }
 											multiline={ false }
@@ -303,7 +286,7 @@ export default class EditDataModal extends Component {
 										/>
 									</th>
 									{ parsedData.datasets.map( ( dataset, index ) => (
-										<td className="hello-charts-table-cell" key={ `${ row }-${ index }` }>
+										<td key={ `${ row }-${ index }` }>
 											<input
 												type="number"
 												value={ parsedData.datasets[ index ].data[ row ] }
@@ -312,7 +295,7 @@ export default class EditDataModal extends Component {
 											/>
 										</td>
 									) ) }
-									<td className="disabled hello-charts-delete-row-cell">
+									<td className="disabled">
 										<DropdownMenu
 											icon="ellipsis"
 											label={ __( 'Row Actions', 'hello-charts' ) }
@@ -333,14 +316,23 @@ export default class EditDataModal extends Component {
 								</tr>
 							) ) }
 						</tbody>
+						<tfoot>
+							<tr>
+								<th key="new" className="new">
+									<Button
+										onClick={ () => newRow() }
+										label={ __( 'New Row', 'hello-charts' ) }
+									>
+										<Icon icon="table-row-after" />
+									</Button>
+								</th>
+								<td
+									className="disabled"
+									colspan={ parsedData.datasets.length }
+								></td>
+							</tr>
+						</tfoot>
 					</table>
-					<Button
-						className="hello-charts-add-row-button"
-						onClick={ () => newRow() }
-						label={ __( 'New Row', 'hello-charts' ) }
-					>
-						<Icon icon="table-row-after" />
-					</Button>
 				</KeyboardShortcuts>
 			</Modal>
 		);
