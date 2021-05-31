@@ -23,12 +23,11 @@ export default class EditDataToolbar extends Component {
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
 				<ToolbarButton
-					icon={ icons.chartTitle }
+					icon={ showChartTitle ? icons.chartTitleOn : icons.chartTitleOff }
 					label={ showChartTitle ? __( 'Hide Chart Title', 'hello-charts' ) : __( 'Show Chart Title', 'hello-charts' ) }
 					onClick={
 						() => setAttributes( { showChartTitle: showChartTitle ? false : true } )
 					}
-					className={ showChartTitle ? 'is-pressed' : '' }
 				/>
 				<ToolbarButton
 					icon={ showChartBackground ? icons.chartBackgroundOn : icons.chartBackgroundOff }
