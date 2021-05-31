@@ -49,48 +49,108 @@
         border-spacing: 0;
         table-layout: fixed;
 
-        th {
-            border: 1px solid #dcdcde;
-			padding: 0;
-        }
-
         thead th {
 			border-top: 0;
 			text-align: left;
-			padding-right: 8px;
-			padding-left: 8px;
+			position: relative;
 
-			button.components-dropdown-menu__toggle {
-				padding: 0;
-				opacity: 0;
+			&:first-child div[contenteditable="true"] {
+				color: transparent;
+			}
 
-				.dashicon {
-					margin: 0;
-					font-size: 14px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
+			div[contenteditable="true"] {
+				padding-right: 36px;
+			}
+
+			.components-dropdown-menu {
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+
+			&:hover button.components-dropdown-menu__toggle,
+			&:focus-within button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+        }
+
+        tbody {
+			th {
+	            text-align: right;
+			}
+        }
+
+		tbody tr:hover button.components-dropdown-menu__toggle,
+		tbody td:focus-within button.components-dropdown-menu__toggle,
+		button.components-dropdown-menu__toggle.is-opened {
+			opacity: 1;
+		}
+
+        th {
+            border: 1px solid #dcdcde;
+			width: 120px;
+			background-color: #f1f1f1;
+			padding: 2px;
+
+			div[contenteditable="true"] {
+				white-space: nowrap !important;
+				padding: 7px 6px;
+
+				&:focus {
+					box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
+					z-index: 10;
+					outline: none;
+					cursor: auto;
 				}
 			}
         }
-		thead th:hover {
-			button.components-dropdown-menu__toggle {
-				opacity: 1;
+
+		td {
+			width: 100px;
+			border: 1px solid #dcdcde;
+			padding: 0;
+			position: relative;
+			padding-right: 1px;
+
+			input[type="number"] {
+				position: relative;
+				height: 36px;
+				border: none;
+				width: 100%;
+				border-radius: 0;
+
+				&:hover {
+					background-color: #f4f4f4;
+					cursor: default;
+				}
+
+				&:focus {
+					box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
+					z-index: 10;
+					outline: none;
+					cursor: auto;
+				}
 			}
 		}
 
-        tbody th {
-            text-align: right;
-			padding-right: 8px;
-			padding-left: 8px;
-        }
+		.components-dropdown-menu__toggle {
+			padding: 0;
+			opacity: 0;
 
-        .title {
-            // width: 15%;
-        }
+			&:focus {
+				opacity: 1;
+			}
+
+			.dashicon {
+				margin: 0;
+				font-size: 14px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
 
         .new {
-            // width: 10%;
             text-align: center;
         }
 
@@ -104,67 +164,7 @@
             vertical-align: middle;
         }
 
-		.hello-charts-table-th {
-			width: 120px;
-			background-color: #f1f1f1;
-		}
-
-		.hello-charts-table-cell {
-			width: 100px;
-			border: 1px solid #dcdcde;
-			padding: 0;
-			position: relative;
-			padding-right: 1px;
-		}
-
-		.hello-charts-table-cell input[type="number"] {
-			position: relative;
-			height: 36px;
-			border: none;
-			width: 100%;
-			border-radius: 0;
-		}
-
-		.hello-charts-table-cell input[type="number"]:hover {
-			background-color: #f4f4f4;
-			cursor: default;
-		}
-
-		.hello-charts-table-cell input[type="number"]:focus {
-			box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
-			z-index: 10;
-			outline: none;
-			cursor: auto;
-		}
-
-		.hello-charts-delete-row-cell button {
-			opacity: 0;
-
-			.dashicon {
-				margin: 0;
-				font-size: 14px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-		}
-
-		.hello-charts-table-row:hover .hello-charts-delete-row-cell button {
-			opacity: 1;
-		}
-
-		.hello-charts-add-row-button {
-			width: 120px;
-			display: flex;
-			height: 38px;
-			align-items: center;
-			justify-content: center;
-			background-color: #f1f1f1;
-			border-right: 1px solid #dcdcde;
-			border-bottom: 1px solid #dcdcde;
-		}
-
-		.hello-charts-add-col-button {
+		.new button {
 			width: 100%;
 			height: 100%;
 			display: flex;
@@ -173,12 +173,16 @@
 			background-color: #f1f1f1;
 		}
 
-		.hello-charts-add-row-button .dashicon:before,
-		.hello-charts-add-col-button .dashicon:before {
+		.new button .dashicon:before {
 			font-size: 16px;
 		}
     }
+}
 
+.popover-slot {
+	.components-menu-item__item {
+		padding-right: 1em;
+	}
 }
 
 .block-editor-block-preview__content .wp-block-hello-charts {

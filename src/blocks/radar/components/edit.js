@@ -31,8 +31,6 @@ export default class Edit extends Component {
 
 	onNewDataset( dataset ) {
 		const color = randomColors( 1 ).shift();
-
-		dataset.label = __( 'New Data Set' );
 		dataset.borderColor = color;
 		dataset.pointBackgroundColor = color;
 		dataset.backgroundColor = hex2rgba( color, 0.6 );
