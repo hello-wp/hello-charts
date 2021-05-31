@@ -1,9 +1,4 @@
 /**
- * Components and dependencies.
- */
-import { randomColors } from '../../../common/helpers';
-
-/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -20,6 +15,11 @@ const {
 	FlexBlock,
 	PanelBody,
 } = wp.components;
+
+/**
+ * Internal dependencies.
+ */
+import { randomColors } from '../../../common/helpers';
 
 export default class DataStyles extends Component {
 	constructor( props ) {

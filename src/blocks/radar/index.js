@@ -9,10 +9,11 @@ const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 
 /**
- * Components and dependencies.
+ * Internal dependencies.
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
+import { icons } from '../../common/helpers';
 
 /**
  * Registers this as a block.
@@ -26,7 +27,7 @@ import { Save } from '../../common/components';
 registerBlockType( 'hello-charts/block-radar', {
 	title: __( 'Radar Chart', 'hello-charts' ),
 	description: __( 'Use a Radar Chart to plot data points in a radial "spider web" pattern. Line Charts are useful for highlighting variations between data sets.', 'hello-charts' ),
-	icon: 'admin-site-alt3',
+	icon: icons.radar,
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ), __( 'web', 'hello-charts' ), __( 'spider', 'hello-charts' ) ],
 	supports: {

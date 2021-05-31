@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 const { Component } = wp.element;
 
 /**
- * Components and dependencies.
+ * Internal dependencies.
  */
 import { ChartStyles, DataStyles } from '.';
 import { Bar } from 'react-chartjs-2';
