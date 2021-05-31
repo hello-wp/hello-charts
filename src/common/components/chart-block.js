@@ -49,7 +49,8 @@ export default class ChartBlock extends Component {
 		} );
 	}
 
-	toggleEditor() {
+	toggleEditor( event ) {
+		event.preventDefault();
 		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
 	}
 

@@ -302,6 +302,7 @@ export default class EditDataModal extends Component {
 						left: previousCell,
 						'shift+enter': previousRow,
 						up: previousRow,
+						'mod+shift+s': toggleEditor,
 					} }
 					bindGlobal={ true }
 				>
