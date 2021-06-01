@@ -15,6 +15,18 @@ const {
 const { RichText } = wp.blockEditor;
 
 export default class EditDataModal extends Component {
+	tableRef = createRef();
+
+	constructor( props ) {
+		super( props );
+
+		this.state = { table: null };
+	}
+
+	componentDidMount() {
+		this.setState( { table: this.tableRef.current } );
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -24,9 +36,9 @@ export default class EditDataModal extends Component {
 			toggleEditor,
 			onNewDataset,
 		} = this.props;
+		const { state: { table } } = this;
 
 		const parsedData = JSON.parse( chartData );
-		const table = createRef();
 
 		let focusTimeout = false;
 
@@ -59,7 +71,7 @@ export default class EditDataModal extends Component {
 		}
 
 		function newDataset( index, focus = true ) {
-			const data = JSON.parse( this.props.chartData );
+			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
 			const dataset = { ...data.datasets[ 0 ] };
 
@@ -73,7 +85,7 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
 			if ( focus ) {
-				const thead = table.current.querySelector( 'thead' );
+				const thead = table.querySelector( 'thead' );
 				setTimeout( setFocus, 10, thead, 0, index + 1 );
 			}
 		}
@@ -88,7 +100,7 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
 			if ( focus ) {
-				const tbody = table.current.querySelector( 'tbody' );
+				const tbody = table.querySelector( 'tbody' );
 				setTimeout( setFocus, 10, tbody, row, 0 );
 			}
 		}
@@ -102,7 +114,7 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
 			if ( focus ) {
-				const thead = table.current.querySelector( 'thead' );
+				const thead = table.querySelector( 'thead' );
 				setTimeout( setFocus, 10, thead, 0, index + 2 );
 			}
 		}
@@ -118,14 +130,14 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
 			if ( focus ) {
-				const tbody = table.current.querySelector( 'tbody' );
+				const tbody = table.querySelector( 'tbody' );
 				setTimeout( setFocus, 10, tbody, row + 1, 0 );
 			}
 		}
 
 		function removeDataset( index, focus = true ) {
 			const data = JSON.parse( chartData );
-			const thead = table.current.querySelector( 'thead' );
+			const thead = table.querySelector( 'thead' );
 			const row = thead.firstChild;
 
 			data.datasets.splice( index, 1 );
@@ -142,7 +154,7 @@ export default class EditDataModal extends Component {
 
 		function removeRow( row, focus = true ) {
 			const data = JSON.parse( chartData );
-			const tbody = table.current.querySelector( 'tbody' );
+			const tbody = table.querySelector( 'tbody' );
 
 			data.labels.splice( row, 1 );
 			data.datasets.forEach( ( dataset ) => {
@@ -162,7 +174,7 @@ export default class EditDataModal extends Component {
 		}
 
 		function moveFocus( direction ) {
-			const { activeElement } = table.current.ownerDocument;
+			const { activeElement } = table.ownerDocument;
 			const cell = activeElement.closest( 'td,th' );
 			const section = cell.closest( 'thead,tbody,tfoot' );
 			const row = Array.prototype.indexOf.call( section.children, cell.closest( 'tr' ) );
@@ -287,7 +299,7 @@ export default class EditDataModal extends Component {
 
 			event.preventDefault();
 
-			const tbody = table.current.firstChild.nextSibling;
+			const tbody = table.firstChild.nextSibling;
 			const cell = event.target.closest( 'td,th' );
 			const row = event.target.closest( 'tr' );
 
@@ -332,7 +344,7 @@ export default class EditDataModal extends Component {
 					} }
 					bindGlobal={ true }
 				>
-					<table ref={ table }>
+					<table ref={ this.tableRef }>
 						<thead>
 							<tr>
 								<th key="-1">
