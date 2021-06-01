@@ -411,7 +411,7 @@ export default class EditDataModal extends Component {
 											onChange={ ( text ) => updateDatasetLabel( text, index ) }
 											onFocus={ ( event ) => selectText( event ) }
 											style={ { whiteSpace: 'nowrap' } }
-											className={ index > getDatasetLabels().indexOf( dataset.label ) ? 'error-duplicate' : '' }
+											className={ index > getDatasetLabels().indexOf( dataset.label ) || '' === dataset.label ? 'input-error' : '' }
 										/>
 									</th>
 								) ) }
