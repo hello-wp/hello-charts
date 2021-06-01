@@ -28,7 +28,12 @@ export default class EditDataModal extends Component {
 		const parsedData = JSON.parse( chartData );
 		const table = createRef();
 
-		let focusTimeout;
+		let focusTimeout = false;
+
+		function getDatasetLabels() {
+			const data = JSON.parse( chartData );
+			return data.datasets.map( ( dataset ) => dataset.label );
+		}
 
 		function updateDatasetLabel( text, index ) {
 			const data = JSON.parse( chartData );
@@ -54,7 +59,7 @@ export default class EditDataModal extends Component {
 		}
 
 		function newDataset( index, focus = true ) {
-			const data = JSON.parse( chartData );
+			const data = JSON.parse( this.props.chartData );
 			const rows = data.datasets[ 0 ].data.length;
 			const dataset = { ...data.datasets[ 0 ] };
 
@@ -226,7 +231,7 @@ export default class EditDataModal extends Component {
 						range.selectNodeContents( target );
 						selection.removeAllRanges();
 						selection.addRange( range );
-					} else {
+					} else if ( target.select ) {
 						// Regular input fields.
 						target.select();
 					}
@@ -394,6 +399,7 @@ export default class EditDataModal extends Component {
 											onChange={ ( text ) => updateDatasetLabel( text, index ) }
 											onFocus={ ( event ) => selectText( event ) }
 											style={ { whiteSpace: 'nowrap' } }
+											className={ index > getDatasetLabels().indexOf( dataset.label ) ? 'error-duplicate' : '' }
 										/>
 									</th>
 								) ) }
