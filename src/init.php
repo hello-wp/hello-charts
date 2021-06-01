@@ -57,19 +57,11 @@ function hello_charts_block_assets() {
 		$version
 	);
 
-	// Register chart.js styles.
-	wp_register_style(
-		'chart-js', // Handle.
-		plugins_url( '/build/lib/chart.js/chart.min.css', dirname( __FILE__ ) ),
-		[],
-		$version
-	);
-
 	// Register block editor styles for backend.
 	wp_register_style(
 		'hello-charts-editor-css', // Handle.
 		plugins_url( '/build/editor.css', dirname( __FILE__ ) ),
-		[ 'chart-js', 'wp-edit-blocks' ],
+		[ 'wp-edit-blocks' ],
 		$version
 	);
 

@@ -2,7 +2,7 @@
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
-const { Component } = wp.element;
+const { createRef, Component } = wp.element;
 const {
 	Button,
 	DropdownMenu,
@@ -26,6 +26,8 @@ export default class EditDataModal extends Component {
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
+		const table = createRef();
+
 		let focusTimeout;
 
 		function updateDatasetLabel( text, index ) {
@@ -51,7 +53,7 @@ export default class EditDataModal extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function newDataset( index ) {
+		function newDataset( index, focus = true ) {
 			const data = JSON.parse( chartData );
 			const rows = data.datasets[ 0 ].data.length;
 			const dataset = { ...data.datasets[ 0 ] };
@@ -65,13 +67,13 @@ export default class EditDataModal extends Component {
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
-			setTimeout( () => {
-				const thead = document.querySelector( '.hello-charts-data-editor table thead' );
-				thead.firstChild.children[ index + 1 ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			}, 10 );
+			if ( focus ) {
+				const thead = table.current.querySelector( 'thead' );
+				setTimeout( setFocus, 10, thead, 0, index + 1 );
+			}
 		}
 
-		function newRow( row ) {
+		function newRow( row, focus = true ) {
 			const data = JSON.parse( chartData );
 			data.labels.splice( row, 0, '' );
 			data.datasets.forEach( ( dataset ) => {
@@ -80,13 +82,13 @@ export default class EditDataModal extends Component {
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
-			setTimeout( () => {
-				const tbody = document.querySelector( '.hello-charts-data-editor table tbody' );
-				tbody.children[ row ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
-			}, 10 );
+			if ( focus ) {
+				const tbody = table.current.querySelector( 'tbody' );
+				setTimeout( setFocus, 10, tbody, row, 0 );
+			}
 		}
 
-		function duplicateDataset( index ) {
+		function duplicateDataset( index, focus = true ) {
 			const data = JSON.parse( chartData );
 			const dataset = { ...data.datasets[ index ] };
 
@@ -94,13 +96,13 @@ export default class EditDataModal extends Component {
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
-			setTimeout( () => {
-				const thead = document.querySelector( '.hello-charts-data-editor table thead' );
-				thead.firstChild.children[ index + 2 ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			}, 10 );
+			if ( focus ) {
+				const thead = table.current.querySelector( 'thead' );
+				setTimeout( setFocus, 10, thead, 0, index + 2 );
+			}
 		}
 
-		function duplicateRow( row ) {
+		function duplicateRow( row, focus = true ) {
 			const data = JSON.parse( chartData );
 
 			data.labels.splice( row, 0, data.labels[ row ] );
@@ -110,29 +112,32 @@ export default class EditDataModal extends Component {
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
-			setTimeout( () => {
-				const tbody = document.querySelector( '.hello-charts-data-editor table tbody' );
-				tbody.children[ row + 1 ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
-			}, 10 );
+			if ( focus ) {
+				const tbody = table.current.querySelector( 'tbody' );
+				setTimeout( setFocus, 10, tbody, row + 1, 0 );
+			}
 		}
 
-		function removeDataset( index ) {
+		function removeDataset( index, focus = true ) {
 			const data = JSON.parse( chartData );
-			const thead = document.querySelector( '.hello-charts-data-editor table thead' );
+			const thead = table.current.querySelector( 'thead' );
+			const row = thead.firstChild;
 
 			data.datasets.splice( index, 1 );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
-			if ( thead.firstChild.children[ index + 1 ] && thead.firstChild.children[ index + 2 ] !== thead.firstChild.lastChild ) {
-				thead.firstChild.children[ index + 1 ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( thead.firstChild.children[ index ] ) {
-				thead.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
+			if ( focus ) {
+				if ( row.children[ index + 1 ] && row.children[ index + 2 ] !== row.lastChild ) {
+					setFocus( thead, 0, index + 1 );
+				} else if ( row.children[ index ] ) {
+					setFocus( thead, 0, index );
+				}
 			}
 		}
 
-		function removeRow( row ) {
+		function removeRow( row, focus = true ) {
 			const data = JSON.parse( chartData );
-			const tbody = document.querySelector( '.hello-charts-data-editor table tbody' );
+			const tbody = table.current.querySelector( 'tbody' );
 
 			data.labels.splice( row, 1 );
 			data.datasets.forEach( ( dataset ) => {
@@ -141,14 +146,75 @@ export default class EditDataModal extends Component {
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
 
-			if ( tbody.children[ row ] && tbody.children[ row ] !== tbody.lastChild ) {
-				tbody.children[ row ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
-			} else if ( tbody.children[ row - 1 ] ) {
-				tbody.children[ row - 1 ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
+			if ( focus ) {
+				if ( tbody.children[ row ] && tbody.children[ row ] !== tbody.lastChild ) {
+					setFocus( tbody, row, 0 );
+					tbody.children[ row ].firstChild.querySelector( 'input,[contenteditable="true"]' ).focus();
+				} else if ( tbody.children[ row - 1 ] ) {
+					setFocus( tbody, row - 1, 0 );
+				}
 			}
 		}
 
-		function handleFocus( event ) {
+		function moveFocus( direction ) {
+			const { activeElement } = table.current.ownerDocument;
+			const cell = activeElement.closest( 'td,th' );
+			const section = cell.closest( 'thead,tbody,tfoot' );
+			const row = Array.prototype.indexOf.call( section.children, cell.closest( 'tr' ) );
+			const column = Array.prototype.indexOf.call( cell.closest( 'tr' ).children, cell );
+
+			if ( 'left' === direction && column !== 0 ) {
+				setFocus( section, row, column - 1 );
+			}
+
+			if ( 'right' === direction && column !== section.children[ 0 ].children.length - 1 ) {
+				if (
+					activeElement.previousSibling &&
+					activeElement.previousSibling.querySelector( 'button' )
+				) {
+					setFocus( section, row, column, true );
+				} else {
+					setFocus( section, row, column + 1 );
+				}
+			}
+
+			if ( 'up' === direction ) {
+				if ( row !== 0 ) {
+					setFocus( section, row - 1, column );
+				} else if ( 'THEAD' !== section.tagName ) {
+					setFocus( section.previousSibling, section.previousSibling.children.length - 1, column );
+				}
+			}
+
+			if ( 'down' === direction ) {
+				if ( row !== section.children.length - 1 ) {
+					setFocus( section, row + 1, column );
+				} else if ( 'TFOOT' !== section.tagName ) {
+					setFocus( section.nextSibling, 0, column );
+				}
+			}
+		}
+
+		function setFocus( section, row, column, skipInput = false ) {
+			if (
+				! section ||
+				! section.children[ row ] ||
+				! section.children[ row ].children[ column ] ||
+				! section.children[ row ].children[ column ].querySelector( 'button,input,[contenteditable="true"]' )
+			) {
+				return;
+			}
+
+			const input = section.children[ row ].children[ column ].querySelector( 'input,[contenteditable="true"]' );
+			const button = section.children[ row ].children[ column ].querySelector( 'button' );
+			if ( input && ! skipInput ) {
+				input.focus();
+			} else {
+				button.focus();
+			}
+		}
+
+		function selectText( event ) {
 			clearTimeout( focusTimeout );
 
 			focusTimeout = setTimeout(
@@ -169,6 +235,7 @@ export default class EditDataModal extends Component {
 				event.target
 			);
 		}
+
 		/**
 		 * This is tied to the onBlur event of MenuItems inside DropDownMenus.
 		 * This workaround is needed due to a bug affecting DropDownMenus.
@@ -192,28 +259,18 @@ export default class EditDataModal extends Component {
 			const cell = event.target.closest( 'td,th' );
 			const row = event.target.closest( 'tr' );
 
-			if ( cell.nextSibling === row.lastChild && 'Tab' === event.key ) {
-				newDataset( parsedData.datasets.length );
+			if ( cell.nextSibling === row.lastChild && 'Tab' === event.key && 'TH' !== cell.tagName ) {
+				newDataset( parsedData.datasets.length, false );
 			}
 
-			if ( event.target.previousSibling && 'ArrowRight' === event.key ) {
-				event.target.previousSibling.querySelector( 'button' ).focus();
-			} else if ( cell.nextSibling === row.lastChild && 'ArrowRight' === event.key ) {
-				cell.nextSibling.querySelector( 'button' ).focus();
-			} else if ( cell.nextSibling && cell.nextSibling !== row.lastChild ) {
-				cell.nextSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
-			}
+			moveFocus( 'right' );
 		}
 
 		function previousCell( event ) {
 			event.preventDefault();
 			clearTimeout( focusTimeout );
 
-			const cell = event.target.closest( 'td,th' );
-
-			if ( cell.previousSibling ) {
-				cell.previousSibling.querySelector( 'input,[contenteditable="true"]' ).focus();
-			}
+			moveFocus( 'left' );
 		}
 
 		function nextRow( event ) {
@@ -225,58 +282,22 @@ export default class EditDataModal extends Component {
 
 			event.preventDefault();
 
-			const tbody = event.target.closest( 'table' ).firstChild.nextSibling;
-			const tfoot = event.target.closest( 'table' ).lastChild;
-			const row = event.target.closest( 'tr' );
+			const tbody = table.current.firstChild.nextSibling;
 			const cell = event.target.closest( 'td,th' );
-			const index = Array.prototype.indexOf.call( row.children, cell );
+			const row = event.target.closest( 'tr' );
 
-			if ( row === tbody.lastChild && 'Enter' === event.key ) {
-				newRow( parsedData.datasets[ 0 ].data.length );
+			if ( row === tbody.lastChild && 'Enter' === event.key && 'TH' !== cell.tagName ) {
+				newRow( parsedData.datasets[ 0 ].data.length, false );
 			}
 
-			if ( row.nextSibling ) {
-				if ( row.lastChild === cell ) {
-					row.nextSibling.children[ index ].querySelector( 'button' ).focus();
-				} else {
-					row.nextSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-				}
-			} else if ( row.closest( 'thead' ) ) {
-				if ( row.lastChild === cell ) {
-					tbody.firstChild.children[ index ].querySelector( 'button' ).focus();
-				} else {
-					tbody.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-				}
-			} else if ( row.closest( 'tbody' ) && row.firstChild === cell ) {
-				tfoot.firstChild.children[ index ].querySelector( 'button' ).focus();
-			}
+			moveFocus( 'down' );
 		}
 
 		function previousRow( event ) {
 			clearTimeout( focusTimeout );
 			event.preventDefault();
 
-			const tbody = event.target.closest( 'table' ).firstChild.nextSibling;
-			const thead = event.target.closest( 'table' ).firstChild;
-			const row = event.target.closest( 'tr' );
-			const cell = event.target.closest( 'td,th' );
-			const index = Array.prototype.indexOf.call( row.children, cell );
-
-			if ( row.previousSibling ) {
-				if ( row.lastChild === cell ) {
-					row.previousSibling.children[ index ].querySelector( 'button' ).focus();
-				} else {
-					row.previousSibling.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-				}
-			} else if ( row.closest( 'tbody' ) ) {
-				if ( row.lastChild === cell ) {
-					thead.firstChild.children[ index ].querySelector( 'button' ).focus();
-				} else {
-					thead.firstChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-				}
-			} else if ( row.closest( 'tfoot' ) ) {
-				tbody.lastChild.children[ index ].querySelector( 'input,[contenteditable="true"]' ).focus();
-			}
+			moveFocus( 'up' );
 		}
 
 		return (
@@ -306,7 +327,7 @@ export default class EditDataModal extends Component {
 					} }
 					bindGlobal={ true }
 				>
-					<table>
+					<table ref={ table }>
 						<thead>
 							<tr>
 								<th key="-1">
@@ -329,6 +350,7 @@ export default class EditDataModal extends Component {
 										<DropdownMenu
 											icon="ellipsis"
 											label={ __( 'Data Set Actions', 'hello-charts' ) }
+											disableOpenOnArrowDown={ true }
 										>
 											{ ( { onClose } ) => (
 												<MenuGroup>
@@ -370,7 +392,7 @@ export default class EditDataModal extends Component {
 											withoutInteractiveFormatting={ true }
 											preserveWhiteSpace={ false }
 											onChange={ ( text ) => updateDatasetLabel( text, index ) }
-											onFocus={ ( event ) => handleFocus( event ) }
+											onFocus={ ( event ) => selectText( event ) }
 											style={ { whiteSpace: 'nowrap' } }
 										/>
 									</th>
@@ -396,7 +418,7 @@ export default class EditDataModal extends Component {
 											withoutInteractiveFormatting={ true }
 											preserveWhiteSpace={ false }
 											onChange={ ( text ) => updateLabel( text, row ) }
-											onFocus={ ( event ) => handleFocus( event ) }
+											onFocus={ ( event ) => selectText( event ) }
 										/>
 									</th>
 									{ parsedData.datasets.map( ( dataset, index ) => (
@@ -405,7 +427,7 @@ export default class EditDataModal extends Component {
 												type="number"
 												value={ parsedData.datasets[ index ].data[ row ] }
 												onChange={ ( event ) => updateData( event.target.value, index, row ) }
-												onFocus={ ( event ) => handleFocus( event ) }
+												onFocus={ ( event ) => selectText( event ) }
 											/>
 										</td>
 									) ) }
@@ -413,6 +435,7 @@ export default class EditDataModal extends Component {
 										<DropdownMenu
 											icon="ellipsis"
 											label={ __( 'Row Actions', 'hello-charts' ) }
+											disableOpenOnArrowDown={ true }
 										>
 											{ ( { onClose } ) => (
 												<MenuGroup>
