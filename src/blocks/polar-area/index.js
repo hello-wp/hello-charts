@@ -26,7 +26,7 @@ import { icons } from '../../common/helpers';
  */
 registerBlockType( 'hello-charts/block-polar-area', {
 	title: __( 'Polar Area Chart', 'hello-charts' ),
-	description: __( 'Use a Polar Area Chart to plot data in scaled segments. Invented by Florence Nightingale, Polar Area Charts are often used to highlight the scale of values, especially in cyclical data sets.', 'hello-charts' ),
+	description: __( 'Invented by Florence Nightingale, Polar Area Charts are often used to highlight the scale of values, especially in cyclical data sets.', 'hello-charts' ),
 	icon: icons.polarArea,
 	category: 'charts',
 	keywords: [ __( 'graph', 'hello-charts' ), __( 'coxcomb', 'hello-charts' ), __( 'rose', 'hello-charts' ) ],
