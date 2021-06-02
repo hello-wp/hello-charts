@@ -117,6 +117,7 @@ registerBlockType( 'hello-charts/block-radar', {
 	example: {
 		attributes: {
 			title: __( 'Radar Chart', 'hello-charts' ),
+			showChartTitle: false,
 			height: 280,
 			chartData: JSON.stringify( {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],

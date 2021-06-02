@@ -123,6 +123,7 @@ registerBlockType( 'hello-charts/block-line', {
 	example: {
 		attributes: {
 			title: __( 'Line Chart', 'hello-charts' ),
+			showChartTitle: false,
 			height: 280,
 			width: 450,
 			chartData: JSON.stringify( {

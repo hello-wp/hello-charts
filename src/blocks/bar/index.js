@@ -106,6 +106,7 @@ registerBlockType( 'hello-charts/block-bar', {
 	example: {
 		attributes: {
 			title: __( 'Bar Chart', 'hello-charts' ),
+			showChartTitle: false,
 			height: 280,
 			width: 450,
 			chartData: JSON.stringify( {

@@ -100,6 +100,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 	example: {
 		attributes: {
 			title: __( 'Polar Area Chart', 'hello-charts' ),
+			showChartTitle: false,
 			height: 280,
 			chartData: JSON.stringify( {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
