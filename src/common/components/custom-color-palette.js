@@ -2,12 +2,11 @@
  * External components.
  */
 import tinycolor from 'tinycolor2';
-import { check } from '@wordpress/icons'
+import { check } from '@wordpress/icons';
 
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { ColorPalette } = wp.blockEditor;
 const {
@@ -18,9 +17,8 @@ const {
 
 export default class CustomColorPalette extends Component {
 	isCustomColor( color ) {
-		const { colorValue } = this.props;
 		const colors = wp.data.select( 'core/block-editor' ).getSettings().colors;
-		const matchingColors = colors.filter( ( colorObject ) => colorObject.color === colorValue );
+		const matchingColors = colors.filter( ( colorObject ) => colorObject.color === color );
 
 		return ! matchingColors.length;
 	}
@@ -36,7 +34,7 @@ export default class CustomColorPalette extends Component {
 			<BaseControl
 				className={ `hello-charts-color-picker ${ this.isCustomColor( colorValue ) ? ' has-custom-color' : '' }` }
 				{ ...additionalProps }
-				>
+			>
 				<ColorPalette
 					value={ colorValue }
 					clearable={ false }

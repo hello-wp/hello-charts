@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
+const { __, sprintf } = wp.i18n;
 const { Component } = wp.element;
 const { RichText } = wp.blockEditor;
 const {
@@ -86,7 +86,8 @@ export default class DataStyles extends Component {
 						{ parsedData.labels.map( ( label, row ) => (
 							<CustomColorPalette
 								key={ row }
-								label={ __( 'Color', 'hello-charts' ) }
+								// translators: %s: The label for a row of data.
+								label={ sprintf( __( '%s Color', 'hello-charts' ), label ) }
 								id={ `inspect-chart-pie-color-${ clientId }` }
 								colorValue={ getColor( this.state.activeDataset, row ) }
 								onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }

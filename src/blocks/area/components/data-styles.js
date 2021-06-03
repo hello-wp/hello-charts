@@ -3,9 +3,8 @@
  */
 const { __ } = wp.i18n;
 const { Component } = wp.element;
-const { ColorPalette, RichText } = wp.blockEditor;
+const { RichText } = wp.blockEditor;
 const {
-	BaseControl,
 	Button,
 	Card,
 	CardBody,
@@ -20,6 +19,7 @@ const {
 /**
  * Internal dependencies.
  */
+import { CustomColorPalette } from '../../../common/components';
 import { hex2rgba } from '../../../common/helpers';
 
 export default class DataStyles extends Component {
@@ -84,16 +84,12 @@ export default class DataStyles extends Component {
 							] }
 							onChange={ ( style ) => updateDatasetPointStyle( style, this.state.activeDataset ) }
 						/>
-						<BaseControl
+						<CustomColorPalette
 							label={ __( 'Color', 'hello-charts' ) }
-							id={ `inspect-chart-line-border-color-${ clientId }` }
-						>
-							<ColorPalette
-								value={ parsedData.datasets[ this.state.activeDataset ].borderColor }
-								clearable={ false }
-								onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
-							/>
-						</BaseControl>
+							id={ `inspect-chart-bar-color-${ clientId }` }
+							colorValue={ parsedData.datasets[ this.state.activeDataset ].borderColor }
+							onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
+						/>
 					</CardBody>
 				</Card>
 				<Flex>
