@@ -56,7 +56,7 @@ export default class EditDataModal extends Component {
 			const rows = data.datasets[ 0 ].data.length;
 			const dataset = { ...data.datasets[ 0 ] };
 
-			dataset.data = new Array( rows ).fill( '' );
+			dataset.data = new Array( rows ).fill( null );
 			dataset.label = '';
 
 			onNewDataset( dataset );
