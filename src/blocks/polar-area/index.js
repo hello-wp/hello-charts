@@ -1,5 +1,5 @@
 /**
- * BLOCK: Line Chart
+ * BLOCK: Polar Area Chart
  */
 
 /**
@@ -24,12 +24,12 @@ import { icons } from '../../common/helpers';
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'hello-charts/block-line', {
-	title: __( 'Line Chart', 'hello-charts' ),
-	description: __( 'Use a Line Chart to plot data points along a line. Line Charts are useful for showing trend data, or comparing data sets.', 'hello-charts' ),
-	icon: icons.line,
+registerBlockType( 'hello-charts/block-polar-area', {
+	title: __( 'Polar Area Chart', 'hello-charts' ),
+	description: __( 'Invented by Florence Nightingale, Polar Area Charts are often used to highlight the scale of values, especially in cyclical data sets.', 'hello-charts' ),
+	icon: icons.polarArea,
 	category: 'charts',
-	keywords: [ __( 'graph', 'hello-charts' ) ],
+	keywords: [ __( 'graph', 'hello-charts' ), __( 'coxcomb', 'hello-charts' ), __( 'rose', 'hello-charts' ) ],
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
@@ -63,28 +63,10 @@ registerBlockType( 'hello-charts/block-line', {
 			type: 'string',
 			default: JSON.stringify( {
 				init: false,
-				labels: [ '1', '2', '3', '4', '5', '6' ],
+				labels: [ 'A', 'B', 'C', 'D', 'E' ],
 				datasets: [
 					{
-						label: 'A',
-						fill: false,
-						showLine: true,
-						pointRadius: 3,
-						hoverRadius: 3,
-						pointBorderWidth: 0,
-						lineTension: 0.4,
-						pointStyle: 'circle',
-						data: [ 'generate' ],
-					},
-					{
-						label: 'B',
-						fill: false,
-						showLine: true,
-						pointRadius: 3,
-						hoverRadius: 3,
-						pointBorderWidth: 0,
-						lineTension: 0.4,
-						pointStyle: 'circle',
+						label: __( 'Data Set', 'hello-charts' ),
 						data: [ 'generate' ],
 					},
 				],
@@ -98,18 +80,16 @@ registerBlockType( 'hello-charts/block-line', {
 				plugins: {
 					legend: {
 						display: true,
-						position: 'top',
+						position: 'bottom',
 						align: 'center',
 					},
 				},
 				scales: {
-					x: {
+					r: {
 						grid: {
 							display: true,
 						},
-					},
-					y: {
-						grid: {
+						ticks: {
 							display: true,
 						},
 					},
@@ -122,40 +102,22 @@ registerBlockType( 'hello-charts/block-line', {
 	},
 	example: {
 		attributes: {
-			title: __( 'Line Chart', 'hello-charts' ),
+			title: __( 'Polar Area Chart', 'hello-charts' ),
 			showChartTitle: false,
 			height: 280,
-			width: 450,
 			chartData: JSON.stringify( {
-				labels: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun' ],
+				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
 				datasets: [
 					{
-						label: 'A',
-						fill: false,
-						showLine: true,
-						pointRadius: 3,
-						hoverRadius: 3,
-						pointBorderWidth: 0,
-						lineTension: 0.4,
-						pointStyle: 'circle',
-						data: [ 10, 19, 6, 3, 12, 15 ],
-						borderColor: '#cf2e2e',
-						pointBackgroundColor: '#cf2e2e',
-						backgroundColor: '#cf2e2e',
-					},
-					{
-						label: 'B',
-						fill: false,
-						showLine: true,
-						pointRadius: 3,
-						hoverRadius: 3,
-						pointBorderWidth: 0,
-						lineTension: 0.4,
-						pointStyle: 'circle',
-						data: [ 15, 13, 3, 11, 1, 10 ],
-						borderColor: '#0693e3',
-						pointBackgroundColor: '#0693e3',
-						backgroundColor: '#0693e3',
+						data: [ 7, 5, 6, 4, 6 ],
+						borderColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0', '#fcb900' ],
+						backgroundColor: [
+							'rgba(207, 46, 46, 0.6)',
+							'rgba(0, 208, 132, 0.6)',
+							'rgba(6, 147, 227, 0.6)',
+							'rgba(155, 81, 224, 0.6)',
+							'rgba(252, 185, 0, 0.6)',
+						],
 					},
 				],
 			} ),
@@ -165,6 +127,16 @@ registerBlockType( 'hello-charts/block-line', {
 				plugins: {
 					legend: {
 						display: false,
+					},
+				},
+				scales: {
+					r: {
+						grid: {
+							display: true,
+						},
+						ticks: {
+							display: false,
+						},
 					},
 				},
 			} ),

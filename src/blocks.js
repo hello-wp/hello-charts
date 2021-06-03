@@ -12,6 +12,7 @@
 import './blocks/bar';
 import './blocks/line';
 import './blocks/pie';
+import './blocks/polar-area';
 import './blocks/radar';
 
 // WordPress filter hooks.
