@@ -108,6 +108,7 @@ function hello_charts_block_assets() {
 	 * @link https://wordpress.org/gutenberg/handbook/blocks/writing-your-first-block-type#enqueuing-block-scripts
 	 * @since 1.16.0
 	 */
+	register_block_type( 'hello-charts/block-area', $block_type_args );
 	register_block_type( 'hello-charts/block-bar', $block_type_args );
 	register_block_type( 'hello-charts/block-line', $block_type_args );
 	register_block_type( 'hello-charts/block-pie', $block_type_args );
@@ -162,6 +163,7 @@ function hello_charts_render_block( $block_content, $block ) {
 
 	return $block_content;
 }
+add_filter( 'render_block_hello-charts/block-area', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-bar', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-line', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-pie', 'hello_charts_render_block', 10, 2 );
