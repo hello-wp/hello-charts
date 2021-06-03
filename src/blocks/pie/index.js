@@ -94,6 +94,7 @@ registerBlockType( 'hello-charts/block-pie', {
 	example: {
 		attributes: {
 			title: __( 'Pie Chart', 'hello-charts' ),
+			showChartTitle: false,
 			height: 280,
 			chartData: JSON.stringify( {
 				datasets: [

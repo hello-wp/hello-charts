@@ -112,6 +112,7 @@ function hello_charts_block_assets() {
 	register_block_type( 'hello-charts/block-bar', $block_type_args );
 	register_block_type( 'hello-charts/block-line', $block_type_args );
 	register_block_type( 'hello-charts/block-pie', $block_type_args );
+	register_block_type( 'hello-charts/block-polar-area', $block_type_args );
 	register_block_type( 'hello-charts/block-radar', $block_type_args );
 }
 
@@ -167,5 +168,6 @@ add_filter( 'render_block_hello-charts/block-area', 'hello_charts_render_block',
 add_filter( 'render_block_hello-charts/block-bar', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-line', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-pie', 'hello_charts_render_block', 10, 2 );
+add_filter( 'render_block_hello-charts/block-polar-area', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-radar', 'hello_charts_render_block', 10, 2 );
 add_filter( 'render_block_hello-charts/block-radar', 'hello_charts_render_block', 10, 2 );
