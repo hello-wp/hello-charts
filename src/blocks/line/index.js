@@ -112,6 +112,7 @@ registerBlockType( 'hello-charts/block-line', {
 						grid: {
 							display: true,
 						},
+						stacked: false,
 					},
 				},
 				layout: {
