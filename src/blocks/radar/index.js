@@ -153,7 +153,6 @@ registerBlockType( 'hello-charts/block-radar', {
 							display: false,
 						},
 						suggestedMin: 0,
-						stacked: false,
 					},
 				},
 			} ),

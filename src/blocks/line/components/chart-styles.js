@@ -29,16 +29,14 @@ export default class ChartStyles extends Component {
 
 		function updateShowBackground( state, stacked ) {
 			const data = JSON.parse( chartData );
-			const options = JSON.parse( chartOptions );
-
 			data.datasets.forEach( ( dataset, index ) => {
 				if ( stacked && 0 === index && state ) {
-					 data.datasets[ index ].fill = 'start';
-				 } else if ( stacked && state ) {
-					 data.datasets[ index ].fill = '-1';
-				 } else {
-					 data.datasets[ index ].fill = state;
-				 }
+					data.datasets[ index ].fill = 'start';
+				} else if ( stacked && state ) {
+					data.datasets[ index ].fill = '-1';
+				} else {
+					data.datasets[ index ].fill = state;
+				}
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
@@ -46,7 +44,7 @@ export default class ChartStyles extends Component {
 		function updateStacked( state ) {
 			const data = JSON.parse( chartData );
 			const options = JSON.parse( chartOptions );
-			const showBackground = parsedData.datasets[ 0 ].fill ? true : false;
+			const showBackground = data.datasets[ 0 ].fill ? true : false;
 
 			options.scales.y.stacked = state;
 

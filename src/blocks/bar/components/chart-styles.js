@@ -24,6 +24,13 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
+		function updateStacked( state ) {
+			const options = JSON.parse( chartOptions );
+			options.scales.x.stacked = state;
+			options.scales.y.stacked = state;
+			setAttributes( { chartOptions: JSON.stringify( options ) } );
+		}
+
 		function updateShowGridLines( state, axis ) {
 			const options = JSON.parse( chartOptions );
 
@@ -48,6 +55,11 @@ export default class ChartStyles extends Component {
 						{ label: __( 'Vertical', 'hello-charts' ), value: 'x' },
 						{ label: __( 'Horizontal', 'hello-charts' ), value: 'y' },
 					] }
+				/>
+				<ToggleControl
+					label={ __( 'Stack Data Sets', 'hello-charts' ) }
+					checked={ parsedOptions.scales.y.stacked }
+					onChange={ ( state ) => updateStacked( state ) }
 				/>
 				<ToggleControl
 					label={ __( 'Show X Axis Grid Lines', 'hello-charts' ) }
