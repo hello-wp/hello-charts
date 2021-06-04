@@ -90,11 +90,13 @@ registerBlockType( 'hello-charts/block-bar', {
 						grid: {
 							display: true,
 						},
+						stacked: false,
 					},
 					y: {
 						grid: {
 							display: true,
 						},
+						stacked: false,
 					},
 				},
 				layout: {

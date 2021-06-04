@@ -27,12 +27,29 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function updateShowBackground( state ) {
+		function updateShowBackground( state, stacked ) {
 			const data = JSON.parse( chartData );
 			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].fill = state;
+				if ( stacked && 0 === index && state ) {
+					data.datasets[ index ].fill = 'start';
+				} else if ( stacked && state ) {
+					data.datasets[ index ].fill = '-1';
+				} else {
+					data.datasets[ index ].fill = state;
+				}
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function updateStacked( state ) {
+			const data = JSON.parse( chartData );
+			const options = JSON.parse( chartOptions );
+			const showBackground = data.datasets[ 0 ].fill ? true : false;
+
+			options.scales.y.stacked = state;
+
+			setAttributes( { chartOptions: JSON.stringify( options ) } );
+			updateShowBackground( showBackground, state );
 		}
 
 		function updateShowGridLines( state, axis ) {
@@ -76,7 +93,12 @@ export default class ChartStyles extends Component {
 				<ToggleControl
 					label={ __( 'Show Background', 'hello-charts' ) }
 					checked={ parsedData.datasets[ 0 ].fill }
-					onChange={ ( state ) => updateShowBackground( state ) }
+					onChange={ ( state ) => updateShowBackground( state, parsedOptions.scales.y.stacked ) }
+				/>
+				<ToggleControl
+					label={ __( 'Stack Data Sets', 'hello-charts' ) }
+					checked={ parsedOptions.scales.y.stacked }
+					onChange={ ( state ) => updateStacked( state ) }
 				/>
 				<ToggleControl
 					label={ __( 'Show X Axis Grid Lines', 'hello-charts' ) }
