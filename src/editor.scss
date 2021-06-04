@@ -72,6 +72,10 @@
 			&:focus-within button.components-dropdown-menu__toggle {
 				opacity: 1;
 			}
+
+			.input-error:not(:focus) {
+				box-shadow: #d63638 0px 0px 0px 2px;
+			}
         }
 
         tbody {
@@ -182,6 +186,11 @@
 .popover-slot {
 	.components-menu-item__item {
 		padding-right: 1em;
+	}
+
+	.info-popover .components-popover__content {
+		padding: 1em;
+		width: 250px;
 	}
 }
 

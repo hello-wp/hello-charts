@@ -94,6 +94,9 @@ registerBlockType( 'hello-charts/block-polar-area', {
 						},
 					},
 				},
+				layout: {
+					padding: 20,
+				},
 			} ),
 		},
 	},
