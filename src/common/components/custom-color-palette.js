@@ -23,6 +23,12 @@ export default class CustomColorPalette extends Component {
 		return ! matchingColors.length;
 	}
 
+	triggerColorPopover( event ) {
+		const wrapper = event.target.closest( '.hello-charts-color-picker' );
+		const actionButton = wrapper.querySelector( '.components-dropdown button' );
+		actionButton.click();
+	}
+
 	render() {
 		const {
 			colorValue,
@@ -43,7 +49,7 @@ export default class CustomColorPalette extends Component {
 				/>
 				{ this.isCustomColor( colorValue ) && (
 					<div className="hello-charts-custom-color-indicator">
-						<ColorIndicator colorValue={ colorValue }>
+						<ColorIndicator colorValue={ colorValue } onClick={ this.triggerColorPopover }>
 							<Icon
 								icon={ check }
 								fill={ tinycolor.mostReadable( colorValue, [ '#000', '#fff' ] ).toHexString() }
