@@ -53,6 +53,11 @@
     "test:e2e:interactive": "npm run test:e2e -- --puppeteer-interactive",
     "test:js": "wp-scripts test-unit-js --config=tests/js/jest.config.js",
     "test:js:coverage": "npm run test:js -- --coverage --coverageDirectory=tests/coverage/js",
-    "test:js:watch": "npm run test:js -- --watch"
+    "test:js:watch": "npm run test:js -- --watch",
+    "package:clean": "rm -rf build && rm -rf package",
+    "package:mkdir": "mkdir -p package/hello-charts",
+    "package:rsync": "rsync -av ./ package/hello-charts/ --exclude=vendor --exclude=node_modules --exclude=package --exclude=\".git*\"",
+    "package:zip": "cd package && zip -r hello-charts hello-charts/ && rm -r hello-charts/",
+    "package": "npm run package:clean && npm run build && npm run package:mkdir && npm run package:rsync && npm run package:zip"
   }
 }
