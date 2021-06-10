@@ -13,12 +13,20 @@ const {
  */
 import { icons } from '../../common/helpers';
 
-export default class EditDataToolbar extends Component {
+export default class ChartFormattingToolbar extends Component {
 	render() {
 		const {
-			attributes: { showChartTitle, showChartBackground },
+			attributes: { showChartTitle, showChartBackground, chartOptions },
 			setAttributes,
 		} = this.props;
+
+		const parsedOptions = JSON.parse( chartOptions );
+
+		function toggleShowLegend() {
+			const options = JSON.parse( chartOptions );
+			options.plugins.legend.display = options.plugins.legend.display ? false : true;
+			setAttributes( { chartOptions: JSON.stringify( options ) } );
+		}
 
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
@@ -28,6 +36,11 @@ export default class EditDataToolbar extends Component {
 					onClick={
 						() => setAttributes( { showChartTitle: showChartTitle ? false : true } )
 					}
+				/>
+				<ToolbarButton
+					icon={ parsedOptions.plugins.legend.display ? icons.legendOn : icons.legendOff }
+					label={ parsedOptions.plugins.legend.display ? __( 'Hide Legend', 'hello-charts' ) : __( 'Show Legend', 'hello-charts' ) }
+					onClick={ toggleShowLegend }
 				/>
 				<ToolbarButton
 					icon={ showChartBackground ? icons.chartBackgroundOn : icons.chartBackgroundOff }
