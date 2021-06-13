@@ -99,7 +99,7 @@ const icons = {
 	legendMiddle: (
 		<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 			<path d="M21,3L3,3L3,21L21,21L21,3ZM19.5,4.5L19.5,19.5C19.5,19.5 4.5,19.5 4.5,19.5C4.5,19.5 4.5,4.5 4.5,4.5L19.5,4.5Z" />
-			<rect x="6" y="12" width="12" height="3" />
+			<rect x="6" y="10.5" width="12" height="3" />
 		</svg>
 	),
 	legendBottom: (
@@ -117,7 +117,7 @@ const icons = {
 	legendCenter: (
 		<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 			<path d="M21,3L3,3L3,21L21,21L21,3ZM19.5,4.5L19.5,19.5C19.5,19.5 4.5,19.5 4.5,19.5C4.5,19.5 4.5,4.5 4.5,4.5L19.5,4.5Z" />
-			<rect x="12" y="6" width="3" height="12" />
+			<rect x="10.5" y="6" width="3" height="12" />
 		</svg>
 	),
 	legendRight: (
