@@ -1,10 +1,11 @@
 const path = require( 'path' );
 const isProduction = process.env.NODE_ENV === 'production';
 
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const IgnoreEmitPlugin = require( 'ignore-emit-webpack-plugin' );
 const CopyPlugin = require( 'copy-webpack-plugin' );
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const IgnoreEmitPlugin = require( 'ignore-emit-webpack-plugin' );
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
 	...defaultConfig,
@@ -41,6 +42,13 @@ module.exports = {
 				},
 			},
 		},
+		minimizer: [
+			new TerserPlugin(
+				{
+					extractComments: false,
+				}
+			)
+		],
 	},
 	watch: false,
 	mode: isProduction ? 'production' : 'development',
