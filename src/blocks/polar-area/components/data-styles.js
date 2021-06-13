@@ -1,11 +1,10 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
+const { __, sprintf } = wp.i18n;
 const { Component } = wp.element;
-const { ColorPalette, RichText } = wp.blockEditor;
+const { RichText } = wp.blockEditor;
 const {
-	BaseControl,
 	Button,
 	Card,
 	CardBody,
@@ -19,6 +18,7 @@ const {
 /**
  * Internal dependencies.
  */
+import { CustomColorPalette } from '../../../common/components';
 import { hex2rgba, randomColors } from '../../../common/helpers';
 
 export default class DataStyles extends Component {
@@ -84,17 +84,14 @@ export default class DataStyles extends Component {
 					</CardHeader>
 					<CardBody>
 						{ parsedData.labels.map( ( label, row ) => (
-							<BaseControl
+							<CustomColorPalette
 								key={ row }
-								label={ label + ' ' + __( 'Color', 'hello-charts' ) }
-								id={ `inspect-chart-pie-border-color-${ clientId }-${ row }` }
-							>
-								<ColorPalette
-									value={ getColor( this.state.activeDataset, row ) }
-									clearable={ false }
-									onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
-								/>
-							</BaseControl>
+								// translators: %s: The label for a row of data.
+								label={ sprintf( __( '%s Color', 'hello-charts' ), label ) }
+								id={ `inspect-chart-bar-color-${ clientId }` }
+								colorValue={ getColor( this.state.activeDataset, row ) }
+								onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
+							/>
 						) ) }
 					</CardBody>
 				</Card>

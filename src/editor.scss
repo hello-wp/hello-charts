@@ -186,6 +186,40 @@
 	}
 }
 
+.hello-charts-color-picker {
+	.components-circular-option-picker__dropdown-link-action {
+		height: 28px;
+		line-height: 28px;
+	}
+
+	&.has-custom-color {
+		.components-circular-option-picker__dropdown-link-action {
+			padding-right: 32px;
+		}
+	}
+
+	.hello-charts-custom-color-indicator {
+		margin-top: -28px;
+		padding-right: 10px;
+
+		.component-color-indicator {
+			margin: 0 0 0 auto;
+			padding: 2px;
+			width: 28px;
+			height: 28px;
+			display: block;
+			border-radius: 50%;
+			border: none;
+			box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 1px inset;
+
+			&:hover {
+				transform: scale( 1.2 );
+				cursor: pointer;
+			}
+		}
+	}
+}
+
 .block-editor-block-preview__content .wp-block-hello-charts {
 	.wrapper {
 		height: 340px;
