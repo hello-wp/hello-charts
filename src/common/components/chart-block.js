@@ -12,7 +12,6 @@ import {
 	EditDataButton,
 	EditDataModal,
 	EditDataToolbar,
-	Legend,
 } from '.';
 
 export default class ChartBlock extends Component {
@@ -79,7 +78,6 @@ export default class ChartBlock extends Component {
 					<EditDataButton toggleEditor={ this.toggleEditor } />
 					<ChartStyles { ...this.props } />
 					<DataStyles { ...this.props } />
-					<Legend { ...this.props } />
 				</InspectorControls>
 				<BlockControls>
 					<EditDataToolbar toggleEditor={ this.toggleEditor } />
