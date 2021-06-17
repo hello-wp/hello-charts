@@ -92,7 +92,7 @@ registerBlockType( 'hello-charts/block-pie', {
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
-	attributes: attributes,
+	attributes,
 	example: {
 		attributes: {
 			title: __( 'Pie Chart', 'hello-charts' ),
@@ -145,9 +145,9 @@ registerBlockType( 'hello-charts/block-pie', {
 					to.chartOptions = JSON.stringify( toOptions );
 
 					return createBlock( 'hello-charts/block-pie', to );
-				}
+				},
 			},
-		]
+		],
 	},
 
 	/* Render the block components. */

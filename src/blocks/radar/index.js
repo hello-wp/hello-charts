@@ -115,7 +115,7 @@ registerBlockType( 'hello-charts/block-radar', {
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
-	attributes: attributes,
+	attributes,
 	example: {
 		attributes: {
 			title: __( 'Radar Chart', 'hello-charts' ),
@@ -185,9 +185,9 @@ registerBlockType( 'hello-charts/block-radar', {
 					to.chartOptions = JSON.stringify( toOptions );
 
 					return createBlock( 'hello-charts/block-radar', to );
-				}
+				},
 			},
-		]
+		],
 	},
 
 	/* Render the block components. */

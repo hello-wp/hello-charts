@@ -101,7 +101,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
-	attributes: attributes,
+	attributes,
 	example: {
 		attributes: {
 			title: __( 'Polar Area Chart', 'hello-charts' ),
@@ -168,9 +168,9 @@ registerBlockType( 'hello-charts/block-polar-area', {
 					to.chartOptions = JSON.stringify( toOptions );
 
 					return createBlock( 'hello-charts/block-polar-area', to );
-				}
+				},
 			},
-		]
+		],
 	},
 
 	/* Render the block components. */

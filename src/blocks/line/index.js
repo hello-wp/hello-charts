@@ -123,7 +123,7 @@ registerBlockType( 'hello-charts/block-line', {
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
-	attributes: attributes,
+	attributes,
 	example: {
 		attributes: {
 			title: __( 'Line Chart', 'hello-charts' ),
@@ -198,9 +198,9 @@ registerBlockType( 'hello-charts/block-line', {
 					to.chartOptions = JSON.stringify( toOptions );
 
 					return createBlock( 'hello-charts/block-line', to );
-				}
+				},
 			},
-		]
+		],
 	},
 
 	/* Render the block components. */

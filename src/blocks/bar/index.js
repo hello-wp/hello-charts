@@ -11,7 +11,6 @@ const { createBlock, registerBlockType } = wp.blocks;
 /**
  * Components and dependencies.
  */
-import { registeredChartBlocks } from '../../blocks';
 import { Edit } from './components';
 import { Save } from '../../common/components';
 import { icons } from '../../common/helpers';
@@ -107,7 +106,7 @@ registerBlockType( 'hello-charts/block-bar', {
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
-	attributes: attributes,
+	attributes,
 	example: {
 		attributes: {
 			title: __( 'Bar Chart', 'hello-charts' ),
@@ -159,9 +158,9 @@ registerBlockType( 'hello-charts/block-bar', {
 					to.chartOptions = JSON.stringify( toOptions );
 
 					return createBlock( 'hello-charts/block-bar', to );
-				}
+				},
 			},
-		]
+		],
 	},
 
 	/* Render the block components. */
