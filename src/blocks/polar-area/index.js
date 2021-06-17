@@ -6,7 +6,7 @@
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
-const { registerBlockType } = wp.blocks;
+const { createBlock, registerBlockType } = wp.blocks;
 
 /**
  * Internal dependencies.
@@ -14,6 +14,74 @@ const { registerBlockType } = wp.blocks;
 import { Edit } from './components';
 import { Save } from '../../common/components';
 import { icons } from '../../common/helpers';
+
+const attributes = {
+	blockId: {
+		type: 'string',
+		default: '',
+	},
+	title: {
+		type: 'string',
+		default: '',
+	},
+	showChartTitle: {
+		type: 'boolean',
+		default: true,
+	},
+	showChartBackground: {
+		type: 'boolean',
+		default: true,
+	},
+	height: {
+		type: 'number',
+	},
+	width: {
+		type: 'number',
+	},
+	chartType: {
+		type: 'string',
+	},
+	chartData: {
+		type: 'string',
+		default: JSON.stringify( {
+			init: false,
+			labels: [ 'A', 'B', 'C', 'D', 'E' ],
+			datasets: [
+				{
+					label: __( 'Data Set', 'hello-charts' ),
+					data: [ 'generate' ],
+				},
+			],
+		} ),
+	},
+	chartOptions: {
+		type: 'string',
+		default: JSON.stringify( {
+			init: false,
+			animation: false,
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					align: 'center',
+				},
+			},
+			scales: {
+				r: {
+					grid: {
+						display: true,
+					},
+					ticks: {
+						display: true,
+					},
+				},
+			},
+			layout: {
+				padding: 20,
+			},
+		} ),
+	},
+};
 
 /**
  * Registers this as a block.
@@ -33,73 +101,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 	supports: {
 		align: [ 'wide', 'full' ],
 	},
-	attributes: {
-		blockId: {
-			type: 'string',
-			default: '',
-		},
-		title: {
-			type: 'string',
-			default: '',
-		},
-		showChartTitle: {
-			type: 'boolean',
-			default: true,
-		},
-		showChartBackground: {
-			type: 'boolean',
-			default: true,
-		},
-		height: {
-			type: 'number',
-		},
-		width: {
-			type: 'number',
-		},
-		chartType: {
-			type: 'string',
-		},
-		chartData: {
-			type: 'string',
-			default: JSON.stringify( {
-				init: false,
-				labels: [ 'A', 'B', 'C', 'D', 'E' ],
-				datasets: [
-					{
-						label: __( 'Data Set', 'hello-charts' ),
-						data: [ 'generate' ],
-					},
-				],
-			} ),
-		},
-		chartOptions: {
-			type: 'string',
-			default: JSON.stringify( {
-				init: false,
-				animation: false,
-				plugins: {
-					legend: {
-						display: true,
-						position: 'bottom',
-						align: 'center',
-					},
-				},
-				scales: {
-					r: {
-						grid: {
-							display: true,
-						},
-						ticks: {
-							display: true,
-						},
-					},
-				},
-				layout: {
-					padding: 20,
-				},
-			} ),
-		},
-	},
+	attributes: attributes,
 	example: {
 		attributes: {
 			title: __( 'Polar Area Chart', 'hello-charts' ),
@@ -141,6 +143,34 @@ registerBlockType( 'hello-charts/block-polar-area', {
 				},
 			} ),
 		},
+	},
+	transforms: {
+		from: [
+			{
+				type: 'block',
+				blocks: [
+					'hello-charts/block-bar',
+					'hello-charts/block-line',
+					'hello-charts/block-pie',
+					'hello-charts/block-radar',
+				],
+				transform: ( from ) => {
+					const to = {};
+					const toOptions = JSON.parse( attributes.chartOptions.default );
+					const fromOptions = JSON.parse( from.chartOptions );
+
+					to.title = from.title;
+					to.showChartTitle = from.showChartTitle;
+					to.showChartBackground = from.showChartBackground;
+					to.chartData = from.chartData;
+					toOptions.plugins.legend = fromOptions.plugins.legend;
+
+					to.chartOptions = JSON.stringify( toOptions );
+
+					return createBlock( 'hello-charts/block-polar-area', to );
+				}
+			},
+		]
 	},
 
 	/* Render the block components. */
