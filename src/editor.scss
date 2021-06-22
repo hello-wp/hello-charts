@@ -35,6 +35,10 @@
 		}
     }
 
+	.components-modal__content:before {
+		margin-bottom: 0;
+	}
+
     table {
         position: relative;
         border-collapse: collapse;
