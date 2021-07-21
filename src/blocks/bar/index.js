@@ -9,11 +9,11 @@ const { __ } = wp.i18n;
 const { createBlock, registerBlockType } = wp.blocks;
 
 /**
- * Components and dependencies.
+ * Internal dependencies.
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons } from '../../common/helpers';
+import { icons, rgba2hex } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -146,16 +146,40 @@ registerBlockType( 'hello-charts/block-bar', {
 				],
 				transform: ( from ) => {
 					const to = {};
-					const toOptions = JSON.parse( attributes.chartOptions.default );
 					const fromOptions = JSON.parse( from.chartOptions );
+					const toOptions = JSON.parse( attributes.chartOptions.default );
+					const fromData = JSON.parse( from.chartData );
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
-					to.chartData = from.chartData;
-					toOptions.plugins.legend = fromOptions.plugins.legend;
+					toOptions.plugins.legend = fromOptions.plugins?.legend;
+
+					/*
+					 * We're intentionally setting the x stacked attribute to the same as y,
+					 * because the "Stack Data Sets" option usually only applies to the y axis,
+					 * however it should apply to both axes on a bar chart.
+					 */
+					toOptions.scales.x.stacked = fromOptions.scales?.y?.stacked ?? false;
+					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
+					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
+					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
 
 					to.chartOptions = JSON.stringify( toOptions );
+
+					/*
+					 * Some chart types use an array of colors per dataset. This chart should
+					 * only use a single color (the first in the array) for each dataset.
+					 */
+					fromData.datasets.forEach( ( dataset ) => {
+						if ( 'object' === typeof dataset.backgroundColor ) {
+							dataset.backgroundColor = rgba2hex( dataset.backgroundColor[0] );
+						} else {
+							dataset.backgroundColor = rgba2hex( dataset.backgroundColor );
+						}
+					} );
+
+					to.chartData = JSON.stringify( fromData );
 
 					return createBlock( 'hello-charts/block-bar', to );
 				},

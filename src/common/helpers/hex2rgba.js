@@ -7,6 +7,11 @@
  */
 const hex2rgba = ( hex, a ) => {
 	const parts = hex.replace( '#', '' ).match( /.{1,2}/g );
+
+	if ( parts.length !== 3 ) {
+		return hex;
+	}
+
 	return `rgba(${ parseInt( parts[ 0 ], 16 ) },${ parseInt(
 		parts[ 1 ],
 		16

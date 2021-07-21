@@ -13,7 +13,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons } from '../../common/helpers';
+import { icons, randomColors, rgba2hex } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -135,6 +135,7 @@ registerBlockType( 'hello-charts/block-pie', {
 					const to = {};
 					const toOptions = JSON.parse( attributes.chartOptions.default );
 					const fromOptions = JSON.parse( from.chartOptions );
+					const fromData = JSON.parse( from.chartData );
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
@@ -143,6 +144,24 @@ registerBlockType( 'hello-charts/block-pie', {
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 
 					to.chartOptions = JSON.stringify( toOptions );
+
+					/*
+					 * Some chart types use only a single color per dataset. This chart should
+					 * use an array of colors, so we'll randomly generate them.
+					 */
+					fromData.datasets.forEach( ( dataset ) => {
+						const themeColors = randomColors( dataset.data.length - 1 );
+						if ( 'string' === typeof dataset.backgroundColor ) {
+							dataset.backgroundColor = [ rgba2hex( dataset.backgroundColor ), ...themeColors ];
+						}
+						if ( 'string' === typeof dataset.borderColor ) {
+							dataset.borderColor = [ rgba2hex( dataset.borderColor ), ...themeColors ];
+						} else if ( 'undefined' === typeof dataset.borderColor ) {
+							dataset.borderColor = dataset.backgroundColor;
+						}
+					} );
+
+					to.chartData = JSON.stringify( fromData );
 
 					return createBlock( 'hello-charts/block-pie', to );
 				},
