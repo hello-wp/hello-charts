@@ -153,13 +153,13 @@ registerBlockType( 'hello-charts/block-bar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
-					toOptions.plugins.legend = fromOptions.plugins?.legend;
 
 					/*
 					 * We're intentionally setting the x stacked attribute to the same as y,
 					 * because the "Stack Data Sets" option usually only applies to the y axis,
 					 * however it should apply to both axes on a bar chart.
 					 */
+					toOptions.plugins.legend = fromOptions.plugins?.legend;
 					toOptions.scales.x.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
@@ -173,10 +173,13 @@ registerBlockType( 'hello-charts/block-bar', {
 					 */
 					fromData.datasets.forEach( ( dataset ) => {
 						if ( 'object' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = rgba2hex( dataset.backgroundColor[0] );
+							dataset.backgroundColor = rgba2hex( dataset.backgroundColor[ 0 ] );
 						} else {
 							dataset.backgroundColor = rgba2hex( dataset.backgroundColor );
 						}
+
+						/* We're intentionally using the background color as the border color for bar charts. */
+						dataset.borderColor = dataset.backgroundColor;
 					} );
 
 					to.chartData = JSON.stringify( fromData );

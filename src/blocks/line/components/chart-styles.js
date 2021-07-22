@@ -22,7 +22,7 @@ export default class ChartStyles extends Component {
 		function updateShowLine( state ) {
 			const data = JSON.parse( chartData );
 			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].showLine = state;
+				data.datasets[ index ].borderWidth = state ? 3 : 0;
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
@@ -87,7 +87,7 @@ export default class ChartStyles extends Component {
 			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<ToggleControl
 					label={ __( 'Show Line', 'hello-charts' ) }
-					checked={ parsedData.datasets[ 0 ].showLine }
+					checked={ parsedData.datasets[ 0 ].borderWidth > 0 }
 					onChange={ ( state ) => updateShowLine( state ) }
 				/>
 				<ToggleControl

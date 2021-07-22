@@ -39,9 +39,9 @@ export default class Edit extends Component {
 	/**
 	 * Workaround for minimumFractionDigits value is out of range bug.
 	 *
-	 * @link https://github.com/chartjs/Chart.js/issues/8092
-	 * @param number value
-	 * @returns number
+	 * @see https://github.com/chartjs/Chart.js/issues/8092
+	 * @param { number } value The tick value.
+	 * @return { number } The unchanged value.
 	 */
 	ticksCallback( value ) {
 		return value;

@@ -13,7 +13,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons } from '../../common/helpers';
+import { hex2rgba, icons, rgba2hex } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -87,7 +87,7 @@ const attributes = {
 					ticks: {
 						display: true,
 					},
-					suggestedMin: null,
+					suggestedMin: 0,
 				},
 			},
 			layout: {
@@ -174,15 +174,44 @@ registerBlockType( 'hello-charts/block-radar', {
 				transform: ( from ) => {
 					const to = {};
 					const toOptions = JSON.parse( attributes.chartOptions.default );
+					const toData = JSON.parse( attributes.chartData.default );
 					const fromOptions = JSON.parse( from.chartOptions );
+					const fromData = JSON.parse( from.chartData );
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
-					to.chartData = from.chartData;
+
 					toOptions.plugins.legend = fromOptions.plugins.legend;
+					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
+					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
 
 					to.chartOptions = JSON.stringify( toOptions );
+
+					/*
+					 * Some chart types use an array of colors per dataset. This chart should
+					 * only use a single color (the first in the array) for each dataset.
+					 */
+					fromData.datasets.forEach( ( dataset ) => {
+						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
+						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
+						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
+						dataset.tension = dataset.tension ?? dataset.lineTension ?? toData.datasets[ 0 ].lineTension;
+						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
+
+						if ( 'object' === typeof dataset.backgroundColor ) {
+							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[ 0 ], 0.6 );
+						} else {
+							dataset.backgroundColor = hex2rgba( dataset.backgroundColor, 0.6 );
+						}
+						if ( 'object' === typeof dataset.borderColor ) {
+							dataset.borderColor = rgba2hex( dataset.borderColor[ 0 ] );
+						} else if ( 'undefined' === typeof dataset.borderColor ) {
+							dataset.borderColor = rgba2hex( dataset.backgroundColor );
+						}
+					} );
+
+					to.chartData = JSON.stringify( fromData );
 
 					return createBlock( 'hello-charts/block-radar', to );
 				},

@@ -5,14 +5,14 @@
  * @return {string} A hex code.
  */
 const rgba2hex = ( rgba ) => {
-	const parts = rgba.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
+	const parts = rgba.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' ).slice( 0, 3 );
 
 	if ( parts.length < 3 ) {
 		return rgba;
 	}
 
-	const merge = ( 1 << 24 ) + ( parseInt( parts[ 0 ] ) << 16 ) + ( parseInt( parts[ 1 ] ) << 8 ) + parseInt( parts[ 2 ] );
-	return `#${ merge.toString( 16 ).slice( 1 ) }`;
+	const merge = parts.map( ( x, i ) => i === 3 ? parseInt( 255 * parseFloat( x ) ).toString( 16 ) : parseInt( x ).toString( 16 ) ).join( '' );
+	return `#${ merge }`;
 };
 
 export default rgba2hex;

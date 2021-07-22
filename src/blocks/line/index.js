@@ -50,9 +50,9 @@ const attributes = {
 				{
 					label: 'A',
 					fill: false,
-					showLine: true,
 					pointRadius: 3,
 					hoverRadius: 3,
+					borderWidth: 3,
 					pointBorderWidth: 0,
 					lineTension: 0.4,
 					pointStyle: 'circle',
@@ -61,9 +61,9 @@ const attributes = {
 				{
 					label: 'B',
 					fill: false,
-					showLine: true,
 					pointRadius: 3,
 					hoverRadius: 3,
+					borderWidth: 3,
 					pointBorderWidth: 0,
 					lineTension: 0.4,
 					pointStyle: 'circle',
@@ -136,9 +136,9 @@ registerBlockType( 'hello-charts/block-line', {
 					{
 						label: 'A',
 						fill: false,
-						showLine: true,
 						pointRadius: 3,
 						hoverRadius: 3,
+						borderWidth: 3,
 						pointBorderWidth: 0,
 						lineTension: 0.4,
 						pointStyle: 'circle',
@@ -150,9 +150,9 @@ registerBlockType( 'hello-charts/block-line', {
 					{
 						label: 'B',
 						fill: false,
-						showLine: true,
 						pointRadius: 3,
 						hoverRadius: 3,
+						borderWidth: 3,
 						pointBorderWidth: 0,
 						lineTension: 0.4,
 						pointStyle: 'circle',
@@ -187,14 +187,15 @@ registerBlockType( 'hello-charts/block-line', {
 				transform: ( from ) => {
 					const to = {};
 					const toOptions = JSON.parse( attributes.chartOptions.default );
+					const toData = JSON.parse( attributes.chartData.default );
 					const fromOptions = JSON.parse( from.chartOptions );
 					const fromData = JSON.parse( from.chartData );
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
-					toOptions.plugins.legend = fromOptions.plugins.legend;
 
+					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
@@ -206,13 +207,19 @@ registerBlockType( 'hello-charts/block-line', {
 					 * only use a single color (the first in the array) for each dataset.
 					 */
 					fromData.datasets.forEach( ( dataset ) => {
+						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
+						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
+						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
+						dataset.lineTension = dataset.lineTension ?? toData.datasets[ 0 ].lineTension;
+						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
+
 						if ( 'object' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[0], 0.6 );
+							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[ 0 ], 0.6 );
 						} else {
 							dataset.backgroundColor = hex2rgba( dataset.backgroundColor, 0.6 );
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
-							dataset.borderColor = hex2rgba( dataset.borderColor[0], 0.6 );
+							dataset.borderColor = rgba2hex( dataset.borderColor[ 0 ] );
 						} else if ( 'undefined' === typeof dataset.borderColor ) {
 							dataset.borderColor = rgba2hex( dataset.backgroundColor );
 						}

@@ -140,9 +140,8 @@ registerBlockType( 'hello-charts/block-pie', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
-					to.chartData = from.chartData;
-					toOptions.plugins.legend = fromOptions.plugins.legend;
 
+					toOptions.plugins.legend = fromOptions.plugins.legend;
 					to.chartOptions = JSON.stringify( toOptions );
 
 					/*
@@ -152,10 +151,16 @@ registerBlockType( 'hello-charts/block-pie', {
 					fromData.datasets.forEach( ( dataset ) => {
 						const themeColors = randomColors( dataset.data.length - 1 );
 						if ( 'string' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = [ rgba2hex( dataset.backgroundColor ), ...themeColors ];
+							dataset.backgroundColor = [
+								rgba2hex( dataset.backgroundColor ),
+								...themeColors,
+							];
 						}
 						if ( 'string' === typeof dataset.borderColor ) {
-							dataset.borderColor = [ rgba2hex( dataset.borderColor ), ...themeColors ];
+							dataset.borderColor = [
+								rgba2hex( dataset.borderColor ),
+								...themeColors,
+							];
 						} else if ( 'undefined' === typeof dataset.borderColor ) {
 							dataset.borderColor = dataset.backgroundColor;
 						}
