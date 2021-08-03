@@ -210,8 +210,10 @@ registerBlockType( 'hello-charts/block-line', {
 						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
 						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
 						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
-						dataset.lineTension = dataset.lineTension ?? dataset.tension ?? toData.datasets[ 0 ].lineTension;
 						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
+
+						dataset.lineTension = dataset.lineTension ?? dataset.tension ?? toData.datasets[ 0 ].lineTension;
+						delete dataset.tension; // Only keep one version of the similar tension properties.
 
 						if ( 'object' === typeof dataset.backgroundColor ) {
 							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[ 0 ], 0.6 );

@@ -196,8 +196,10 @@ registerBlockType( 'hello-charts/block-radar', {
 						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
 						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
 						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
-						dataset.tension = dataset.tension ?? dataset.lineTension ?? toData.datasets[ 0 ].lineTension;
 						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
+
+						dataset.tension = dataset.tension ?? dataset.lineTension ?? toData.datasets[ 0 ].tension;
+						delete dataset.lineTension; // Only keep one version of the similar tension properties.
 
 						if ( 'object' === typeof dataset.backgroundColor ) {
 							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[ 0 ], 0.6 );
