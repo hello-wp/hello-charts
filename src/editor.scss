@@ -13,6 +13,19 @@
     }
 }
 
+.hello-charts-data-styles {
+	.dataset-label,
+	.segment-label {
+		flex-basis: 100%;
+	}
+	.segment-indent {
+	  border-left: 12px solid #f0f0f0;
+	}
+	.dataset-pagination-number {
+		white-space: nowrap;
+	}
+}
+
 .hello-charts-data-editor {
 	width: 100%;
 	height: 100%;

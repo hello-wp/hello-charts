@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies.
  */
-const { __, sprintf } = wp.i18n;
+const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { RichText } = wp.blockEditor;
 const {
@@ -11,7 +11,6 @@ const {
 	CardHeader,
 	Flex,
 	FlexItem,
-	FlexBlock,
 	PanelBody,
 	ToggleControl,
 } = wp.components;
@@ -26,7 +25,7 @@ export default class DataStyles extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = { activeDataset: 0 };
+		this.state = { activeDataset: 0, activeSegment: 0 };
 	}
 
 	render() {
@@ -49,14 +48,20 @@ export default class DataStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function updateSegmentColor( color, dataset, row ) {
+		function updateSegmentLabel( text, index ) {
 			const data = JSON.parse( chartData );
-			data.datasets[ dataset ].borderColor[ row ] = color;
-			data.datasets[ dataset ].backgroundColor[ row ] = color;
+			data.labels[ index ] = text;
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
-		function getColor( dataset, row ) {
+		function updateSegmentColor( color, dataset, segment ) {
+			const data = JSON.parse( chartData );
+			data.datasets[ dataset ].borderColor[ segment ] = color;
+			data.datasets[ dataset ].backgroundColor[ segment ] = color;
+			setAttributes( { chartData: JSON.stringify( data ) } );
+		}
+
+		function getColor( dataset, segment ) {
 			const data = JSON.parse( chartData );
 
 			// If there's no colors at all, return null. We're not properly intialized.
@@ -65,14 +70,14 @@ export default class DataStyles extends Component {
 			}
 
 			// If there is no set color, pick one at random.
-			if ( ! data.datasets[ dataset ].borderColor[ row ] ) {
+			if ( ! data.datasets[ dataset ].borderColor[ segment ] ) {
 				const color = randomColors( 1 ).shift();
-				data.datasets[ dataset ].borderColor[ row ] = color;
-				data.datasets[ dataset ].backgroundColor[ row ] = color;
+				data.datasets[ dataset ].borderColor[ segment ] = color;
+				data.datasets[ dataset ].backgroundColor[ segment ] = color;
 				setAttributes( { chartData: JSON.stringify( data ) } );
 			}
 
-			return parsedData.datasets[ dataset ].borderColor[ row ];
+			return parsedData.datasets[ dataset ].borderColor[ segment ];
 		}
 
 		function hasThemeColors() {
@@ -88,7 +93,11 @@ export default class DataStyles extends Component {
 		}
 
 		return (
-			<PanelBody title={ __( 'Data Styles', 'hello-charts' ) } initialOpen={ false }>
+			<PanelBody
+				title={ __( 'Data Styles', 'hello-charts' ) }
+				initialOpen={ false }
+				className={ 'hello-charts-data-styles' }
+			>
 				{ hasThemeColors() && (
 					<ToggleControl
 						label={ __( 'Use Theme Colors', 'hello-charts' ) }
@@ -98,55 +107,81 @@ export default class DataStyles extends Component {
 				) }
 				<Card>
 					<CardHeader>
-						<Flex>
-							<FlexBlock>
+						<Flex className={ 'dataset-styles' }>
+							<FlexItem className={ 'dataset-label' }>
 								<RichText
+									id="dataset-label-field"
 									value={ parsedData.datasets[ this.state.activeDataset ].label }
 									onChange={ ( text ) => updateDatasetLabel( text, this.state.activeDataset ) }
 								/>
-							</FlexBlock>
+							</FlexItem>
+							<FlexItem>
+								<Button
+									disabled={ 0 === this.state.activeDataset }
+									isSmal={ true }
+									icon="arrow-left-alt2"
+									label={ __( 'Previous Data Set', 'hello-charts' ) }
+									onClick={ () => this.setState( { activeDataset: this.state.activeDataset - 1 } ) }
+								/>
+							</FlexItem>
+							<FlexItem className={ 'dataset-pagination-number' }>
+								{ this.state.activeDataset + 1 }{ ' / ' }
+								{ parsedData.datasets.length }
+							</FlexItem>
+							<FlexItem>
+								<Button
+									disabled={ this.state.activeDataset === parsedData.datasets.length - 1 }
+									isSmall={ true }
+									icon="arrow-right-alt2"
+									label={ __( 'Next Data Set', 'hello-charts' ) }
+									onClick={ () => this.setState( { activeDataset: this.state.activeDataset + 1 } ) }
+								/>
+							</FlexItem>
 						</Flex>
 					</CardHeader>
-					<CardBody>
-						{ parsedData.labels.map( ( label, row ) => (
-							<CustomColorPalette
-								key={ row }
-								// translators: %s: The label for a row of data.
-								label={ sprintf( __( '%s Color', 'hello-charts' ), label ) }
-								id={ `inspect-chart-pie-color-${ clientId }` }
-								colors={ useThemeColors ? themeColors : niceColors }
-								colorValue={ getColor( this.state.activeDataset, row ) }
-								onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, row ) }
-							/>
-						) ) }
+					<CardHeader className={ 'segment-indent' }>
+						<Flex>
+							<FlexItem className={ 'segment-label' }>
+								<RichText
+									id="segment-label-field"
+									value={ parsedData.labels[ this.state.activeSegment ] }
+									onChange={ ( text ) => updateSegmentLabel( text, this.state.activeSegment ) }
+								/>
+							</FlexItem>
+							<FlexItem>
+								<Button
+									disabled={ 0 === this.state.activeSegment }
+									isSmal={ true }
+									icon="arrow-left-alt2"
+									label={ __( 'Previous Segment', 'hello-charts' ) }
+									onClick={ () => this.setState( { activeSegment: this.state.activeSegment - 1 } ) }
+								/>
+							</FlexItem>
+							<FlexItem className={ 'dataset-pagination-number' }>
+								{ this.state.activeSegment + 1 }{ ' / ' }
+								{ parsedData.labels.length }
+							</FlexItem>
+							<FlexItem>
+								<Button
+									disabled={ this.state.activeSegment === parsedData.labels.length - 1 }
+									isSmall={ true }
+									icon="arrow-right-alt2"
+									label={ __( 'Next Data Set', 'hello-charts' ) }
+									onClick={ () => this.setState( { activeSegment: this.state.activeSegment + 1 } ) }
+								/>
+							</FlexItem>
+						</Flex>
+					</CardHeader>
+					<CardBody className={ 'segment-indent' }>
+						<CustomColorPalette
+							label={ __( 'Color', 'hello-charts' ) }
+							id={ `inspect-chart-pie-color-${ clientId }` }
+							colors={ useThemeColors ? themeColors : niceColors }
+							colorValue={ getColor( this.state.activeDataset, this.state.activeSegment ) }
+							onChange={ ( color ) => updateSegmentColor( color, this.state.activeDataset, this.state.activeSegment ) }
+						/>
 					</CardBody>
 				</Card>
-				<Flex>
-					<FlexItem>
-						<Button
-							disabled={ 0 === this.state.activeDataset }
-							isSmal={ true }
-							icon="arrow-left-alt2"
-							label={ __( 'Previous Data Set', 'hello-charts' ) }
-							onClick={ () => this.setState( { activeDataset: this.state.activeDataset - 1 } ) }
-						/>
-					</FlexItem>
-					<FlexItem>
-						<span>
-							{ this.state.activeDataset + 1 }{ ' / ' }
-							{ parsedData.datasets.length }
-						</span>
-					</FlexItem>
-					<FlexItem>
-						<Button
-							disabled={ this.state.activeDataset === parsedData.datasets.length - 1 }
-							isSmall={ true }
-							icon="arrow-right-alt2"
-							label={ __( 'Next Data Set', 'hello-charts' ) }
-							onClick={ () => this.setState( { activeDataset: this.state.activeDataset + 1 } ) }
-						/>
-					</FlexItem>
-				</Flex>
 			</PanelBody>
 		);
 	}
