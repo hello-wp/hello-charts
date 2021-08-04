@@ -20,12 +20,12 @@ export default class Edit extends Component {
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				const themeColors = randomColors( dataset.data.length );
+				const colors = randomColors( dataset.data.length );
 				dataset.borderColor = [];
 				dataset.backgroundColor = [];
 				dataset.data.forEach( ( data, index ) => {
-					dataset.borderColor.push( themeColors[ index ] );
-					dataset.backgroundColor.push( themeColors[ index ] );
+					dataset.borderColor.push( colors[ index ] );
+					dataset.backgroundColor.push( colors[ index ] );
 				} );
 			}
 		} );

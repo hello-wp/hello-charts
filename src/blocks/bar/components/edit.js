@@ -14,7 +14,7 @@ import { randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
 	maybeGenerateData( datasets ) {
-		const themeColors = randomColors( datasets.length );
+		const colors = randomColors( datasets.length );
 
 		datasets.forEach( ( dataset, index ) => {
 			if ( 'generate' === dataset.data[ 0 ] ) {
@@ -22,7 +22,7 @@ export default class Edit extends Component {
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				dataset.backgroundColor = themeColors[ index ];
+				dataset.backgroundColor = colors[ index ];
 			}
 		} );
 	}

@@ -32,6 +32,10 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
+	useThemeColors: {
+		type: 'boolean',
+		default: false,
+	},
 	height: {
 		type: 'number',
 	},

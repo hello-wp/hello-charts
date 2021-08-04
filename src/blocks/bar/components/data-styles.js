@@ -13,6 +13,7 @@ const {
 	FlexItem,
 	FlexBlock,
 	PanelBody,
+	ToggleControl,
 } = wp.components;
 
 /**
@@ -29,12 +30,17 @@ export default class DataStyles extends Component {
 
 	render() {
 		const {
-			attributes: { chartData },
+			attributes: { chartData, useThemeColors },
 			clientId,
 			setAttributes,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
+		const themeColors = wp.data.select( 'core/block-editor' ).getSettings().colors;
+		const defaultColors = wp.blockEditor.SETTINGS_DEFAULTS.colors;
+		const niceColors = defaultColors.filter(
+			( color ) => ! [ 'black', 'white', 'cyan-bluish-gray' ].find( ( boring ) => boring === color.slug )
+		);
 
 		function updateDatasetLabel( text, index ) {
 			const data = JSON.parse( chartData );
@@ -48,8 +54,27 @@ export default class DataStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
+		function hasThemeColors() {
+			const colorDiff = themeColors.filter(
+				( themeColor ) => ! defaultColors.find( ( defaultColor ) => defaultColor.slug === themeColor.slug )
+			);
+
+			if ( ! colorDiff.length ) {
+				return false;
+			}
+
+			return true;
+		}
+
 		return (
 			<PanelBody title={ __( 'Data Styles', 'hello-charts' ) } initialOpen={ false }>
+				{ hasThemeColors() && (
+					<ToggleControl
+						label={ __( 'Use Theme Colors', 'hello-charts' ) }
+						checked={ useThemeColors }
+						onChange={ () => setAttributes( { useThemeColors: useThemeColors ? false : true } ) }
+					/>
+				) }
 				<Card>
 					<CardHeader>
 						<Flex>
@@ -65,6 +90,7 @@ export default class DataStyles extends Component {
 						<CustomColorPalette
 							label={ __( 'Color', 'hello-charts' ) }
 							id={ `inspect-chart-bar-color-${ clientId }` }
+							colors={ useThemeColors ? themeColors : niceColors }
 							colorValue={ parsedData.datasets[ this.state.activeDataset ].backgroundColor }
 							onChange={ ( color ) => updateDatasetColor( color, this.state.activeDataset ) }
 						/>
