@@ -91,6 +91,7 @@ export default class ChartBlock extends Component {
 		const {
 			ChartStyles,
 			DataStyles,
+			SegmentStyles,
 			attributes: {
 				showChartTitle,
 				showChartBackground,
@@ -108,8 +109,15 @@ export default class ChartBlock extends Component {
 			<>
 				<InspectorControls key="inspector">
 					<EditDataButton toggleEditor={ this.toggleEditor } />
-					<ChartStyles { ...this.props } />
-					<DataStyles { ...this.props } />
+					{ ChartStyles && (
+						<ChartStyles { ...this.props } />
+					) }
+					{ DataStyles && (
+						<DataStyles { ...this.props } />
+					) }
+					{ SegmentStyles && (
+						<SegmentStyles { ...this.props } />
+					) }
 				</InspectorControls>
 				<BlockControls>
 					<EditDataToolbar toggleEditor={ this.toggleEditor } />

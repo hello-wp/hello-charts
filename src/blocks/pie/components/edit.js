@@ -12,7 +12,7 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles } from '.';
+import { ChartStyles, DataStyles, SegmentStyles } from '.';
 import { Pie } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
 import { randomColors, randomValues } from '../../../common/helpers';
@@ -71,6 +71,7 @@ export default class Edit extends Component {
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
 				DataStyles={ DataStyles }
+				SegmentStyles={ SegmentStyles }
 				chartType="pie"
 				maybeGenerateData={ this.maybeGenerateData }
 				titlePlaceholder={ __( 'Pie Chart', 'hello-charts' ) }
