@@ -18,9 +18,6 @@
 	.segment-label {
 		flex-basis: 100%;
 	}
-	.segment-indent {
-	  border-left: 12px solid #f0f0f0;
-	}
 	.dataset-pagination-number {
 		white-space: nowrap;
 	}
@@ -203,7 +200,7 @@
 	}
 }
 
-.hello-charts-color-picker {
+.hello-charts-color-palette {
 	.components-circular-option-picker__dropdown-link-action {
 		height: 28px;
 		line-height: 28px;

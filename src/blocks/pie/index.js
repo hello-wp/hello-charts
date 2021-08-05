@@ -108,6 +108,7 @@ registerBlockType( 'hello-charts/block-pie', {
 						data: [ 6, 4, 9, 10 ],
 						borderColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0' ],
 						backgroundColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0' ],
+						borderWidth: [ 3, 3, 3, 3 ],
 					},
 				],
 			} ),

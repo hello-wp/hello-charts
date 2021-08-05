@@ -21,6 +21,7 @@ export default class CustomColorPalette extends Component {
 			colorValue,
 			colors,
 			onChange,
+			clientId,
 			...additionalProps
 		} = this.props;
 
@@ -31,17 +32,19 @@ export default class CustomColorPalette extends Component {
 		}
 
 		function triggerColorPopover( event ) {
-			const wrapper = event.target.closest( '.hello-charts-color-picker' );
+			const wrapper = event.target.closest( '.hello-charts-color-palette' );
 			const actionButton = wrapper.querySelector( '.components-dropdown button' );
 			actionButton.click();
 		}
 
 		return (
 			<BaseControl
-				className={ `hello-charts-color-picker ${ isCustomColor( colorValue ) ? ' has-custom-color' : '' }` }
+				className={ `hello-charts-color-palette ${ isCustomColor( colorValue ) ? ' has-custom-color' : '' }` }
+				id={ `inspect-chart-color-palette-${ clientId }` }
 				{ ...additionalProps }
 			>
 				<ColorPalette
+					id={ `inspect-chart-color-palette-${ clientId }` }
 					value={ colorValue }
 					colors={ colors }
 					clearable={ false }

@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -21,20 +26,30 @@ export default class Edit extends Component {
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
 				const colors = randomColors( dataset.data.length );
-				dataset.borderColor = [];
 				dataset.backgroundColor = [];
 				dataset.data.forEach( ( data, index ) => {
-					dataset.borderColor.push( colors[ index ] );
-					dataset.backgroundColor.push( colors[ index ] );
+					const color = tinycolor( colors[ index ] );
+					color.setAlpha( 0.6 );
+					dataset.backgroundColor.push( color.toRgbString() );
 				} );
 			}
-		} );
-	}
 
-	onNewDataset( dataset ) {
-		const colors = randomColors( dataset.data.length );
-		dataset.borderColor = colors;
-		dataset.backgroundColor = colors;
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				dataset.borderColor = [];
+				dataset.data.forEach( ( data, index ) => {
+					const color = tinycolor( dataset.backgroundColor[ index ] );
+					dataset.borderColor.push( color.toHexString() );
+				} );
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
+				dataset.borderWidth = new Array( dataset.data.length ).fill( 2 );
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderAlign' ) ) {
+				dataset.borderAlign = new Array( dataset.data.length ).fill( 'inner' );
+			}
+		} );
 	}
 
 	render() {
@@ -58,7 +73,6 @@ export default class Edit extends Component {
 				DataStyles={ DataStyles }
 				chartType="pie"
 				maybeGenerateData={ this.maybeGenerateData }
-				onNewDataset={ this.onNewDataset }
 				titlePlaceholder={ __( 'Pie Chart', 'hello-charts' ) }
 			>
 				<Pie

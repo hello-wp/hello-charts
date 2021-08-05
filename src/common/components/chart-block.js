@@ -84,7 +84,7 @@ export default class ChartBlock extends Component {
 
 	toggleEditor( event ) {
 		event.preventDefault();
-		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
+		this.setState( { editorOpen: ! this.state.editorOpen } );
 	}
 
 	render() {
@@ -98,13 +98,11 @@ export default class ChartBlock extends Component {
 			},
 			children,
 			className,
-			onNewDataset,
 			setAttributes,
 			titlePlaceholder,
 		} = this.props;
 
 		this.toggleEditor = this.toggleEditor.bind( this );
-		this.onNewDataset = onNewDataset.bind( this );
 
 		return (
 			<>
@@ -136,7 +134,7 @@ export default class ChartBlock extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } onNewDataset={ this.onNewDataset } { ...this.props } />
+							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
 						) }
 					</div>
 				</div>

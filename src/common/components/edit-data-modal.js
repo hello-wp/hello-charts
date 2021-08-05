@@ -77,7 +77,9 @@ export default class EditDataModal extends Component {
 			dataset.data = new Array( rows ).fill( null );
 			dataset.label = '';
 
-			onNewDataset( dataset );
+			if ( onNewDataset ) {
+				onNewDataset( dataset );
+			}
 
 			data.datasets.splice( index, 0, dataset );
 
