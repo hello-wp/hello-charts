@@ -12,9 +12,9 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles, SegmentStyles } from '.';
+import { ChartStyles } from '.';
 import { Pie } from 'react-chartjs-2';
-import { ChartBlock } from '../../../common/components';
+import { ChartBlock, DataStyles, SegmentStyles } from '../../../common/components';
 import { randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {

@@ -23,7 +23,7 @@ const {
 /**
  * Internal dependencies.
  */
-import { CustomColorPalette } from '../../../common/components';
+import { CustomColorPalette } from '.';
 
 export default class SegmentStyles extends Component {
 	constructor( props ) {
