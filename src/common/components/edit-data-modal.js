@@ -15,12 +15,11 @@ const {
 const { RichText } = wp.blockEditor;
 
 export default class EditDataModal extends Component {
-	tableRef = createRef();
-
 	constructor( props ) {
 		super( props );
 
 		this.state = { table: null };
+		this.tableRef = createRef();
 	}
 
 	componentDidMount() {

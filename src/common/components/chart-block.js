@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies.
  */
-const { Component } = wp.element;
+const { createRef, Component } = wp.element;
 const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
 
 /**
@@ -33,7 +33,8 @@ export default class ChartBlock extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		this.state = { editorOpen: false };
+		this.state = { editorOpen: false, refreshChart: false };
+		this.chartRef = createRef();
 
 		parsedData.init = true;
 		parsedOptions.init = true;
@@ -46,6 +47,39 @@ export default class ChartBlock extends Component {
 			chartOptions: JSON.stringify( parsedOptions ),
 			chartType,
 		} );
+	}
+
+	componentDidUpdate() {
+		const { current } = this.chartRef;
+
+		if ( this.state.refreshChart ) {
+			this.setState( { refreshChart: false } );
+		}
+
+		// Force the transform preview to display with a specific height and width.
+		if ( current && current.closest( '.block-editor-block-switcher__preview' ) ) {
+			this.setPreviewDimensions();
+		}
+	}
+
+	setPreviewDimensions() {
+		const {
+			attributes: { chartOptions },
+			setAttributes,
+		} = this.props;
+		const options = JSON.parse( chartOptions );
+
+		if ( false !== options.responsive ) {
+			options.responsive = false;
+
+			setAttributes( {
+				height: 280,
+				width: 450,
+				chartOptions: JSON.stringify( options ),
+			} );
+
+			this.setState( { refreshChart: true } );
+		}
 	}
 
 	toggleEditor( event ) {
@@ -96,8 +130,8 @@ export default class ChartBlock extends Component {
 								onChange={ ( value ) => setAttributes( { title: value } ) }
 							/>
 						) }
-						{ ! this.state.editorOpen && (
-							<div className="chart">
+						{ ! this.state.editorOpen && ! this.state.refreshChart && (
+							<div className="chart" ref={ this.chartRef }>
 								{ children }
 							</div>
 						) }

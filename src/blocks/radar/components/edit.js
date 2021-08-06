@@ -36,6 +36,17 @@ export default class Edit extends Component {
 		dataset.backgroundColor = hex2rgba( color, 0.6 );
 	}
 
+	/**
+	 * Workaround for minimumFractionDigits value is out of range bug.
+	 *
+	 * @see https://github.com/chartjs/Chart.js/issues/8092
+	 * @param { number } value The tick value.
+	 * @return { number } The unchanged value.
+	 */
+	ticksCallback( value ) {
+		return value;
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -49,6 +60,8 @@ export default class Edit extends Component {
 
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
+
+		parsedOptions.scales.r.ticks.callback = this.ticksCallback;
 
 		return (
 			<ChartBlock
