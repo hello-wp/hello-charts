@@ -29,7 +29,7 @@ export default class Edit extends Component {
 				dataset.backgroundColor = [];
 				dataset.data.forEach( ( data, index ) => {
 					const color = tinycolor( colors[ index ] );
-					color.setAlpha( 0.6 );
+					color.setAlpha( 0.8 );
 					dataset.backgroundColor.push( color.toRgbString() );
 				} );
 			}

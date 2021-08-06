@@ -95,7 +95,10 @@ export default class SegmentStyles extends Component {
 
 	render() {
 		const {
-			attributes: { chartData, useThemeColors },
+			attributes: {
+				chartData,
+				useThemeColors
+			},
 			clientId,
 			setAttributes,
 		} = this.props;

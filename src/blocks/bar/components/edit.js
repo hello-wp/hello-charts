@@ -1,3 +1,5 @@
+import tinycolor from "tinycolor2";
+
 /**
  * WordPress dependencies.
  */
@@ -7,9 +9,9 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles } from '.';
+import { ChartStyles } from '.';
 import { Bar } from 'react-chartjs-2';
-import { ChartBlock } from '../../../common/components';
+import { ChartBlock, DataStyles } from '../../../common/components';
 import { randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
@@ -22,14 +24,31 @@ export default class Edit extends Component {
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				dataset.backgroundColor = colors[ index ];
+				const color = tinycolor( colors[ index ] );
+				color.setAlpha( 0.8 );
+				dataset.backgroundColor = color.toRgbString();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				const color = tinycolor( dataset.backgroundColor );
+				dataset.borderColor = color.toHexString();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
+				dataset.borderWidth = new Array( dataset.data.length ).fill( 2 );
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderAlign' ) ) {
+				dataset.borderAlign = new Array( dataset.data.length ).fill( 'inner' );
 			}
 		} );
 	}
 
 	onNewDataset( dataset ) {
-		const color = randomColors( 1 ).shift();
-		dataset.backgroundColor = color;
+		const color = tinycolor( randomColors( 1 ).shift() );
+		color.setAlpha( 0.8 );
+		dataset.borderColor = color.toHexString();
+		dataset.backgroundColor = color.toRgbString();
 	}
 
 	render() {
@@ -51,6 +70,7 @@ export default class Edit extends Component {
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
 				DataStyles={ DataStyles }
+				singleColor={ true }
 				chartType="bar"
 				maybeGenerateData={ this.maybeGenerateData }
 				onNewDataset={ this.onNewDataset }

@@ -123,7 +123,9 @@ registerBlockType( 'hello-charts/block-bar', {
 					{
 						label: 'A',
 						data: [ 10, 19, 6, 3, 12, 15 ],
-						backgroundColor: '#0693e3',
+						borderColor: '#0693e3',
+						backgroundColor: 'rgba( 6, 147, 227, 0.8 )',
+						borderWidth: [ 3, 3, 3, 3 ],
 					},
 				],
 			} ),

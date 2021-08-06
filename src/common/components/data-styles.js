@@ -18,14 +18,23 @@ const {
 	FlexItem,
 	PanelBody,
 	RangeControl,
+	ToggleControl,
 } = wp.components;
 
 /**
  * Internal dependencies.
  */
+import { CustomColorPalette } from "./index";
+
 export default class DataStyles extends Component {
 	constructor( props ) {
 		super( props );
+
+		this.themeColors = wp.data.select( 'core/block-editor' ).getSettings().colors;
+		this.defaultColors = wp.blockEditor.SETTINGS_DEFAULTS.colors;
+		this.niceColors = this.defaultColors.filter(
+			( color ) => ! [ 'black', 'white', 'cyan-bluish-gray' ].find( ( boring ) => boring === color.slug )
+		);
 
 		this.state = { activeDataset: 0 };
 	}
@@ -42,7 +51,7 @@ export default class DataStyles extends Component {
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
-	updateAlpha( alpha ) {
+	updateColor( color ) {
 		const {
 			attributes: { chartData },
 			setAttributes,
@@ -51,11 +60,38 @@ export default class DataStyles extends Component {
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		data.datasets[ dataset ].backgroundColor.forEach( ( backgroundColor, index ) => {
-			const color = tinycolor( backgroundColor );
+		const borderColor = tinycolor( color );
+		const backgroundColor = tinycolor( color );
+		const alpha = tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
+
+		backgroundColor.setAlpha( alpha );
+		data.datasets[ dataset ].borderColor  = borderColor.toHexString();
+		data.datasets[ dataset ].backgroundColor  = backgroundColor.toRgbString();
+
+		setAttributes( { chartData: JSON.stringify( data ) } );
+	}
+
+	updateAlpha( alpha ) {
+		const {
+			attributes: { chartData },
+			setAttributes,
+			singleColor,
+		} = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		if ( singleColor ) {
+			const color = tinycolor( data.datasets[ dataset ].backgroundColor );
 			color.setAlpha( alpha );
-			data.datasets[ dataset ].backgroundColor[ index ] = color.toRgbString();
-		} );
+			data.datasets[ dataset ].backgroundColor = color.toRgbString();
+		} else {
+			data.datasets[ dataset ].backgroundColor.forEach( ( backgroundColor, index ) => {
+				const color = tinycolor( backgroundColor );
+				color.setAlpha( alpha );
+				data.datasets[ dataset ].backgroundColor[ index ] = color.toRgbString();
+			} );
+		}
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
@@ -76,14 +112,29 @@ export default class DataStyles extends Component {
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
-	getAlpha() {
-		const { attributes: { chartData } } = this.props;
+	getColor() {
+		const { attributes: { chartData }, singleColor } = this.props;
 
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		const color = tinycolor( data.datasets[ dataset ].backgroundColor[ 0 ] );
-		return color.getAlpha();
+		if ( singleColor ) {
+			return data.datasets[ 0 ].borderColor;
+		}
+		return data.datasets[ 0 ].borderColor[ dataset ];
+	}
+
+	getAlpha() {
+		const { attributes: { chartData }, singleColor } = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		if ( singleColor ) {
+			return tinycolor(data.datasets[dataset].backgroundColor[0]).getAlpha();
+		}
+
+		return tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
 	}
 
 	getBorderWidth() {
@@ -95,10 +146,27 @@ export default class DataStyles extends Component {
 		return data.datasets[ dataset ].borderWidth[ 0 ];
 	}
 
+	hasThemeColors() {
+		const colorDiff = this.themeColors.filter(
+			( themeColor ) => ! this.defaultColors.find( ( defaultColor ) => defaultColor.slug === themeColor.slug )
+		);
+
+		if ( ! colorDiff.length ) {
+			return false;
+		}
+
+		return true;
+	}
+
 	render() {
 		const {
-			attributes: { chartData },
+			attributes: {
+				chartData,
+				useThemeColors
+			},
 			clientId,
+			setAttributes,
+			singleColor,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -113,6 +181,13 @@ export default class DataStyles extends Component {
 				initialOpen={ false }
 				className={ 'hello-charts-data-styles' }
 			>
+				{ this.hasThemeColors() && singleColor && (
+					<ToggleControl
+						label={ __( 'Use Theme Colors', 'hello-charts' ) }
+						checked={ useThemeColors }
+						onChange={ () => setAttributes( { useThemeColors: ! useThemeColors } ) }
+					/>
+				) }
 				<Card>
 					<CardHeader>
 						<Flex className={ 'dataset-styles' }>
@@ -148,6 +223,14 @@ export default class DataStyles extends Component {
 						</Flex>
 					</CardHeader>
 					<CardBody>
+						{ singleColor && (
+							<CustomColorPalette
+								label={ __( 'Color', 'hello-charts' ) }
+								colors={ useThemeColors ? this.themeColors : this.niceColors }
+								colorValue={ this.getColor() }
+								onChange={ ( color ) => this.updateColor( color ) }
+							/>
+						) }
 						<RangeControl
 							label={ __( 'Opacity', 'hello-charts' ) }
 							value={ this.getAlpha() }
