@@ -24,7 +24,7 @@ const {
 /**
  * Internal dependencies.
  */
-import { CustomColorPalette } from "./index";
+import { CustomColorPalette } from '.';
 
 export default class DataStyles extends Component {
 	constructor( props ) {

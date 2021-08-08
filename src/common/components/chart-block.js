@@ -9,9 +9,11 @@ const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
  */
 import {
 	ChartFormattingToolbar,
+	DataStyles,
 	EditDataButton,
 	EditDataModal,
 	EditDataToolbar,
+	SegmentStyles,
 } from '.';
 
 export default class ChartBlock extends Component {
@@ -90,8 +92,6 @@ export default class ChartBlock extends Component {
 	render() {
 		const {
 			ChartStyles,
-			DataStyles,
-			SegmentStyles,
 			attributes: {
 				showChartTitle,
 				showChartBackground,
@@ -100,6 +100,7 @@ export default class ChartBlock extends Component {
 			children,
 			className,
 			setAttributes,
+			singleColor,
 			titlePlaceholder,
 		} = this.props;
 
@@ -112,10 +113,8 @@ export default class ChartBlock extends Component {
 					{ ChartStyles && (
 						<ChartStyles { ...this.props } />
 					) }
-					{ DataStyles && (
-						<DataStyles { ...this.props } />
-					) }
-					{ SegmentStyles && (
+					<DataStyles { ...this.props } />
+					{ ! singleColor && (
 						<SegmentStyles { ...this.props } />
 					) }
 				</InspectorControls>

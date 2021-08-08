@@ -14,7 +14,7 @@ const { Component } = wp.element;
  */
 import { ChartStyles } from '.';
 import { Bar } from 'react-chartjs-2';
-import { ChartBlock, DataStyles } from '../../../common/components';
+import { ChartBlock } from '../../../common/components';
 import { randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
@@ -72,7 +72,6 @@ export default class Edit extends Component {
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
-				DataStyles={ DataStyles }
 				singleColor={ true }
 				chartType="bar"
 				maybeGenerateData={ this.maybeGenerateData }
