@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { createRef, Component } = wp.element;
@@ -15,6 +20,10 @@ import {
 	EditDataToolbar,
 	SegmentStyles,
 } from '.';
+import {
+	randomColors,
+	randomValues
+} from '../helpers';
 
 export default class ChartBlock extends Component {
 	constructor( props ) {
@@ -26,10 +35,8 @@ export default class ChartBlock extends Component {
 				chartData,
 				chartOptions,
 			},
-			chartType,
 			clientId,
 			setAttributes,
-			maybeGenerateData,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -41,14 +48,13 @@ export default class ChartBlock extends Component {
 		parsedData.init = true;
 		parsedOptions.init = true;
 
-		maybeGenerateData( parsedData.datasets );
-
 		setAttributes( {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 			chartOptions: JSON.stringify( parsedOptions ),
-			chartType,
 		} );
+
+		this.setDefaults();
 	}
 
 	componentDidUpdate() {
@@ -84,6 +90,71 @@ export default class ChartBlock extends Component {
 		}
 	}
 
+	setDefaults() {
+		const {
+			attributes: {
+				chartData,
+			},
+			setAttributes,
+			generateData,
+			hasSegments,
+		} = this.props;
+
+		const parsedData = JSON.parse( chartData );
+		const colors = randomColors( parsedData.datasets.length );
+
+		parsedData.datasets.forEach( ( dataset, index ) => {
+			if ( 'generate' === dataset.data[ 0 ] ) {
+				dataset.data = generateData();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
+				if ( hasSegments && 0 === index ) {
+					const segmentColors = randomColors(dataset.data.length);
+					dataset.backgroundColor = [];
+					dataset.data.forEach((data, index) => {
+						const segmentColor = tinycolor(segmentColors[index]);
+						segmentColor.setAlpha(0.8);
+						dataset.backgroundColor.push(segmentColor.toRgbString());
+					});
+				} else if ( hasSegments ) {
+					dataset.backgroundColor = parsedData.datasets[0].backgroundColor;
+				} else {
+					const backgroundColor = tinycolor( colors[ index ] );
+					backgroundColor.setAlpha( 0.8 );
+					dataset.backgroundColor = backgroundColor.toRgbString();
+				}
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				if ( hasSegments ) {
+					dataset.borderColor = [];
+					dataset.data.forEach( ( data, index ) => {
+						const color = tinycolor( dataset.backgroundColor[ index ] );
+						dataset.borderColor.push( color.toHexString() );
+					} );
+				} else {
+					const color = tinycolor( dataset.backgroundColor );
+					dataset.borderColor = color.toHexString();
+				}
+			}
+
+			if ( ! dataset.hasOwnProperty( 'pointBackgroundColor' ) ) {
+				dataset.pointBackgroundColor = dataset.borderColor;
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
+				dataset.borderWidth = 2;
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderAlign' ) ) {
+				dataset.borderAlign = 'inner';
+			}
+		} );
+
+		setAttributes( { chartData: JSON.stringify( parsedData ) } );
+	}
+
 	toggleEditor( event ) {
 		event.preventDefault();
 		this.setState( { editorOpen: ! this.state.editorOpen } );
@@ -100,7 +171,7 @@ export default class ChartBlock extends Component {
 			children,
 			className,
 			setAttributes,
-			singleColor,
+			hasSegments,
 			titlePlaceholder,
 		} = this.props;
 
@@ -114,7 +185,7 @@ export default class ChartBlock extends Component {
 						<ChartStyles { ...this.props } />
 					) }
 					<DataStyles { ...this.props } />
-					{ ! singleColor && (
+					{ hasSegments && (
 						<SegmentStyles { ...this.props } />
 					) }
 				</InspectorControls>

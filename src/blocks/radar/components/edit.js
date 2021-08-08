@@ -15,42 +15,9 @@ const { Component } = wp.element;
 import { ChartStyles } from '.';
 import { Radar } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
+import { randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
-	maybeGenerateData( datasets ) {
-		const colors = randomColors( datasets.length );
-
-		datasets.forEach( ( dataset, index ) => {
-			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 7 );
-			}
-
-			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				const color = tinycolor( colors[ index ] );
-				color.setAlpha( 0.6 );
-				dataset.backgroundColor = color.toRgbString();
-			}
-
-			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
-				const color = tinycolor( dataset.backgroundColor );
-				dataset.borderColor = color.toHexString();
-			}
-
-			if ( ! dataset.hasOwnProperty( 'pointBackgroundColor' ) ) {
-				dataset.pointBackgroundColor = dataset.borderColor;
-			}
-
-			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
-				dataset.borderWidth = new Array( dataset.data.length ).fill( 2 );
-			}
-
-			if ( ! dataset.hasOwnProperty( 'borderAlign' ) ) {
-				dataset.borderAlign = new Array( dataset.data.length ).fill( 'inner' );
-			}
-		} );
-	}
-
 	onNewDataset( dataset ) {
 		const color = tinycolor( randomColors( 1 ).shift() );
 		color.setAlpha( 0.6 );
@@ -92,7 +59,7 @@ export default class Edit extends Component {
 				ChartStyles={ ChartStyles }
 				hasPoints={ true }
 				chartType="radar"
-				maybeGenerateData={ this.maybeGenerateData }
+				generateData={ () => { return randomValues( 7 ) } }
 				onNewDataset={ this.onNewDataset }
 				titlePlaceholder={ __( 'Radar Chart', 'hello-charts' ) }
 			>

@@ -14,7 +14,7 @@ const {
 /**
  * Internal dependencies.
  */
-import { icons } from '../../common/helpers';
+import { icons } from '../helpers';
 
 /**
  * External dependencies
