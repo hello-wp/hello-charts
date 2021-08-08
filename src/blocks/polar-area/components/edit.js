@@ -83,6 +83,7 @@ export default class Edit extends Component {
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
+				hasSegments={ true }
 				chartType="polarArea"
 				maybeGenerateData={ this.maybeGenerateData }
 				titlePlaceholder={ __( 'Polar Area Chart', 'hello-charts' ) }

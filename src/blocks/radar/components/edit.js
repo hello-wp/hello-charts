@@ -90,7 +90,7 @@ export default class Edit extends Component {
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
-				singleColor={ true }
+				hasPoints={ true }
 				chartType="radar"
 				maybeGenerateData={ this.maybeGenerateData }
 				onNewDataset={ this.onNewDataset }

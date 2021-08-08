@@ -70,6 +70,7 @@ export default class Edit extends Component {
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
+				hasSegments={ true }
 				chartType="pie"
 				maybeGenerateData={ this.maybeGenerateData }
 				titlePlaceholder={ __( 'Pie Chart', 'hello-charts' ) }

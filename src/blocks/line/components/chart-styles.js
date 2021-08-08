@@ -55,15 +55,6 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updatePointRadius( radius ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].pointRadius = radius;
-				data.datasets[ index ].hoverRadius = radius;
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
 		function updateLineTension( tension ) {
 			const data = JSON.parse( chartData );
 			data.datasets.forEach( ( dataset, index ) => {
@@ -92,13 +83,6 @@ export default class ChartStyles extends Component {
 						parsedOptions.scales.y.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
-				/>
-				<RangeControl
-					label={ __( 'Point Size', 'hello-charts' ) }
-					value={ parsedData.datasets[ 0 ].pointRadius }
-					onChange={ ( radius ) => updatePointRadius( radius ) }
-					min={ 0 }
-					max={ 10 }
 				/>
 				<RangeControl
 					label={ __( 'Curve', 'hello-charts' ) }

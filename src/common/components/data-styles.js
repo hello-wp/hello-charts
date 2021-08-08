@@ -18,6 +18,7 @@ const {
 	FlexItem,
 	PanelBody,
 	RangeControl,
+	SelectControl,
 	ToggleControl,
 } = wp.components;
 
@@ -76,22 +77,22 @@ export default class DataStyles extends Component {
 		const {
 			attributes: { chartData },
 			setAttributes,
-			singleColor,
+			hasSegments,
 		} = this.props;
 
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		if ( singleColor ) {
-			const color = tinycolor( data.datasets[ dataset ].backgroundColor );
-			color.setAlpha( alpha );
-			data.datasets[ dataset ].backgroundColor = color.toRgbString();
-		} else {
+		if ( hasSegments ) {
 			data.datasets[ dataset ].backgroundColor.forEach( ( backgroundColor, index ) => {
 				const color = tinycolor( backgroundColor );
 				color.setAlpha( alpha );
 				data.datasets[ dataset ].backgroundColor[ index ] = color.toRgbString();
 			} );
+		} else {
+			const color = tinycolor( data.datasets[ dataset ].backgroundColor );
+			color.setAlpha( alpha );
+			data.datasets[ dataset ].backgroundColor = color.toRgbString();
 		}
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
@@ -111,30 +112,63 @@ export default class DataStyles extends Component {
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
-	getColor() {
-		const { attributes: { chartData }, singleColor } = this.props;
+	updatePointRadius( radius ) {
+		const {
+			attributes: { chartData },
+			setAttributes,
+		} = this.props;
 
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		if ( singleColor ) {
-			return data.datasets[ dataset ].borderColor;
+		data.datasets[ dataset ].pointRadius = radius;
+		data.datasets[ dataset ].hoverRadius = radius;
+		setAttributes( { chartData: JSON.stringify( data ) } );
+	}
+
+	updatePointStyle( style ) {
+		const {
+			attributes: { chartData },
+			setAttributes,
+		} = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		data.datasets[ dataset ].pointStyle = style;
+		setAttributes( { chartData: JSON.stringify( data ) } );
+	}
+
+	getColor() {
+		const {
+			attributes: { chartData },
+			hasSegments,
+		} = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		if ( hasSegments ) {
+			return data.datasets[ dataset ].borderColor[ 0 ];
 		}
 
-		return data.datasets[ dataset ].borderColor[ 0 ];
+		return data.datasets[ dataset ].borderColor;
 	}
 
 	getAlpha() {
-		const { attributes: { chartData }, singleColor } = this.props;
+		const {
+			attributes: { chartData },
+			hasSegments,
+		} = this.props;
 
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		if ( singleColor ) {
-			return tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
+		if ( hasSegments ) {
+			return tinycolor( data.datasets[ dataset ].backgroundColor[ 0 ] ).getAlpha();
 		}
 
-		return tinycolor( data.datasets[ dataset ].backgroundColor[ 0 ] ).getAlpha();
+		return tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
 	}
 
 	getBorderWidth() {
@@ -144,6 +178,24 @@ export default class DataStyles extends Component {
 		const dataset = this.state.activeDataset;
 
 		return data.datasets[ dataset ].borderWidth;
+	}
+
+	getPointRadius() {
+		const { attributes: { chartData } } = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		return data.datasets[ dataset ].pointRadius;
+	}
+
+	getPointStyle() {
+		const { attributes: { chartData } } = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		return data.datasets[ dataset ].pointStyle;
 	}
 
 	hasThemeColors() {
@@ -166,7 +218,8 @@ export default class DataStyles extends Component {
 			},
 			clientId,
 			setAttributes,
-			singleColor,
+			hasSegments,
+			hasPoints,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -181,7 +234,7 @@ export default class DataStyles extends Component {
 				initialOpen={ false }
 				className={ 'hello-charts-data-styles' }
 			>
-				{ this.hasThemeColors() && singleColor && (
+				{ this.hasThemeColors() && ! hasSegments && (
 					<ToggleControl
 						label={ __( 'Use Theme Colors', 'hello-charts' ) }
 						checked={ useThemeColors }
@@ -223,7 +276,7 @@ export default class DataStyles extends Component {
 						</Flex>
 					</CardHeader>
 					<CardBody>
-						{ singleColor && (
+						{ ! hasSegments && (
 							<CustomColorPalette
 								label={ __( 'Color', 'hello-charts' ) }
 								colors={ useThemeColors ? this.themeColors : this.niceColors }
@@ -247,6 +300,30 @@ export default class DataStyles extends Component {
 							max={ 12 }
 							step={ 1 }
 						/>
+						{ hasPoints && (
+							<RangeControl
+								label={ __( 'Point Size', 'hello-charts' ) }
+								value={ this.getPointRadius() }
+								onChange={ ( radius ) => this.updatePointRadius( radius ) }
+								min={ 0 }
+								max={ 12 }
+								step={ 1 }
+							/>
+						) }
+						{ hasPoints && (
+							<SelectControl
+								label={ __( 'Point Style', 'hello-charts' ) }
+								value={ this.getPointStyle() }
+								options={ [
+									{ label: __( 'Circle', 'hello-charts' ), value: 'circle' },
+									{ label: __( 'Rectangle', 'hello-charts' ), value: 'rect' },
+									{ label: __( 'Rounded Rectangle', 'hello-charts' ), value: 'rectRounded' },
+									{ label: __( 'Diamond', 'hello-charts' ), value: 'rectRot' },
+									{ label: __( 'Triangle', 'hello-charts' ), value: 'triangle' },
+								] }
+								onChange={ ( style ) => this.updatePointStyle( style ) }
+							/>
+						) }
 					</CardBody>
 				</Card>
 			</PanelBody>

@@ -72,7 +72,6 @@ export default class Edit extends Component {
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
-				singleColor={ true }
 				chartType="bar"
 				maybeGenerateData={ this.maybeGenerateData }
 				onNewDataset={ this.onNewDataset }
