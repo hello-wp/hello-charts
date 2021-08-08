@@ -65,8 +65,9 @@ export default class DataStyles extends Component {
 		const alpha = tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
 
 		backgroundColor.setAlpha( alpha );
-		data.datasets[ dataset ].borderColor  = borderColor.toHexString();
-		data.datasets[ dataset ].backgroundColor  = backgroundColor.toRgbString();
+		data.datasets[ dataset ].borderColor = borderColor.toHexString();
+		data.datasets[ dataset ].pointBackgroundColor = borderColor.toHexString();
+		data.datasets[ dataset ].backgroundColor = backgroundColor.toRgbString();
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
@@ -119,9 +120,10 @@ export default class DataStyles extends Component {
 		const dataset = this.state.activeDataset;
 
 		if ( singleColor ) {
-			return data.datasets[ 0 ].borderColor;
+			return data.datasets[ dataset ].borderColor;
 		}
-		return data.datasets[ 0 ].borderColor[ dataset ];
+
+		return data.datasets[ dataset ].borderColor[ 0 ];
 	}
 
 	getAlpha() {
@@ -131,10 +133,10 @@ export default class DataStyles extends Component {
 		const dataset = this.state.activeDataset;
 
 		if ( singleColor ) {
-			return tinycolor(data.datasets[dataset].backgroundColor[0]).getAlpha();
+			return tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
 		}
 
-		return tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
+		return tinycolor( data.datasets[ dataset ].backgroundColor[ 0 ] ).getAlpha();
 	}
 
 	getBorderWidth() {
@@ -177,7 +179,7 @@ export default class DataStyles extends Component {
 
 		return (
 			<PanelBody
-				title={ __( 'Data Styles', 'hello-charts' ) }
+				title={ __( 'Data Set Styles', 'hello-charts' ) }
 				initialOpen={ false }
 				className={ 'hello-charts-data-styles' }
 			>

@@ -1,4 +1,7 @@
-import tinycolor from "tinycolor2";
+/**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
 
 /**
  * WordPress dependencies.
