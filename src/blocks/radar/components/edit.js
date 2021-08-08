@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -7,9 +12,9 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles } from '.';
+import { ChartStyles } from '.';
 import { Radar } from 'react-chartjs-2';
-import { ChartBlock } from '../../../common/components';
+import { ChartBlock, DataStyles } from '../../../common/components';
 import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
@@ -22,18 +27,36 @@ export default class Edit extends Component {
 			}
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				dataset.borderColor = colors[ index ];
-				dataset.pointBackgroundColor = colors[ index ];
-				dataset.backgroundColor = hex2rgba( colors[ index ], 0.6 );
+				const color = tinycolor( colors[ index ] );
+				color.setAlpha( 0.6 );
+				dataset.backgroundColor = color.toRgbString();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				const color = tinycolor( dataset.backgroundColor );
+				dataset.borderColor = color.toHexString();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'pointBackgroundColor' ) ) {
+				dataset.pointBackgroundColor = dataset.borderColor;
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
+				dataset.borderWidth = new Array( dataset.data.length ).fill( 2 );
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderAlign' ) ) {
+				dataset.borderAlign = new Array( dataset.data.length ).fill( 'inner' );
 			}
 		} );
 	}
 
 	onNewDataset( dataset ) {
-		const color = randomColors( 1 ).shift();
-		dataset.borderColor = color;
-		dataset.pointBackgroundColor = color;
-		dataset.backgroundColor = hex2rgba( color, 0.6 );
+		const color = tinycolor( randomColors( 1 ).shift() );
+		color.setAlpha( 0.6 );
+		dataset.borderColor = color.toHexString();
+		dataset.pointBackgroundColor = color.toHexString();
+		dataset.backgroundColor = color.toRgbString();
 	}
 
 	/**
@@ -68,6 +91,7 @@ export default class Edit extends Component {
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
 				DataStyles={ DataStyles }
+				singleColor={ true }
 				chartType="radar"
 				maybeGenerateData={ this.maybeGenerateData }
 				onNewDataset={ this.onNewDataset }

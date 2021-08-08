@@ -19,22 +19,6 @@ export default class ChartStyles extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		function updateShowLine( state ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].borderWidth = state ? 3 : 0;
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
-		function updateShowBackground( state ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].fill = state;
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
 		function updateShowAngleLines( state ) {
 			const options = JSON.parse( chartOptions );
 			options.scales.r.angleLines.display = state;
@@ -84,16 +68,6 @@ export default class ChartStyles extends Component {
 
 		return (
 			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
-				<ToggleControl
-					label={ __( 'Show Line', 'hello-charts' ) }
-					checked={ parsedData.datasets[ 0 ].borderWidth > 0 }
-					onChange={ ( state ) => updateShowLine( state ) }
-				/>
-				<ToggleControl
-					label={ __( 'Show Background', 'hello-charts' ) }
-					checked={ parsedData.datasets[ 0 ].fill }
-					onChange={ ( state ) => updateShowBackground( state ) }
-				/>
 				<ToggleControl
 					label={ __( 'Show Angle Lines', 'hello-charts' ) }
 					checked={

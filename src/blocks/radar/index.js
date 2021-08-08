@@ -54,7 +54,7 @@ const attributes = {
 				{
 					label: __( 'Data Set', 'hello-charts' ),
 					fill: true,
-					borderWidth: 3,
+					borderWidth: 2,
 					pointRadius: 3,
 					hoverRadius: 3,
 					pointBorderWidth: 0,
@@ -130,7 +130,6 @@ registerBlockType( 'hello-charts/block-radar', {
 				datasets: [
 					{
 						fill: true,
-						borderWidth: 3,
 						pointRadius: 3,
 						hoverRadius: 3,
 						pointBorderWidth: 0,
@@ -138,6 +137,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						pointStyle: 'circle',
 						data: [ 5, 19, 14, 15, 6, 15 ],
 						borderColor: '#0693e3',
+						borderWidth: 3,
 						pointBackgroundColor: '#0693e3',
 						backgroundColor: 'rgba(6, 147, 227, 0.6)',
 					},

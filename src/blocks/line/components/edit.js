@@ -38,8 +38,7 @@ export default class Edit extends Component {
 			}
 
 			if ( ! dataset.hasOwnProperty( 'pointBackgroundColor' ) ) {
-				const color = tinycolor( dataset.pointBackgroundColor );
-				dataset.pointBackgroundColor = color.toHexString();
+				dataset.pointBackgroundColor = dataset.borderColor;
 			}
 
 			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
@@ -53,7 +52,7 @@ export default class Edit extends Component {
 	}
 
 	onNewDataset( dataset ) {
-		const color = randomColors( 1 ).shift();
+		const color = tinycolor( randomColors( 1 ).shift() );
 		color.setAlpha( 0.6 );
 		dataset.borderColor = color.toHexString();
 		dataset.pointBackgroundColor = color.toHexString();

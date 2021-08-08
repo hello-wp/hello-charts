@@ -113,7 +113,7 @@ registerBlockType( 'hello-charts/block-pie', {
 							'rgba( 6, 147, 227, 0.8 )',
 							'rgba( 155, 81, 224, 0.8 )',
 						],
-						borderWidth: [ 3, 3, 3, 3 ],
+						borderWidth: 3,
 					},
 				],
 			} ),

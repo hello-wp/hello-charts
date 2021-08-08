@@ -117,7 +117,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 					{
 						data: [ 7, 5, 6, 4, 6 ],
 						borderColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0', '#fcb900' ],
-						borderWidth: [ 3, 3, 3, 3, 3 ],
+						borderWidth: 3,
 						backgroundColor: [
 							'rgba(207, 46, 46, 0.6)',
 							'rgba(0, 208, 132, 0.6)',

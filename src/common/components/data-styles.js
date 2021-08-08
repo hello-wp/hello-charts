@@ -106,9 +106,7 @@ export default class DataStyles extends Component {
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		data.datasets[ dataset ].borderWidth.forEach( ( borderWidth, index ) => {
-			data.datasets[ dataset ].borderWidth[ index ] = width;
-		} );
+		data.datasets[ dataset ].borderWidth = width;
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
@@ -145,7 +143,7 @@ export default class DataStyles extends Component {
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		return data.datasets[ dataset ].borderWidth[ 0 ];
+		return data.datasets[ dataset ].borderWidth;
 	}
 
 	hasThemeColors() {
