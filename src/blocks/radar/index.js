@@ -2,8 +2,6 @@
  * BLOCK: Radar Chart
  */
 
-import tinycolor from "tinycolor2";
-
 /**
  * WordPress dependencies.
  */
@@ -211,7 +209,7 @@ registerBlockType( 'hello-charts/block-radar', {
 							dataset.backgroundColor = dataset.backgroundColor[ index % dataset.backgroundColor.length ];
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
-							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ]
+							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
 						}
 					} );
 
