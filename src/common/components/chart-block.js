@@ -45,13 +45,13 @@ export default class ChartBlock extends Component {
 		parsedData.init = true;
 		parsedOptions.init = true;
 
+		this.setDefaults( parsedData );
+
 		setAttributes( {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 			chartOptions: JSON.stringify( parsedOptions ),
 		} );
-
-		this.setDefaults();
 	}
 
 	componentDidUpdate() {
@@ -87,17 +87,13 @@ export default class ChartBlock extends Component {
 		}
 	}
 
-	setDefaults() {
+	setDefaults( parsedData ) {
 		const {
-			attributes: {
-				chartData,
-			},
 			setAttributes,
 			generateData,
 			hasSegments,
 		} = this.props;
 
-		const parsedData = JSON.parse( chartData );
 		const colors = randomColors( parsedData.datasets.length );
 
 		parsedData.datasets.forEach( ( dataset, index ) => {

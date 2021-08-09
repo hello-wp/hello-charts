@@ -36,7 +36,6 @@ export default class Edit extends Component {
 				generateData={ () => {
 					return randomValues( 8 );
 				} }
-				onNewDataset={ this.onNewDataset }
 				titlePlaceholder={ __( 'Line Chart', 'hello-charts' ) }
 			>
 				<Line

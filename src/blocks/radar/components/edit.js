@@ -49,7 +49,6 @@ export default class Edit extends Component {
 				generateData={ () => {
 					return randomValues( 7 );
 				} }
-				onNewDataset={ this.onNewDataset }
 				titlePlaceholder={ __( 'Radar Chart', 'hello-charts' ) }
 			>
 				<Radar

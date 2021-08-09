@@ -3,6 +3,11 @@
  */
 
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -13,7 +18,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons, randomColors, rgba2hex } from '../../common/helpers';
+import { icons, randomColors } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -158,21 +163,25 @@ registerBlockType( 'hello-charts/block-pie', {
 					 * Some chart types use only a single color per dataset. This chart should
 					 * use an array of colors, so we'll randomly generate them.
 					 */
-					fromData.datasets.forEach( ( dataset ) => {
-						const themeColors = randomColors( dataset.data.length - 1 );
-						if ( 'string' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = [
-								rgba2hex( dataset.backgroundColor ),
-								...themeColors,
-							];
+					fromData.datasets.forEach( ( dataset, index ) => {
+						if ( 0 === index ) {
+							if ( 'string' === typeof dataset.backgroundColor ) {
+								const themeColors = randomColors( dataset.data.length - 1 );
+								const alpha = tinycolor( dataset.backgroundColor ).getAlpha();
+								dataset.backgroundColor = [
+									dataset.backgroundColor,
+									...themeColors.map(
+										( color ) => tinycolor( color ).setAlpha( alpha ).toRgbString()
+									),
+								];
+							}
+						} else {
+							dataset.backgroundColor = fromData.datasets[ 0 ].backgroundColor;
 						}
 						if ( 'string' === typeof dataset.borderColor ) {
-							dataset.borderColor = [
-								rgba2hex( dataset.borderColor ),
-								...themeColors,
-							];
-						} else if ( 'undefined' === typeof dataset.borderColor ) {
-							dataset.borderColor = dataset.backgroundColor;
+							dataset.borderColor = dataset.backgroundColor.map(
+								( color ) => tinycolor( color ).toHexString()
+							);
 						}
 					} );
 

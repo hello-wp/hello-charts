@@ -2,6 +2,8 @@
  * BLOCK: Radar Chart
  */
 
+import tinycolor from "tinycolor2";
+
 /**
  * WordPress dependencies.
  */
@@ -13,7 +15,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { hex2rgba, icons, rgba2hex } from '../../common/helpers';
+import { icons } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -196,7 +198,7 @@ registerBlockType( 'hello-charts/block-radar', {
 					 * Some chart types use an array of colors per dataset. This chart should
 					 * only use a single color (the first in the array) for each dataset.
 					 */
-					fromData.datasets.forEach( ( dataset ) => {
+					fromData.datasets.forEach( ( dataset, index ) => {
 						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
 						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
 						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
@@ -206,14 +208,10 @@ registerBlockType( 'hello-charts/block-radar', {
 						delete dataset.lineTension; // Only keep one version of the similar tension properties.
 
 						if ( 'object' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[ 0 ], 0.6 );
-						} else {
-							dataset.backgroundColor = hex2rgba( dataset.backgroundColor, 0.6 );
+							dataset.backgroundColor = dataset.backgroundColor[ index % dataset.backgroundColor.length ];
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
-							dataset.borderColor = rgba2hex( dataset.borderColor[ 0 ] );
-						} else if ( 'undefined' === typeof dataset.borderColor ) {
-							dataset.borderColor = rgba2hex( dataset.backgroundColor );
+							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ]
 						}
 					} );
 

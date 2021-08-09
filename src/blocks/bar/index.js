@@ -3,6 +3,11 @@
  */
 
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -13,7 +18,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons, rgba2hex } from '../../common/helpers';
+import { icons } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -177,15 +182,13 @@ registerBlockType( 'hello-charts/block-bar', {
 					 * Some chart types use an array of colors per dataset. This chart should
 					 * only use a single color (the first in the array) for each dataset.
 					 */
-					fromData.datasets.forEach( ( dataset ) => {
+					fromData.datasets.forEach( ( dataset, index ) => {
 						if ( 'object' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = rgba2hex( dataset.backgroundColor[ 0 ] );
-						} else {
-							dataset.backgroundColor = rgba2hex( dataset.backgroundColor );
+							dataset.backgroundColor = dataset.backgroundColor[ index % dataset.backgroundColor.length ];
 						}
-
-						/* We're intentionally using the background color as the border color for bar charts. */
-						dataset.borderColor = dataset.backgroundColor;
+						if ( 'object' === typeof dataset.borderColor ) {
+							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ]
+						}
 					} );
 
 					to.chartData = JSON.stringify( fromData );
