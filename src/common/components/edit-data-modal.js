@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -13,6 +18,11 @@ const {
 	Modal,
 } = wp.components;
 const { RichText } = wp.blockEditor;
+
+/**
+ * Internal dependencies.
+ */
+import { randomColors } from '../helpers';
 
 export default class EditDataModal extends Component {
 	constructor( props ) {
@@ -33,7 +43,7 @@ export default class EditDataModal extends Component {
 			},
 			setAttributes,
 			toggleEditor,
-			onNewDataset,
+			hasSegments,
 		} = this.props;
 		const { state: { table } } = this;
 
@@ -77,8 +87,16 @@ export default class EditDataModal extends Component {
 			dataset.data = new Array( rows ).fill( null );
 			dataset.label = '';
 
-			if ( onNewDataset ) {
-				onNewDataset( dataset );
+			if ( ! hasSegments ) {
+				const color = tinycolor( randomColors( 1 ).shift() );
+				color.setAlpha( 0.8 );
+				dataset.borderColor = color.toHexString();
+				dataset.pointBackgroundColor = color.toHexString();
+				dataset.backgroundColor = color.toRgbString();
+			}
+
+			if ( 'start' === dataset.fill ) {
+				dataset.fill = '-1';
 			}
 
 			data.datasets.splice( index, 0, dataset );

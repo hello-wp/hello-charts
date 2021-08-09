@@ -1,9 +1,4 @@
 /**
- * External components.
- */
-import tinycolor from 'tinycolor2';
-
-/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -15,7 +10,7 @@ const { Component } = wp.element;
 import { ChartStyles } from '.';
 import { PolarArea } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { randomColors, randomValues } from '../../../common/helpers';
+import { randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
 	/**
@@ -51,7 +46,9 @@ export default class Edit extends Component {
 				ChartStyles={ ChartStyles }
 				hasSegments={ true }
 				chartType="polarArea"
-				generateData={ () => { return randomValues( 5, 3, 10 ) } }
+				generateData={ () => {
+					return randomValues( 5, 3, 10 );
+				} }
 				titlePlaceholder={ __( 'Polar Area Chart', 'hello-charts' ) }
 			>
 				<PolarArea

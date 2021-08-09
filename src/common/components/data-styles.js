@@ -214,7 +214,7 @@ export default class DataStyles extends Component {
 		const {
 			attributes: {
 				chartData,
-				useThemeColors
+				useThemeColors,
 			},
 			clientId,
 			setAttributes,

@@ -1,9 +1,4 @@
 /**
- * External components.
- */
-import tinycolor from 'tinycolor2';
-
-/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -15,7 +10,7 @@ const { Component } = wp.element;
 import { ChartStyles } from '.';
 import { Pie } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { randomColors, randomValues } from '../../../common/helpers';
+import { randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
 	render() {
@@ -38,7 +33,9 @@ export default class Edit extends Component {
 				ChartStyles={ ChartStyles }
 				hasSegments={ true }
 				chartType="pie"
-				generateData={ () => { return randomValues( 4, 1, 10 ) } }
+				generateData={ () => {
+					return randomValues( 4, 1, 10 );
+				} }
 				titlePlaceholder={ __( 'Pie Chart', 'hello-charts' ) }
 			>
 				<Pie

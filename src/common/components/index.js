@@ -6,4 +6,4 @@ export { default as EditDataButton } from './edit-data-button';
 export { default as EditDataModal } from './edit-data-modal';
 export { default as EditDataToolbar } from './edit-data-toolbar';
 export { default as Save } from './save';
-export { default as SegmentStyles } from './segment-styles'
+export { default as SegmentStyles } from './segment-styles';

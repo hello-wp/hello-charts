@@ -97,7 +97,7 @@ export default class SegmentStyles extends Component {
 		const {
 			attributes: {
 				chartData,
-				useThemeColors
+				useThemeColors,
 			},
 			clientId,
 			setAttributes,

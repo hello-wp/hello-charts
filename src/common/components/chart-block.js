@@ -20,10 +20,7 @@ import {
 	EditDataToolbar,
 	SegmentStyles,
 } from '.';
-import {
-	randomColors,
-	randomValues
-} from '../helpers';
+import { randomColors } from '../helpers';
 
 export default class ChartBlock extends Component {
 	constructor( props ) {
@@ -110,15 +107,15 @@ export default class ChartBlock extends Component {
 
 			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
 				if ( hasSegments && 0 === index ) {
-					const segmentColors = randomColors(dataset.data.length);
+					const segmentColors = randomColors( dataset.data.length );
 					dataset.backgroundColor = [];
-					dataset.data.forEach((data, index) => {
-						const segmentColor = tinycolor(segmentColors[index]);
-						segmentColor.setAlpha(0.8);
-						dataset.backgroundColor.push(segmentColor.toRgbString());
-					});
+					dataset.data.forEach( ( data, segmentIndex ) => {
+						const segmentColor = tinycolor( segmentColors[ segmentIndex ] );
+						segmentColor.setAlpha( 0.8 );
+						dataset.backgroundColor.push( segmentColor.toRgbString() );
+					} );
 				} else if ( hasSegments ) {
-					dataset.backgroundColor = parsedData.datasets[0].backgroundColor;
+					dataset.backgroundColor = parsedData.datasets[ 0 ].backgroundColor;
 				} else {
 					const backgroundColor = tinycolor( colors[ index ] );
 					backgroundColor.setAlpha( 0.8 );
@@ -129,8 +126,8 @@ export default class ChartBlock extends Component {
 			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
 				if ( hasSegments ) {
 					dataset.borderColor = [];
-					dataset.data.forEach( ( data, index ) => {
-						const color = tinycolor( dataset.backgroundColor[ index ] );
+					dataset.data.forEach( ( data, segmentIndex ) => {
+						const color = tinycolor( dataset.backgroundColor[ segmentIndex ] );
 						dataset.borderColor.push( color.toHexString() );
 					} );
 				} else {
