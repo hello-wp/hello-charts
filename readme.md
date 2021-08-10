@@ -46,5 +46,5 @@ GPLv3
 
 ### 👉 `npm run build`
 
-- Use to build production code for your block inside `dist` folder.
+- Use to build production code for your block inside `build` folder.
 - Runs once and reports back the gzip file sizes of the produced code.
