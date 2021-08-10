@@ -26,16 +26,13 @@ const {
  * Internal dependencies.
  */
 import { CustomColorPalette } from '.';
+import { colorPalettes } from '../helpers';
 
 export default class DataStyles extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.themeColors = wp.data.select( 'core/block-editor' ).getSettings().colors;
-		this.defaultColors = wp.blockEditor.SETTINGS_DEFAULTS.colors;
-		this.niceColors = this.defaultColors.filter(
-			( color ) => ! [ 'black', 'white', 'cyan-bluish-gray' ].find( ( boring ) => boring === color.slug )
-		);
+		this.colorPalettes = colorPalettes();
 
 		this.state = { activeDataset: 0 };
 	}
@@ -200,18 +197,6 @@ export default class DataStyles extends Component {
 		return data.datasets[ dataset ].pointStyle;
 	}
 
-	hasThemeColors() {
-		const colorDiff = this.themeColors.filter(
-			( themeColor ) => ! this.defaultColors.find( ( defaultColor ) => defaultColor.slug === themeColor.slug )
-		);
-
-		if ( ! colorDiff.length ) {
-			return false;
-		}
-
-		return true;
-	}
-
 	render() {
 		const {
 			attributes: {
@@ -236,7 +221,7 @@ export default class DataStyles extends Component {
 				initialOpen={ false }
 				className={ 'hello-charts-data-styles' }
 			>
-				{ this.hasThemeColors() && ! hasSegments && (
+				{ this.colorPalettes.hasThemeColorPalette && ! hasSegments && (
 					<ToggleControl
 						label={ __( 'Use Theme Colors', 'hello-charts' ) }
 						checked={ useThemeColors }
@@ -281,7 +266,7 @@ export default class DataStyles extends Component {
 						{ ! hasSegments && (
 							<CustomColorPalette
 								label={ __( 'Color', 'hello-charts' ) }
-								colors={ useThemeColors ? this.themeColors : this.niceColors }
+								colors={ useThemeColors ? this.colorPalettes.themeColors : this.colorPalettes.niceColors }
 								colorValue={ this.getColor() }
 								onChange={ ( color ) => this.updateColor( color ) }
 							/>
