@@ -58,17 +58,19 @@ export default class DataStyles extends Component {
 			setAttributes,
 		} = this.props;
 
+		if ( ! color ) {
+			return;
+		}
+
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		const borderColor = tinycolor( color );
-		const backgroundColor = tinycolor( color );
+		data.datasets[ dataset ].borderColor = color;
+		data.datasets[ dataset ].pointBackgroundColor = color;
+
 		const alpha = tinycolor( data.datasets[ dataset ].backgroundColor ).getAlpha();
 
-		backgroundColor.setAlpha( alpha );
-		data.datasets[ dataset ].borderColor = borderColor.toHexString();
-		data.datasets[ dataset ].pointBackgroundColor = borderColor.toHexString();
-		data.datasets[ dataset ].backgroundColor = backgroundColor.toRgbString();
+		data.datasets[ dataset ].backgroundColor = tinycolor( color ).setAlpha( alpha ).toRgbString();
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
