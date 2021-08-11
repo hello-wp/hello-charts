@@ -27,4 +27,4 @@ function hello_charts_version() {
 /**
  * Block Initializer.
  */
-require_once plugin_dir_path( __FILE__ ) . 'src/init.php';
+require_once plugin_dir_path( __FILE__ ) . 'php/init.php';

@@ -16,11 +16,6 @@ const {
  */
 import { icons } from '../helpers';
 
-/**
- * External dependencies
- */
-import classnames from 'classnames';
-
 export default class ChartFormattingToolbar extends Component {
 	render() {
 		const {
@@ -88,6 +83,14 @@ export default class ChartFormattingToolbar extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
+		function getMenuItemClassname( active ) {
+			let classname = 'components-menu-item';
+			if ( active ) {
+				return classname + ' is-active';
+			}
+			return classname;
+		}
+
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
 				<ToolbarButton
@@ -128,12 +131,7 @@ export default class ChartFormattingToolbar extends Component {
 												icon={ item.icon }
 												onClick={ () => updateLegendPosition( item.position ) }
 												isSelected={ item.position === parsedOptions.plugins.legend.position }
-												className={ classnames(
-													'components-menu-item',
-													{
-														'is-active': item.position === parsedOptions.plugins.legend.position,
-													}
-												) }
+												className={ getMenuItemClassname( item.position === parsedOptions.plugins.legend.position ) }
 											>
 												{ item.title }
 											</MenuItem>
@@ -146,12 +144,7 @@ export default class ChartFormattingToolbar extends Component {
 												icon={ item.icon }
 												onClick={ () => updateLegendAlign( item.align ) }
 												isSelected={ item.align === parsedOptions.plugins.legend.align }
-												className={ classnames(
-													'components-menu-item',
-													{
-														'is-active': item.align === parsedOptions.plugins.legend.align,
-													}
-												) }
+												className={ getMenuItemClassname( item.align === parsedOptions.plugins.legend.align ) }
 											>
 												{ item.title }
 											</MenuItem>

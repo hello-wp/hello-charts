@@ -10,9 +10,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
 	...defaultConfig,
 	entry: {
-    	'./build/blocks': './src/blocks.js',
-		'./build/editor': './src/editor.scss',
-		'./build/style': './src/style.scss',
+    	'./build/blocks': './js/blocks.js',
+		'./build/editor': './css/editor.scss',
+		'./build/style': './css/style.scss',
 	},
 	output: {
 		path: path.resolve( __dirname ),
