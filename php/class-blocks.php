@@ -2,7 +2,6 @@
 /**
  * Blocks Initializer
  *
- * @since   1.0.0
  * @package Hello_Charts
  */
 
@@ -33,7 +32,7 @@ class Blocks {
 	];
 
 	/**
-	 * Block initializer constructor.
+	 * Blocks constructor.
 	 *
 	 * @return void
 	 */
@@ -77,7 +76,6 @@ class Blocks {
 	 * @uses {wp-element} for WP Element abstraction — structure of blocks.
 	 * @uses {wp-i18n} to internationalize the block's text.
 	 * @uses {wp-editor} for WP editor styles.
-	 * @since 1.0.0
 	 */
 	public function block_assets() {
 		$version = hello_charts_version();
@@ -138,7 +136,6 @@ class Blocks {
 		 * enqueued when the editor loads.
 		 *
 		 * @link https://wordpress.org/gutenberg/handbook/blocks/writing-your-first-block-type#enqueuing-block-scripts
-		 * @since 1.16.0
 		 */
 		foreach ( self::BLOCK_SLUGS as $block_slug ) {
 			$namespace = self::BLOCK_NAMESPACE;

@@ -27,8 +27,10 @@ function hello_charts_version() {
 /**
  * Block Initializer.
  */
-require_once plugin_dir_path( __FILE__ ) . 'php/blocks.php';
+require_once plugin_dir_path( __FILE__ ) . 'php/class-blocks.php';
+require_once plugin_dir_path( __FILE__ ) . 'php/class-license.php';
 
 $hello_charts = [
-	'blocks' => new Hello_Charts\Blocks(),
+	'blocks'  => new Hello_Charts\Blocks(),
+	'license' => new Hello_Charts\License(),
 ];
