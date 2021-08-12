@@ -70,6 +70,9 @@ const attributes = {
 					position: 'top',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			scales: {
 				x: {
@@ -134,6 +137,9 @@ registerBlockType( 'hello-charts/block-bar', {
 				responsive: false,
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},

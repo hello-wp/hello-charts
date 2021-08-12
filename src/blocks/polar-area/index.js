@@ -74,6 +74,9 @@ const attributes = {
 					position: 'bottom',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			scales: {
 				r: {
@@ -138,6 +141,9 @@ registerBlockType( 'hello-charts/block-polar-area', {
 				responsive: false,
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},

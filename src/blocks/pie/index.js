@@ -75,6 +75,9 @@ const attributes = {
 					position: 'bottom',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			layout: {
 				padding: 20,
@@ -130,6 +133,9 @@ registerBlockType( 'hello-charts/block-pie', {
 				},
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},

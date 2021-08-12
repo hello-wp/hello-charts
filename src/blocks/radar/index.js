@@ -76,6 +76,9 @@ const attributes = {
 					position: 'top',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			scales: {
 				r: {
@@ -148,6 +151,9 @@ registerBlockType( 'hello-charts/block-radar', {
 				responsive: false,
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},
