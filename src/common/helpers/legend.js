@@ -44,10 +44,10 @@ const legend = {
 			return items;
 		},
 	},
-	segmentClick: ( event, legendItem, legend ) => {
-		const index = legend.legendItems.indexOf( legendItem )
-		legend.chart.toggleDataVisibility( index );
-		legend.chart.update();
+	segmentClick: ( event, item, options ) => {
+		const index = options.legendItems.indexOf( item );
+		options.chart.toggleDataVisibility( index );
+		options.chart.update();
 	},
 };
 
