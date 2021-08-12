@@ -94,16 +94,13 @@ export default class ChartStyles extends Component {
 					}
 					onChange={ ( state ) => updateSuggestedMin( state ) }
 				/>
-				{ ( parsedData.datasets[ 0 ].borderWidth > 0 ||
-					parsedData.datasets[ 0 ].fill ) && (
-					<RangeControl
-						label={ __( 'Curve', 'hello-charts' ) }
-						value={ parsedData.datasets[ 0 ].tension * 20 }
-						onChange={ ( tension ) => updateTension( tension / 20 ) }
-						min={ 0 }
-						max={ 10 }
-					/>
-				) }
+				<RangeControl
+					label={ __( 'Curve', 'hello-charts' ) }
+					value={ parsedData.datasets[ 0 ].tension * 20 }
+					onChange={ ( tension ) => updateTension( tension / 20 ) }
+					min={ 0 }
+					max={ 10 }
+				/>
 			</PanelBody>
 		);
 	}

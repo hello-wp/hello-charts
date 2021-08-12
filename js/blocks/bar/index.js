@@ -70,6 +70,9 @@ const attributes = {
 					position: 'top',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			scales: {
 				x: {
@@ -136,6 +139,9 @@ registerBlockType( 'hello-charts/block-bar', {
 					legend: {
 						display: false,
 					},
+					tooltip: {
+						display: false,
+					},
 				},
 			} ),
 		},
@@ -183,6 +189,7 @@ registerBlockType( 'hello-charts/block-bar', {
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
 							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

@@ -75,6 +75,9 @@ const attributes = {
 					position: 'bottom',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			layout: {
 				padding: 20,
@@ -132,6 +135,9 @@ registerBlockType( 'hello-charts/block-pie', {
 					legend: {
 						display: false,
 					},
+					tooltip: {
+						display: false,
+					},
 				},
 			} ),
 		},
@@ -182,6 +188,7 @@ registerBlockType( 'hello-charts/block-pie', {
 							dataset.borderColor = dataset.backgroundColor.map(
 								( color ) => tinycolor( color ).toHexString()
 							);
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

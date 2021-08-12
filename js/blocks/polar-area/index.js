@@ -74,6 +74,9 @@ const attributes = {
 					position: 'bottom',
 					align: 'center',
 				},
+				tooltip: {
+					displayColors: false,
+				},
 			},
 			scales: {
 				r: {
@@ -140,6 +143,9 @@ registerBlockType( 'hello-charts/block-polar-area', {
 					legend: {
 						display: false,
 					},
+					tooltip: {
+						display: false,
+					},
 				},
 				scales: {
 					r: {
@@ -203,6 +209,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 							dataset.borderColor = dataset.backgroundColor.map(
 								( color ) => tinycolor( color ).toHexString()
 							);
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 
