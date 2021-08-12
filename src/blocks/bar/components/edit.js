@@ -10,7 +10,7 @@ const { Component } = wp.element;
 import { ChartStyles } from '.';
 import { Bar } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { randomValues } from '../../../common/helpers';
+import { legend, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
 	render() {
@@ -26,6 +26,8 @@ export default class Edit extends Component {
 
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
+
+		parsedOptions.plugins.legend.labels = legend.labels;
 
 		return (
 			<ChartBlock
