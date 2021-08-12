@@ -189,6 +189,7 @@ registerBlockType( 'hello-charts/block-bar', {
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
 							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

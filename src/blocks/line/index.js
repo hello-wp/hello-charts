@@ -53,7 +53,7 @@ const attributes = {
 			datasets: [
 				{
 					label: 'A',
-					fill: false,
+					fill: true,
 					pointRadius: 3,
 					hoverRadius: 3,
 					borderWidth: 3,
@@ -64,7 +64,7 @@ const attributes = {
 				},
 				{
 					label: 'B',
-					fill: false,
+					fill: true,
 					pointRadius: 3,
 					hoverRadius: 3,
 					borderWidth: 3,
@@ -142,7 +142,7 @@ registerBlockType( 'hello-charts/block-line', {
 				datasets: [
 					{
 						label: 'A',
-						fill: false,
+						fill: true,
 						pointRadius: 3,
 						hoverRadius: 3,
 						pointBorderWidth: 0,
@@ -152,11 +152,11 @@ registerBlockType( 'hello-charts/block-line', {
 						borderColor: '#cf2e2e',
 						borderWidth: 3,
 						pointBackgroundColor: '#cf2e2e',
-						backgroundColor: '#cf2e2e',
+						backgroundColor: 'rgba(207, 46, 46, 0)',
 					},
 					{
 						label: 'B',
-						fill: false,
+						fill: true,
 						pointRadius: 3,
 						hoverRadius: 3,
 						pointBorderWidth: 0,
@@ -166,7 +166,7 @@ registerBlockType( 'hello-charts/block-line', {
 						borderColor: '#0693e3',
 						borderWidth: 3,
 						pointBackgroundColor: '#0693e3',
-						backgroundColor: '#0693e3',
+						backgroundColor: 'rgba(6, 147, 227, 0)',
 					},
 				],
 			} ),
@@ -217,10 +217,17 @@ registerBlockType( 'hello-charts/block-line', {
 					 * only use a single color (the first in the array) for each dataset.
 					 */
 					fromData.datasets.forEach( ( dataset, index ) => {
-						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
 						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
 						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
 						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
+
+						if ( toOptions.scales.y.stacked && 0 === index ) {
+							dataset.fill = 'start';
+						} else if ( toOptions.scales.y.stacked ) {
+							dataset.fill = '-1';
+						} else {
+							dataset.fill = true;
+						}
 
 						dataset.lineTension = dataset.lineTension ?? dataset.tension ?? toData.datasets[ 0 ].lineTension;
 						delete dataset.tension; // Only keep one version of the similar tension properties.
@@ -229,7 +236,8 @@ registerBlockType( 'hello-charts/block-line', {
 							dataset.backgroundColor = dataset.backgroundColor[ index % dataset.backgroundColor.length ];
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
-							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
+							dataset.borderColor = dataset.borderColor[ index % dataset.borderColor.length ];
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

@@ -209,6 +209,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 							dataset.borderColor = dataset.backgroundColor.map(
 								( color ) => tinycolor( color ).toHexString()
 							);
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

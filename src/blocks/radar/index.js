@@ -203,7 +203,6 @@ registerBlockType( 'hello-charts/block-radar', {
 					 * only use a single color (the first in the array) for each dataset.
 					 */
 					fromData.datasets.forEach( ( dataset, index ) => {
-						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
 						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
 						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
 						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
@@ -216,6 +215,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
 							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

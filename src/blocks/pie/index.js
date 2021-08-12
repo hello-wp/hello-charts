@@ -188,6 +188,7 @@ registerBlockType( 'hello-charts/block-pie', {
 							dataset.borderColor = dataset.backgroundColor.map(
 								( color ) => tinycolor( color ).toHexString()
 							);
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 
