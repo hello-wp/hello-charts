@@ -84,7 +84,7 @@ export default class ChartFormattingToolbar extends Component {
 		}
 
 		function getMenuItemClassname( active ) {
-			let classname = 'components-menu-item';
+			const classname = 'components-menu-item';
 			if ( active ) {
 				return classname + ' is-active';
 			}
