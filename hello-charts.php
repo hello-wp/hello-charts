@@ -32,5 +32,5 @@ require_once plugin_dir_path( __FILE__ ) . 'php/class-license.php';
 
 $hello_charts = [
 	'blocks'  => new Hello_Charts\Blocks(),
-	'license' => new Hello_Charts\License(),
+	'license' => new Hello_Charts\License( plugin_basename( __FILE__ ) ),
 ];
