@@ -66,8 +66,10 @@ class License {
 
 	/**
 	 * License constructor.
+	 *
+	 * @param string $plugin_file Path to the plugin file relative to the plugins directory.
 	 */
-	public function __construct( $plugin_file ) {
+	public function __construct( string $plugin_file ) {
 		$this->plugin_file = $plugin_file;
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'license_key_styles' ] );
@@ -75,7 +77,7 @@ class License {
 		add_action( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
 		add_filter( 'pre_update_option_' . self::OPTION_NAME, [ $this, 'save_license_key' ] );
 
-		if ( isset( $_GET[ self::DEREGISTER_KEY ] ) ) {
+		if ( filter_input( INPUT_GET, self::DEREGISTER_KEY ) ) {
 			add_action( 'admin_init', [ $this, 'remove_license' ] );
 		}
 	}
@@ -194,8 +196,8 @@ class License {
 	/**
 	 * Add links to plugin row.
 	 *
-	 * @param  string[]  $plugin_meta An array of the plugin's metadata.
-	 * @param  string  $plugin_file Path to the plugin file relative to the plugins directory.
+	 * @param string[] $plugin_meta An array of the plugin's metadata.
+	 * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
 	 *
 	 * @return string[]
 	 */
