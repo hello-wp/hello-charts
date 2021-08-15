@@ -83,6 +83,9 @@ class License {
 		add_action( 'after_plugin_row_' . $this->plugin_file, [ $this, 'license_key_field' ] );
 		add_action( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
 
+		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'update_plugins' ] );
+		add_filter( 'plugins_api', [ $this, 'plugins_api' ], 10, 3 );
+
 		if ( filter_input( INPUT_GET, self::DEREGISTER_KEY, FILTER_SANITIZE_STRING ) ) {
 			add_action( 'admin_init', [ $this, 'remove_license' ] );
 		}
@@ -190,30 +193,17 @@ class License {
 	 * @param string $key The license key to activate.
 	 */
 	private function activate_license( string $key ) {
-		$api_params = [
-			'edd_action' => 'activate_license',
-			'license'    => $key,
-			'item_name'  => rawurlencode( self::PRODUCT_SLUG ),
-			'url'        => home_url(),
-		];
-
-		$response = wp_remote_post(
-			self::LICENSE_URL,
-			[
-				'timeout'   => 10,
-				'sslverify' => true,
-				'body'      => $api_params,
-			]
-		);
+		$response = $this->api_request( 'activate_license', [ 'license' => $key ] );
 
 		if ( is_wp_error( $response ) ) {
 			$license = [ 'license' => self::REQUEST_FAILED ];
 		} else {
-			$license = json_decode( wp_remote_retrieve_body( $response ), true );
+			$license = $response;
 		}
 
 		$expiration = DAY_IN_SECONDS;
 
+		update_option( self::OPTION_NAME, $key );
 		set_transient( self::TRANSIENT_NAME, $license, $expiration );
 	}
 
@@ -251,6 +241,102 @@ class License {
 		);
 
 		return $plugin_meta;
+	}
+
+	/**
+	 * Check for Updates and modify the update array.
+	 *
+	 * @param mixed $value New value of site transient.
+	 *
+	 * @return mixed Modified update array with custom plugin data.
+	 *
+	 * @see https://developer.wordpress.org/reference/hooks/pre_set_site_transient_transient/
+	 */
+	public function update_plugins( $value ) {
+		if ( ! $this->is_valid() ) {
+			return $value;
+		}
+
+		if ( empty( $value ) ) {
+			return $value;
+		}
+
+		$response = $this->api_request( 'get_version' );
+
+		if ( ! is_wp_error( $response ) && isset( $response['new_version'] ) ) {
+			if ( version_compare( hello_charts_version(), $response['new_version'], '<' ) ) {
+				$value->response[ $this->plugin_file ] = (object) $response;
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Updates information on the "View version details" page with custom data.
+	 *
+	 * @param mixed  $data   The result object or array.
+	 * @param string $action The type of information being requested from the Plugin Installation API.
+	 * @param object $args   Plugin API arguments.
+	 *
+	 * @return mixed $data
+	 *
+	 * @see https://developer.wordpress.org/reference/hooks/\/
+	 */
+	public function plugins_api( $data, $action, $args ) {
+		if (
+			'get_version' !== $action ||
+			! isset( $args->slug ) ||
+			self::PRODUCT_SLUG !== $args->slug
+		) {
+			return $data;
+		}
+
+		$response = $this->api_request( 'plugin_information' );
+
+		if ( ! is_wp_error( $response ) ) {
+			$data = $response;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Calls the API and, if successful, returns the object delivered by the API.
+	 *
+	 * @param string $action The requested action.
+	 * @param array $data Optional API data.
+	 *
+	 * @return array|WP_ERROR
+	 */
+	private function api_request( string $action, array $data = [] ) {
+		$api_params = [
+			'edd_action' => $action,
+			'license'    => $data['license'] ?? get_option( self::OPTION_NAME ),
+			'item_name'  => rawurlencode( self::PRODUCT_SLUG ),
+			'url'        => home_url(),
+		];
+
+		$request = wp_remote_post(
+			self::LICENSE_URL,
+			[
+				'timeout'   => 10,
+				'sslverify' => true,
+				'body'      => $api_params,
+			]
+		);
+
+		if ( ! is_wp_error( $request ) ) {
+			$response = json_decode( wp_remote_retrieve_body( $request ), true );
+
+			if ( $response ) {
+				$response['sections'] = maybe_unserialize( $response['sections'] );
+			}
+
+			return $response;
+		}
+
+		return $request;
 	}
 
 	/**
