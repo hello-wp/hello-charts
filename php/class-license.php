@@ -305,7 +305,7 @@ class License {
 	 * Calls the API and, if successful, returns the object delivered by the API.
 	 *
 	 * @param string $action The requested action.
-	 * @param array $data Optional API data.
+	 * @param array  $data Optional API data.
 	 *
 	 * @return array|WP_ERROR
 	 */
