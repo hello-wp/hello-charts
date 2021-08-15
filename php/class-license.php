@@ -80,7 +80,7 @@ class License {
 		$this->plugin_file = $plugin_file;
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'license_key_styles' ] );
-		add_action( 'after_plugin_row_' . $this->plugin_file, [ $this, 'license_key_field' ] );
+		add_action( 'after_plugin_row_' . $this->plugin_file, [ $this, 'license_key_field' ], 10, 2 );
 		add_action( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
 
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'update_plugins' ] );
@@ -115,9 +115,15 @@ class License {
 			return;
 		}
 
-		delete_transient( self::TRANSIENT_NAME );
-		delete_option( self::OPTION_NAME );
-		add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_remove_message' ] );
+		$response = $this->api_request( 'deactivate_license' );
+
+		if ( ! is_wp_error( $response ) ) {
+			delete_transient( self::TRANSIENT_NAME );
+			delete_option( self::OPTION_NAME );
+			add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_remove_message' ] );
+		} else {
+			add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_request_failed_message' ] );
+		}
 	}
 
 	/**
@@ -153,14 +159,8 @@ class License {
 	public function is_valid(): bool {
 		$license = $this->get_license();
 
-		if ( isset( $license['license'] ) && 'valid' === $license['license'] ) {
-			if (
-				isset( $license['expires'] ) &&
-				(
-					time() < strtotime( $license['expires'] ) ||
-					'lifetime' === $license['expires']
-				)
-			) {
+		if ( isset( $license->license ) && 'valid' === $license->license && isset( $license->expires ) ) {
+			if ( time() < strtotime( $license->expires ) || 'lifetime' === $license->expires ) {
 				return true;
 			}
 		}
@@ -263,9 +263,9 @@ class License {
 
 		$response = $this->api_request( 'get_version' );
 
-		if ( ! is_wp_error( $response ) && isset( $response['new_version'] ) ) {
-			if ( version_compare( hello_charts_version(), $response['new_version'], '<' ) ) {
-				$value->response[ $this->plugin_file ] = (object) $response;
+		if ( ! is_wp_error( $response ) && isset( $response->new_version ) ) {
+			if ( version_compare( hello_charts_version(), $response->new_version, '<' ) ) {
+				$value->response[ $this->plugin_file ] = $response;
 			}
 		}
 
@@ -283,16 +283,17 @@ class License {
 	 *
 	 * @see https://developer.wordpress.org/reference/hooks/\/
 	 */
-	public function plugins_api( $data, $action, $args ) {
+	public function plugins_api( $data, string $action, $args ) {
 		if (
-			'get_version' !== $action ||
+			! $this->is_valid() ||
+			'plugin_information' !== $action ||
 			! isset( $args->slug ) ||
 			self::PRODUCT_SLUG !== $args->slug
 		) {
 			return $data;
 		}
 
-		$response = $this->api_request( 'plugin_information' );
+		$response = $this->api_request( 'get_version' );
 
 		if ( ! is_wp_error( $response ) ) {
 			$data = $response;
@@ -307,7 +308,7 @@ class License {
 	 * @param string $action The requested action.
 	 * @param array  $data Optional API data.
 	 *
-	 * @return array|WP_ERROR
+	 * @return object|WP_ERROR
 	 */
 	private function api_request( string $action, array $data = [] ) {
 		$api_params = [
@@ -327,10 +328,12 @@ class License {
 		);
 
 		if ( ! is_wp_error( $request ) ) {
-			$response = json_decode( wp_remote_retrieve_body( $request ), true );
+			$response = json_decode( wp_remote_retrieve_body( $request ) );
 
 			if ( $response ) {
-				$response['sections'] = maybe_unserialize( $response['sections'] );
+				$response->sections = maybe_unserialize( $response->sections );
+				$response->banners  = maybe_unserialize( $response->banners );
+				$response->icons    = maybe_unserialize( $response->icons );
 			}
 
 			return $response;
@@ -347,6 +350,7 @@ class License {
 			.plugins tr[data-slug="hello-charts"] > * { box-shadow: none; }
 			.plugins tr[data-slug="hello-charts"] .deregister { color: #b32d2e; }
 			.plugins .hello-charts-plugin-row td { padding-top: 0; }
+			.plugins .hello-charts-plugin-row.update td { padding-bottom: 0; }
 			.plugins .hello-charts-plugin-row .dashicons-yes { color: #00a32a; }
 			.plugins .hello-charts-plugin-row .license-key { font-family: monospace; width: 18rem; margin-right: 0.5rem; }
 		';
@@ -357,18 +361,24 @@ class License {
 	 * Output the HTML for showing an input field for the license key.
 	 *
 	 * @param string $plugin_file Path to the plugin file relative to the plugins directory.
+	 * @param array  $plugin_data An array of plugin data.
 	 *
 	 * @see https://developer.wordpress.org/reference/hooks/after_plugin_row_plugin_file/
 	 */
-	public function license_key_field( string $plugin_file ) {
+	public function license_key_field( string $plugin_file, array $plugin_data ) {
 		unset( $plugin_file );
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			return;
 		}
 
+		$class = 'hello-charts-plugin-row active';
+		if ( isset( $plugin_data['update'] ) && $plugin_data['update'] ) {
+			$class .= ' update';
+		}
+
 		?>
-		<tr class="hello-charts-plugin-row active">
+		<tr class="<?php echo esc_attr( $class ); ?>">
 			<th class="check-column"></th>
 			<td class="column-primary"></td>
 			<td class="column-description">
@@ -464,7 +474,7 @@ class License {
 	public function license_request_failed_message(): string {
 		$message = sprintf(
 			/* translators: %s is an HTML link to contact support */
-			__( 'There was a problem activating the license, but it may not be invalid. If the problem persists, please %s.', 'hello-charts' ),
+			__( 'There was a problem communicating with the license validation server. If the problem persists, please %s.', 'hello-charts' ),
 			sprintf(
 				'<a href="%1$s">%2$s</a>',
 				'mailto:hi@hellocharts.co?subject=There was a problem activating my Hello Charts license',
