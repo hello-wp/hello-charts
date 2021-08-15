@@ -17,42 +17,42 @@ class License {
 	 *
 	 * @var string
 	 */
-	const TRANSIENT_NAME = 'hello_charts_license';
+	private const TRANSIENT_NAME = 'hello_charts_license';
 
 	/**
 	 * Option name of the license key.
 	 *
 	 * @var string
 	 */
-	const OPTION_NAME = 'hello_charts_license_key';
+	private const OPTION_NAME = 'hello_charts_license_key';
 
 	/**
 	 * URL of the Hello Charts store.
 	 *
 	 * @var string
 	 */
-	const LICENSE_URL = 'https://hellocharts.co';
+	private const LICENSE_URL = 'https://hellocharts.co';
 
 	/**
 	 * Product slug of Hello Charts.
 	 *
 	 * @var string
 	 */
-	const PRODUCT_SLUG = 'hello-charts';
+	private const PRODUCT_SLUG = 'hello-charts';
 
 	/**
 	 * The name of the GET parameter that indicates we should register the plugin.
 	 *
 	 * @var string
 	 */
-	const REGISTER_KEY = 'hello-charts-register';
+	private const REGISTER_KEY = 'hello-charts-register';
 
 	/**
 	 * The name of the GET parameter that indicates we should deregister the plugin.
 	 *
 	 * @var string
 	 */
-	const DEREGISTER_KEY = 'hello-charts-deregister';
+	private const DEREGISTER_KEY = 'hello-charts-deregister';
 
 	/**
 	 * The transient 'license' value for when the request to validate the license failed.
@@ -62,14 +62,14 @@ class License {
 	 *
 	 * @var string
 	 */
-	const REQUEST_FAILED = 'request_failed';
+	private const REQUEST_FAILED = 'request_failed';
 
 	/**
 	 * Path to the plugin file relative to the plugins directory.
 	 *
 	 * @var string
 	 */
-	public $plugin_file;
+	private $plugin_file;
 
 	/**
 	 * License constructor.
@@ -86,12 +86,12 @@ class License {
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'update_plugins' ] );
 		add_filter( 'plugins_api', [ $this, 'plugins_api' ], 10, 3 );
 
-		if ( filter_input( INPUT_GET, self::DEREGISTER_KEY, FILTER_SANITIZE_STRING ) ) {
-			add_action( 'admin_init', [ $this, 'remove_license' ] );
-		}
-
 		if ( filter_input( INPUT_GET, self::REGISTER_KEY, FILTER_SANITIZE_STRING ) ) {
 			add_action( 'admin_init', [ $this, 'add_license' ] );
+		}
+
+		if ( filter_input( INPUT_GET, self::DEREGISTER_KEY, FILTER_SANITIZE_STRING ) ) {
+			add_action( 'admin_init', [ $this, 'remove_license' ] );
 		}
 	}
 
@@ -156,7 +156,7 @@ class License {
 	 *
 	 * @return bool
 	 */
-	public function is_valid(): bool {
+	private function is_valid(): bool {
 		$license = $this->get_license();
 
 		if ( isset( $license->license ) && 'valid' === $license->license && isset( $license->expires ) ) {
@@ -412,7 +412,7 @@ class License {
 	 *
 	 * @return string
 	 */
-	public function license_active_message(): string {
+	private function license_active_message(): string {
 		$message = __( 'Hello Charts is registered and receiving updates.', 'hello-charts' );
 		return sprintf(
 			'<p><span class="dashicons dashicons-yes"></span>%1$s</p>',
@@ -425,7 +425,7 @@ class License {
 	 *
 	 * @return string
 	 */
-	public function license_inactive_message(): string {
+	private function license_inactive_message(): string {
 		$message = __( 'Enter your license key to receive plugin updates:', 'hello-charts' );
 		return sprintf(
 			'<p>%1$s</p><p>%2$s%3$s</p>',
