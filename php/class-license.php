@@ -41,7 +41,14 @@ class License {
 	const PRODUCT_SLUG = 'hello-charts';
 
 	/**
-	 * The name of the $_GET parameter that indicates we should deregister the plugin.
+	 * The name of the GET parameter that indicates we should register the plugin.
+	 *
+	 * @var string
+	 */
+	const REGISTER_KEY = 'hello-charts-register';
+
+	/**
+	 * The name of the GET parameter that indicates we should deregister the plugin.
 	 *
 	 * @var string
 	 */
@@ -75,11 +82,39 @@ class License {
 		add_action( 'admin_enqueue_scripts', [ $this, 'license_key_styles' ] );
 		add_action( 'after_plugin_row_' . $this->plugin_file, [ $this, 'license_key_field' ] );
 		add_action( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
-		add_filter( 'pre_update_option_' . self::OPTION_NAME, [ $this, 'save_license_key' ] );
 
-		if ( filter_input( INPUT_GET, self::DEREGISTER_KEY ) ) {
+		if ( filter_input( INPUT_GET, self::DEREGISTER_KEY, FILTER_SANITIZE_STRING ) ) {
 			add_action( 'admin_init', [ $this, 'remove_license' ] );
 		}
+
+		if ( filter_input( INPUT_GET, self::REGISTER_KEY, FILTER_SANITIZE_STRING ) ) {
+			add_action( 'admin_init', [ $this, 'add_license' ] );
+		}
+	}
+
+	/**
+	 * Add a license submitted via the register license form.
+	 */
+	public function add_license() {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return;
+		}
+
+		$key = filter_input( INPUT_GET, self::REGISTER_KEY, FILTER_SANITIZE_STRING );
+		$this->save_license( $key );
+	}
+
+	/**
+	 * Remove the saved license.
+	 */
+	public function remove_license() {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return;
+		}
+
+		delete_transient( self::TRANSIENT_NAME );
+		delete_option( self::OPTION_NAME );
+		add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_remove_message' ] );
 	}
 
 	/**
@@ -89,11 +124,7 @@ class License {
 	 *
 	 * @return string
 	 */
-	public function save_license_key( string $key ): string {
-		if ( ! current_user_can( 'update_plugins' ) ) {
-			return '';
-		}
-
+	private function save_license( string $key ): string {
 		$this->activate_license( $key );
 		$license = get_transient( self::TRANSIENT_NAME );
 
@@ -112,19 +143,6 @@ class License {
 	}
 
 	/**
-	 * Remove the saved license.
-	 */
-	public function remove_license() {
-		if ( ! current_user_can( 'update_plugins' ) ) {
-			return;
-		}
-
-		delete_transient( self::TRANSIENT_NAME );
-		delete_option( self::OPTION_NAME );
-		add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_remove_message' ] );
-	}
-
-	/**
 	 * Check if the license is valid.
 	 *
 	 * @return bool
@@ -133,7 +151,13 @@ class License {
 		$license = $this->get_license();
 
 		if ( isset( $license['license'] ) && 'valid' === $license['license'] ) {
-			if ( isset( $license['expires'] ) && time() < strtotime( $license['expires'] ) ) {
+			if (
+				isset( $license['expires'] ) &&
+				(
+					time() < strtotime( $license['expires'] ) ||
+					'lifetime' === $license['expires']
+				)
+			) {
 				return true;
 			}
 		}
@@ -206,7 +230,7 @@ class License {
 			return $plugin_meta;
 		}
 
-		if ( ! current_user_can( 'update_plugins' ) ) {
+		if ( ! current_user_can( 'update_plugins' ) || ! $this->is_valid() ) {
 			return $plugin_meta;
 		}
 
@@ -238,6 +262,7 @@ class License {
 			.plugins tr[data-slug="hello-charts"] .deregister { color: #b32d2e; }
 			.plugins .hello-charts-plugin-row td { padding-top: 0; }
 			.plugins .hello-charts-plugin-row .dashicons-yes { color: #00a32a; }
+			.plugins .hello-charts-plugin-row .license-key { font-family: monospace; width: 18rem; margin-right: 0.5rem; }
 		';
 		wp_add_inline_style( 'list-tables', $custom_css );
 	}
@@ -263,8 +288,21 @@ class License {
 			<td class="column-description">
 				<?php
 				echo wp_kses_post( apply_filters( 'hello_charts_plugin_row_notice', '' ) );
-				if ( $this->is_valid() || true ) {
+				if ( $this->is_valid() ) {
 					echo wp_kses_post( $this->license_active_message() );
+				} else {
+					echo wp_kses(
+						$this->license_inactive_message(),
+						[
+							'p'     => [],
+							'input' => [
+								'type'    => true,
+								'class'   => true,
+								'value'   => true,
+								'onclick' => true,
+							],
+						]
+					);
 				}
 				?>
 			</td>
@@ -281,8 +319,31 @@ class License {
 	public function license_active_message(): string {
 		$message = __( 'Hello Charts is registered and receiving updates.', 'hello-charts' );
 		return sprintf(
-			'<p><span class="dashicons dashicons-yes"></span>%s</p>',
+			'<p><span class="dashicons dashicons-yes"></span>%1$s</p>',
 			$message
+		);
+	}
+
+	/**
+	 * Message for a valid license.
+	 *
+	 * @return string
+	 */
+	public function license_inactive_message(): string {
+		$message = __( 'Enter your license key to receive plugin updates:', 'hello-charts' );
+		return sprintf(
+			'<p>%1$s</p><p>%2$s%3$s</p>',
+			$message,
+			'<input type="text" class="license-key" />',
+			sprintf(
+				'<input type="button" class="button" value="%1$s" onclick="%2$s" />',
+				__( 'Save', 'hello-charts' ),
+				sprintf(
+					'window.location = \'%1$s?%2$s=\' + this.previousElementSibling.value;',
+					admin_url( 'plugins.php' ),
+					self::REGISTER_KEY
+				)
+			)
 		);
 	}
 
@@ -325,7 +386,7 @@ class License {
 			)
 		);
 
-		return sprintf( '<div class="notice inline notice-error"><p>%s</p></div>', wp_kses_post( $message ) );
+		return sprintf( '<div class="notice inline notice-warning"><p>%s</p></div>', wp_kses_post( $message ) );
 	}
 
 	/**
@@ -334,7 +395,7 @@ class License {
 	 * @return string
 	 */
 	public function license_invalid_message(): string {
-		$message = __( 'There was a problem activating your Hello Charts license.', 'hello-charts' );
-		return sprintf( '<div class="notice inline notice-error"><p>%s</p></div>', esc_html( $message ) );
+		$message = __( 'The Hello Charts license you entered is not valid.', 'hello-charts' );
+		return sprintf( '<div class="notice inline notice-warning"><p>%s</p></div>', esc_html( $message ) );
 	}
 }
