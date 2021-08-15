@@ -50,9 +50,10 @@ class Blocks {
 	 * Create a custom block category
 	 *
 	 * @param array $categories List of current categories.
+	 *
 	 * @return array
 	 */
-	public function block_categories( $categories ) {
+	public function block_categories( array $categories ): array {
 		return array_merge(
 			$categories,
 			[
@@ -148,9 +149,10 @@ class Blocks {
 	 *
 	 * @param string $block_content The block content about to be appended.
 	 * @param array  $block         The full block, including name and attributes.
+	 *
 	 * @return string Modified block content.
 	 */
-	public function render_block( $block_content, $block ) {
+	public function render_block( string $block_content, array $block ): string {
 		if ( is_admin() ) {
 			return $block_content;
 		}
@@ -176,11 +178,11 @@ class Blocks {
 		}
 
 		$script = "
-		var ctx = document.getElementById('chart-${id}').getContext('2d');
+		var ctx = document.getElementById('chart-$id').getContext('2d');
 		var chart = new Chart(ctx, {
-			type: '${type}',
-			data: ${data},
-			options: ${options}
+			type: '$type',
+			data: $data,
+			options: $options
 		});
 		";
 

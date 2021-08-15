@@ -19,8 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Get plugin version.
+ *
+ * @return string
  */
-function hello_charts_version() {
+function hello_charts_version(): string {
 	return '1.0.0';
 }
 

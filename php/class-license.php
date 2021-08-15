@@ -69,7 +69,7 @@ class License {
 	 *
 	 * @var string
 	 */
-	private $plugin_file;
+	private string $plugin_file;
 
 	/**
 	 * License constructor.
@@ -130,10 +130,8 @@ class License {
 	 * Check that the license key is valid before saving.
 	 *
 	 * @param string $key The license key that was submitted.
-	 *
-	 * @return string
 	 */
-	private function save_license( string $key ): string {
+	private function save_license( string $key ) {
 		$this->activate_license( $key );
 		$license = get_transient( self::TRANSIENT_NAME );
 
@@ -147,8 +145,6 @@ class License {
 		} else {
 			add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_success_message' ] );
 		}
-
-		return $key;
 	}
 
 	/**
@@ -283,7 +279,7 @@ class License {
 	 *
 	 * @see https://developer.wordpress.org/reference/hooks/\/
 	 */
-	public function plugins_api( $data, string $action, $args ) {
+	public function plugins_api( $data, string $action, object $args ) {
 		if (
 			! $this->is_valid() ||
 			'plugin_information' !== $action ||
@@ -308,7 +304,7 @@ class License {
 	 * @param string $action The requested action.
 	 * @param array  $data Optional API data.
 	 *
-	 * @return object|WP_ERROR
+	 * @return object|WP_Error
 	 */
 	private function api_request( string $action, array $data = [] ) {
 		$api_params = [
