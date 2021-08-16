@@ -27,7 +27,10 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		parsedOptions.plugins.legend.labels = legend.labels;
+		parsedOptions.plugins.legend = {
+			...parsedOptions.plugins.legend,
+			labels: legend.labels,
+		};
 
 		return (
 			<ChartBlock
