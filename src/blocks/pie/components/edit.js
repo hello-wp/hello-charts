@@ -10,7 +10,7 @@ const { Component } = wp.element;
 import { ChartStyles } from '.';
 import { Pie } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { legend, randomValues } from '../../../common/helpers';
+import { legend, randomValues, tooltip } from '../../../common/helpers';
 
 export default class Edit extends Component {
 	render() {
@@ -27,8 +27,15 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		parsedOptions.plugins.legend.labels = legend.segmentLabels;
-		parsedOptions.plugins.legend.onClick = legend.segmentClick;
+		parsedOptions.plugins.legend = {
+			...parsedOptions.plugins.legend,
+			labels: legend.segmentLabels,
+			onClick: legend.segmentClick,
+		};
+		parsedOptions.plugins.tooltip = {
+			...parsedOptions.plugins.tooltip,
+			callbacks: tooltip.segmentCallbacks,
+		};
 
 		return (
 			<ChartBlock

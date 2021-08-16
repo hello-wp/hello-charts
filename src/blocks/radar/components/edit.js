@@ -38,8 +38,14 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		parsedOptions.scales.r.ticks.callback = this.ticksCallback;
-		parsedOptions.plugins.legend.labels = legend.labels;
+		parsedOptions.scales.r = {
+			...parsedOptions.scales.r,
+			callback: this.ticksCallback,
+		};
+		parsedOptions.plugins.legend = {
+			...parsedOptions.plugins.legend,
+			labels: legend.labels,
+		};
 
 		return (
 			<ChartBlock
