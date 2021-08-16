@@ -7,6 +7,8 @@
 
 namespace Hello_Charts;
 
+use WP_Error;
+
 /**
  * Class License
  */
@@ -69,7 +71,7 @@ class License {
 	 *
 	 * @var string
 	 */
-	private string $plugin_file;
+	private $plugin_file;
 
 	/**
 	 * License constructor.
@@ -136,7 +138,6 @@ class License {
 		$license = get_transient( self::TRANSIENT_NAME );
 
 		if ( ! $this->is_valid() ) {
-			$key = '';
 			if ( isset( $license['license'] ) && self::REQUEST_FAILED === $license['license'] ) {
 				add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_request_failed_message' ] );
 			} else {
@@ -279,7 +280,7 @@ class License {
 	 *
 	 * @see https://developer.wordpress.org/reference/hooks/\/
 	 */
-	public function plugins_api( $data, string $action, object $args ) {
+	public function plugins_api( $data, string $action, $args ) {
 		if (
 			! $this->is_valid() ||
 			'plugin_information' !== $action ||
@@ -428,10 +429,10 @@ class License {
 			$message,
 			'<input type="text" class="license-key" />',
 			sprintf(
-				'<input type="button" class="button" value="%1$s" onclick="%2$s" />',
+				'<input type="button" class="button" value="%1$s" %2$s />',
 				__( 'Save', 'hello-charts' ),
 				sprintf(
-					'window.location = \'%1$s?%2$s=\' + this.previousElementSibling.value;',
+					'onclick="window.location=\'%1$s?%2$s=\' + this.previousElementSibling.value;"',
 					admin_url( 'plugins.php' ),
 					self::REGISTER_KEY
 				)
