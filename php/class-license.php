@@ -138,7 +138,7 @@ class License {
 		$license = get_transient( self::TRANSIENT_NAME );
 
 		if ( ! $this->is_valid() ) {
-			if ( isset( $license['license'] ) && self::REQUEST_FAILED === $license['license'] ) {
+			if ( isset( $license->license ) && self::REQUEST_FAILED === $license->license ) {
 				add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_request_failed_message' ] );
 			} else {
 				add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_invalid_message' ] );
@@ -327,10 +327,10 @@ class License {
 		if ( ! is_wp_error( $request ) ) {
 			$response = json_decode( wp_remote_retrieve_body( $request ) );
 
-			if ( $response ) {
-				$response->sections = maybe_unserialize( $response->sections );
-				$response->banners  = maybe_unserialize( $response->banners );
-				$response->icons    = maybe_unserialize( $response->icons );
+			if ( $response && $response->success ) {
+				$response->sections = maybe_unserialize( $response->sections || '' );
+				$response->banners  = maybe_unserialize( $response->banners || '' );
+				$response->icons    = maybe_unserialize( $response->icons || '' );
 			}
 
 			return $response;
