@@ -2,7 +2,6 @@
  * External components.
  */
 import tinycolor from 'tinycolor2';
-import { check } from '@wordpress/icons';
 
 /**
  * WordPress dependencies.
@@ -14,6 +13,11 @@ const {
 	ColorIndicator,
 	Icon,
 } = wp.components;
+
+/**
+ * Internal dependencies.
+ */
+import { icons } from '../helpers';
 
 export default class CustomColorPalette extends Component {
 	render() {
@@ -56,7 +60,7 @@ export default class CustomColorPalette extends Component {
 					<div className="hello-charts-custom-color-indicator">
 						<ColorIndicator colorValue={ colorValue } onClick={ triggerColorPopover }>
 							<Icon
-								icon={ check }
+								icon={ icons.check }
 								fill={ tinycolor.mostReadable( colorValue, [ '#000', '#fff' ] ).toHexString() }
 							/>
 						</ColorIndicator>

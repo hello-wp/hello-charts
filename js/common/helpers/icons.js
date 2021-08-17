@@ -126,6 +126,12 @@ const icons = {
 			<rect x="15" y="6" width="3" height="12" />
 		</svg>
 	),
+	// Forked from https://github.com/WordPress/gutenberg/blob/trunk/packages/icons/src/library/check.js
+	check: (
+		<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+			<path d="M18.3 5.6L9.9 16.9l-4.6-3.4-.9 1.2 5.8 4.3 9.3-12.6z" />
+		</svg>
+	),
 };
 
 export default icons;

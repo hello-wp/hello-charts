@@ -19,12 +19,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Get plugin version.
+ *
+ * @return string
  */
-function hello_charts_version() {
+function hello_charts_version(): string {
 	return '1.0.0';
 }
 
 /**
  * Block Initializer.
  */
-require_once plugin_dir_path( __FILE__ ) . 'src/init.php';
+require_once plugin_dir_path( __FILE__ ) . 'php/class-blocks.php';
+require_once plugin_dir_path( __FILE__ ) . 'php/class-license.php';
+
+$hello_charts = [
+	'blocks'  => new Hello_Charts\Blocks(),
+	'license' => new Hello_Charts\License( plugin_basename( __FILE__ ) ),
+];

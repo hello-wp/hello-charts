@@ -20,7 +20,6 @@
     "url": "https://github.com/Hello-Charts/Hello-Charts/issues"
   },
   "dependencies": {
-    "@wordpress/icons": "^4.0.1",
     "chart.js": "^3.3.2",
     "react-chartjs-2": "^3.0.3",
     "tinycolor2": "^1.4.2"
@@ -29,7 +28,6 @@
     "@wordpress/eslint-plugin": "^9.0.4",
     "@wordpress/scripts": "^15.0.1",
     "babel-plugin-lodash": "^3.3.4",
-    "classnames": "^2.3.1",
     "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^5.2.4",
     "ignore-emit-webpack-plugin": "^2.0.6",
@@ -45,7 +43,7 @@
     "dev": "wp-scripts start",
     "env": "wp-env",
     "lint": "npm run lint:js && npm run lint:php && npm run lint:pkg-json",
-    "lint:js": "wp-scripts lint-js src",
+    "lint:js": "wp-scripts lint-js js",
     "lint:js:files": "wp-scripts lint-js",
     "lint:js:fix": "npm run lint:js -- --fix",
     "lint:pkg-json": "wp-scripts lint-pkg-json",
