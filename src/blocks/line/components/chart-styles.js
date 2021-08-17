@@ -19,37 +19,26 @@ export default class ChartStyles extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		function updateShowLine( state ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].borderWidth = state ? 3 : 0;
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
-		function updateShowBackground( state, stacked ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				if ( stacked && 0 === index && state ) {
-					data.datasets[ index ].fill = 'start';
-				} else if ( stacked && state ) {
-					data.datasets[ index ].fill = '-1';
-				} else {
-					data.datasets[ index ].fill = state;
-				}
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
 		function updateStacked( state ) {
 			const data = JSON.parse( chartData );
 			const options = JSON.parse( chartOptions );
-			const showBackground = data.datasets[ 0 ].fill ? true : false;
 
 			options.scales.y.stacked = state;
 
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
-			updateShowBackground( showBackground, state );
+			data.datasets.forEach( ( dataset, index ) => {
+				if ( state && 0 === index ) {
+					data.datasets[ index ].fill = 'start';
+				} else if ( state ) {
+					data.datasets[ index ].fill = '-1';
+				} else {
+					data.datasets[ index ].fill = true;
+				}
+			} );
+
+			setAttributes( {
+				chartData: JSON.stringify( data ),
+				chartOptions: JSON.stringify( options ),
+			} );
 		}
 
 		function updateShowGridLines( state, axis ) {
@@ -66,15 +55,6 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updatePointRadius( radius ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].pointRadius = radius;
-				data.datasets[ index ].hoverRadius = radius;
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
 		function updateLineTension( tension ) {
 			const data = JSON.parse( chartData );
 			data.datasets.forEach( ( dataset, index ) => {
@@ -85,16 +65,6 @@ export default class ChartStyles extends Component {
 
 		return (
 			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
-				<ToggleControl
-					label={ __( 'Show Line', 'hello-charts' ) }
-					checked={ parsedData.datasets[ 0 ].borderWidth > 0 }
-					onChange={ ( state ) => updateShowLine( state ) }
-				/>
-				<ToggleControl
-					label={ __( 'Show Background', 'hello-charts' ) }
-					checked={ parsedData.datasets[ 0 ].fill }
-					onChange={ ( state ) => updateShowBackground( state, parsedOptions.scales.y.stacked ) }
-				/>
 				<ToggleControl
 					label={ __( 'Stack Data Sets', 'hello-charts' ) }
 					checked={ parsedOptions.scales.y.stacked }
@@ -113,13 +83,6 @@ export default class ChartStyles extends Component {
 						parsedOptions.scales.y.grid.display
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
-				/>
-				<RangeControl
-					label={ __( 'Point Size', 'hello-charts' ) }
-					value={ parsedData.datasets[ 0 ].pointRadius }
-					onChange={ ( radius ) => updatePointRadius( radius ) }
-					min={ 0 }
-					max={ 10 }
 				/>
 				<RangeControl
 					label={ __( 'Curve', 'hello-charts' ) }

@@ -5,18 +5,27 @@
  * @return {Array} The colors.
  */
 const randomColors = ( length ) => {
+	const useThemeColors = wp.data.select( 'core/block-editor' )?.getSelectedBlock()?.attributes?.useThemeColors ?? false;
+
 	let colors = [];
+
+	// Retrieve the default Gutenberg color scheme.
+	let colorsObject = wp.blockEditor.SETTINGS_DEFAULTS.colors;
+
+	// Retrieve the active color scheme.
+	if ( useThemeColors ) {
+		colorsObject = wp.data.select( 'core/block-editor' ).getSettings().colors;
+	}
 
 	const boringColors = [
 		'black',
-		'gray',
+		'cyan-bluish-gray',
 		'dark-gray',
+		'gray',
 		'light-gray',
+		'medium-gray',
 		'white',
 	];
-
-	// Retrieve the active color scheme.
-	const colorsObject = wp.data.select( 'core/block-editor' ).getSettings().colors;
 
 	// Remove boring colors, like black & white.
 	const filteredColors = colorsObject.filter(

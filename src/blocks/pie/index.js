@@ -3,6 +3,11 @@
  */
 
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -13,7 +18,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons, randomColors, rgba2hex } from '../../common/helpers';
+import { icons, randomColors } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -31,6 +36,10 @@ const attributes = {
 	showChartBackground: {
 		type: 'boolean',
 		default: true,
+	},
+	useThemeColors: {
+		type: 'boolean',
+		default: false,
 	},
 	height: {
 		type: 'number',
@@ -65,6 +74,9 @@ const attributes = {
 					display: true,
 					position: 'bottom',
 					align: 'center',
+				},
+				tooltip: {
+					displayColors: false,
 				},
 			},
 			layout: {
@@ -103,7 +115,13 @@ registerBlockType( 'hello-charts/block-pie', {
 					{
 						data: [ 6, 4, 9, 10 ],
 						borderColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0' ],
-						backgroundColor: [ '#cf2e2e', '#00d084', '#0693e3', '#9b51e0' ],
+						backgroundColor: [
+							'rgba( 207, 46, 46, 0.8 )',
+							'rgba( 0, 208, 132, 0.8 )',
+							'rgba( 6, 147, 227, 0.8 )',
+							'rgba( 155, 81, 224, 0.8 )',
+						],
+						borderWidth: 3,
 					},
 				],
 			} ),
@@ -115,6 +133,9 @@ registerBlockType( 'hello-charts/block-pie', {
 				},
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},
@@ -148,21 +169,26 @@ registerBlockType( 'hello-charts/block-pie', {
 					 * Some chart types use only a single color per dataset. This chart should
 					 * use an array of colors, so we'll randomly generate them.
 					 */
-					fromData.datasets.forEach( ( dataset ) => {
-						const themeColors = randomColors( dataset.data.length - 1 );
-						if ( 'string' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = [
-								rgba2hex( dataset.backgroundColor ),
-								...themeColors,
-							];
+					fromData.datasets.forEach( ( dataset, index ) => {
+						if ( 0 === index ) {
+							if ( 'string' === typeof dataset.backgroundColor ) {
+								const themeColors = randomColors( dataset.data.length - 1 );
+								const alpha = tinycolor( dataset.backgroundColor ).getAlpha();
+								dataset.backgroundColor = [
+									dataset.backgroundColor,
+									...themeColors.map(
+										( color ) => tinycolor( color ).setAlpha( alpha ).toRgbString()
+									),
+								];
+							}
+						} else {
+							dataset.backgroundColor = fromData.datasets[ 0 ].backgroundColor;
 						}
 						if ( 'string' === typeof dataset.borderColor ) {
-							dataset.borderColor = [
-								rgba2hex( dataset.borderColor ),
-								...themeColors,
-							];
-						} else if ( 'undefined' === typeof dataset.borderColor ) {
-							dataset.borderColor = dataset.backgroundColor;
+							dataset.borderColor = dataset.backgroundColor.map(
+								( color ) => tinycolor( color ).toHexString()
+							);
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

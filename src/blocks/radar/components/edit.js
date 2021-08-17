@@ -7,35 +7,12 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles } from '.';
+import { ChartStyles } from '.';
 import { Radar } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
+import { legend, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
-	maybeGenerateData( datasets ) {
-		const themeColors = randomColors( datasets.length );
-
-		datasets.forEach( ( dataset, index ) => {
-			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 7 );
-			}
-
-			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				dataset.borderColor = themeColors[ index ];
-				dataset.pointBackgroundColor = themeColors[ index ];
-				dataset.backgroundColor = hex2rgba( themeColors[ index ], 0.6 );
-			}
-		} );
-	}
-
-	onNewDataset( dataset ) {
-		const color = randomColors( 1 ).shift();
-		dataset.borderColor = color;
-		dataset.pointBackgroundColor = color;
-		dataset.backgroundColor = hex2rgba( color, 0.6 );
-	}
-
 	/**
 	 * Workaround for minimumFractionDigits value is out of range bug.
 	 *
@@ -61,16 +38,24 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		parsedOptions.scales.r.ticks.callback = this.ticksCallback;
+		parsedOptions.scales.r = {
+			...parsedOptions.scales.r,
+			callback: this.ticksCallback,
+		};
+		parsedOptions.plugins.legend = {
+			...parsedOptions.plugins.legend,
+			labels: legend.labels,
+		};
 
 		return (
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
-				DataStyles={ DataStyles }
+				hasPoints={ true }
 				chartType="radar"
-				maybeGenerateData={ this.maybeGenerateData }
-				onNewDataset={ this.onNewDataset }
+				generateData={ () => {
+					return randomValues( 7 );
+				} }
 				titlePlaceholder={ __( 'Radar Chart', 'hello-charts' ) }
 			>
 				<Radar

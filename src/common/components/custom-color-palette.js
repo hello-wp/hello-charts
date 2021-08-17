@@ -16,40 +16,45 @@ const {
 } = wp.components;
 
 export default class CustomColorPalette extends Component {
-	isCustomColor( color ) {
-		const colors = wp.data.select( 'core/block-editor' ).getSettings().colors;
-		const matchingColors = colors.filter( ( colorObject ) => colorObject.color === color );
-
-		return ! matchingColors.length;
-	}
-
-	triggerColorPopover( event ) {
-		const wrapper = event.target.closest( '.hello-charts-color-picker' );
-		const actionButton = wrapper.querySelector( '.components-dropdown button' );
-		actionButton.click();
-	}
-
 	render() {
 		const {
 			colorValue,
+			colors,
 			onChange,
+			clientId,
 			...additionalProps
 		} = this.props;
 
+		function isCustomColor( color ) {
+			const matchingColors = colors.filter( ( colorObject ) => colorObject.color === color );
+
+			return ! matchingColors.length;
+		}
+
+		function triggerColorPopover( event ) {
+			const wrapper = event.target.closest( '.hello-charts-color-palette' );
+			const actionButton = wrapper.querySelector( '.components-dropdown button' );
+			actionButton.click();
+		}
+
 		return (
 			<BaseControl
-				className={ `hello-charts-color-picker ${ this.isCustomColor( colorValue ) ? ' has-custom-color' : '' }` }
+				className={ `hello-charts-color-palette ${ isCustomColor( colorValue ) ? ' has-custom-color' : '' }` }
+				id={ `inspect-chart-color-palette-${ clientId }` }
 				{ ...additionalProps }
 			>
 				<ColorPalette
+					id={ `inspect-chart-color-palette-${ clientId }` }
 					value={ colorValue }
+					colors={ colors }
 					clearable={ false }
 					disableCustomColors={ false }
+					disableAlpha={ false }
 					onChange={ onChange }
 				/>
-				{ this.isCustomColor( colorValue ) && (
+				{ isCustomColor( colorValue ) && (
 					<div className="hello-charts-custom-color-indicator">
-						<ColorIndicator colorValue={ colorValue } onClick={ this.triggerColorPopover }>
+						<ColorIndicator colorValue={ colorValue } onClick={ triggerColorPopover }>
 							<Icon
 								icon={ check }
 								fill={ tinycolor.mostReadable( colorValue, [ '#000', '#fff' ] ).toHexString() }

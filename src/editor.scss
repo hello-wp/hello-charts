@@ -13,6 +13,16 @@
     }
 }
 
+.hello-charts-data-styles {
+	.dataset-label,
+	.segment-label {
+		flex-basis: 100%;
+	}
+	.dataset-pagination-number {
+		white-space: nowrap;
+	}
+}
+
 .hello-charts-data-editor {
 	width: 100%;
 	height: 100%;
@@ -190,7 +200,7 @@
 	}
 }
 
-.hello-charts-color-picker {
+.hello-charts-color-palette {
 	.components-circular-option-picker__dropdown-link-action {
 		height: 28px;
 		line-height: 28px;

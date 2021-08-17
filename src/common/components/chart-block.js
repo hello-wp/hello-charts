@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { createRef, Component } = wp.element;
@@ -9,10 +14,13 @@ const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
  */
 import {
 	ChartFormattingToolbar,
+	DataStyles,
 	EditDataButton,
 	EditDataModal,
 	EditDataToolbar,
+	SegmentStyles,
 } from '.';
+import { randomColors } from '../helpers';
 
 export default class ChartBlock extends Component {
 	constructor( props ) {
@@ -24,10 +32,8 @@ export default class ChartBlock extends Component {
 				chartData,
 				chartOptions,
 			},
-			chartType,
 			clientId,
 			setAttributes,
-			maybeGenerateData,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -39,13 +45,12 @@ export default class ChartBlock extends Component {
 		parsedData.init = true;
 		parsedOptions.init = true;
 
-		maybeGenerateData( parsedData.datasets );
+		this.setDefaults( parsedData );
 
 		setAttributes( {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 			chartOptions: JSON.stringify( parsedOptions ),
-			chartType,
 		} );
 	}
 
@@ -82,15 +87,75 @@ export default class ChartBlock extends Component {
 		}
 	}
 
+	setDefaults( parsedData ) {
+		const {
+			setAttributes,
+			generateData,
+			hasSegments,
+		} = this.props;
+
+		const colors = randomColors( parsedData.datasets.length );
+
+		parsedData.datasets.forEach( ( dataset, index ) => {
+			if ( 'generate' === dataset.data[ 0 ] ) {
+				dataset.data = generateData();
+			}
+
+			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
+				if ( hasSegments && 0 === index ) {
+					const segmentColors = randomColors( dataset.data.length );
+					dataset.backgroundColor = [];
+					dataset.data.forEach( ( data, segmentIndex ) => {
+						const segmentColor = tinycolor( segmentColors[ segmentIndex ] );
+						segmentColor.setAlpha( 0.8 );
+						dataset.backgroundColor.push( segmentColor.toRgbString() );
+					} );
+				} else if ( hasSegments ) {
+					dataset.backgroundColor = parsedData.datasets[ 0 ].backgroundColor;
+				} else {
+					const backgroundColor = tinycolor( colors[ index ] );
+					backgroundColor.setAlpha( 0.8 );
+					dataset.backgroundColor = backgroundColor.toRgbString();
+				}
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderColor' ) ) {
+				if ( hasSegments ) {
+					dataset.borderColor = [];
+					dataset.data.forEach( ( data, segmentIndex ) => {
+						const color = tinycolor( dataset.backgroundColor[ segmentIndex ] );
+						dataset.borderColor.push( color.toHexString() );
+					} );
+				} else {
+					const color = tinycolor( dataset.backgroundColor );
+					dataset.borderColor = color.toHexString();
+				}
+			}
+
+			if ( ! dataset.hasOwnProperty( 'pointBackgroundColor' ) ) {
+				dataset.pointBackgroundColor = dataset.borderColor;
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderWidth' ) ) {
+				dataset.borderWidth = 2;
+			}
+
+			if ( ! dataset.hasOwnProperty( 'borderAlign' ) ) {
+				dataset.borderAlign = 'inner';
+			}
+		} );
+
+		setAttributes( { chartData: JSON.stringify( parsedData ) } );
+	}
+
 	toggleEditor( event ) {
 		event.preventDefault();
-		this.setState( { editorOpen: this.state.editorOpen ? false : true } );
+		this.setState( { editorOpen: ! this.state.editorOpen } );
 	}
 
 	render() {
 		const {
 			ChartStyles,
-			DataStyles,
 			attributes: {
 				showChartTitle,
 				showChartBackground,
@@ -98,20 +163,24 @@ export default class ChartBlock extends Component {
 			},
 			children,
 			className,
-			onNewDataset,
 			setAttributes,
+			hasSegments,
 			titlePlaceholder,
 		} = this.props;
 
 		this.toggleEditor = this.toggleEditor.bind( this );
-		this.onNewDataset = onNewDataset.bind( this );
 
 		return (
 			<>
 				<InspectorControls key="inspector">
 					<EditDataButton toggleEditor={ this.toggleEditor } />
-					<ChartStyles { ...this.props } />
+					{ ChartStyles && (
+						<ChartStyles { ...this.props } />
+					) }
 					<DataStyles { ...this.props } />
+					{ hasSegments && (
+						<SegmentStyles { ...this.props } />
+					) }
 				</InspectorControls>
 				<BlockControls>
 					<EditDataToolbar toggleEditor={ this.toggleEditor } />
@@ -136,7 +205,7 @@ export default class ChartBlock extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } onNewDataset={ this.onNewDataset } { ...this.props } />
+							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
 						) }
 					</div>
 				</div>

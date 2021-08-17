@@ -7,36 +7,12 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles } from '.';
+import { ChartStyles } from '.';
 import { PolarArea } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
+import { legend, randomValues, tooltip } from '../../../common/helpers';
 
 export default class Edit extends Component {
-	maybeGenerateData( datasets ) {
-		datasets.forEach( ( dataset ) => {
-			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 5, 3, 10 );
-			}
-
-			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				const themeColors = randomColors( dataset.data.length );
-				dataset.borderColor = [];
-				dataset.backgroundColor = [];
-				dataset.data.forEach( ( data, index ) => {
-					dataset.borderColor.push( themeColors[ index ] );
-					dataset.backgroundColor.push( hex2rgba( themeColors[ index ], 0.6 ) );
-				} );
-			}
-		} );
-	}
-
-	onNewDataset( dataset ) {
-		const colors = randomColors( dataset.data.length );
-		dataset.borderColor = colors;
-		dataset.backgroundColor = colors;
-	}
-
 	/**
 	 * Workaround for minimumFractionDigits value is out of range bug.
 	 *
@@ -62,16 +38,29 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		parsedOptions.scales.r.ticks.callback = this.ticksCallback;
+		parsedOptions.scales.r = {
+			...parsedOptions.scales.r,
+			callback: this.ticksCallback,
+		};
+		parsedOptions.plugins.legend = {
+			...parsedOptions.plugins.legend,
+			labels: legend.segmentLabels,
+			onClick: legend.segmentClick,
+		};
+		parsedOptions.plugins.tooltip = {
+			...parsedOptions.plugins.tooltip,
+			callbacks: tooltip.segmentCallbacks,
+		};
 
 		return (
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
-				DataStyles={ DataStyles }
+				hasSegments={ true }
 				chartType="polarArea"
-				maybeGenerateData={ this.maybeGenerateData }
-				onNewDataset={ this.onNewDataset }
+				generateData={ () => {
+					return randomValues( 5, 3, 10 );
+				} }
 				titlePlaceholder={ __( 'Polar Area Chart', 'hello-charts' ) }
 			>
 				<PolarArea

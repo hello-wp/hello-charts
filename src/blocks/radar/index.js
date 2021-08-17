@@ -13,7 +13,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { hex2rgba, icons, rgba2hex } from '../../common/helpers';
+import { icons } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -31,6 +31,10 @@ const attributes = {
 	showChartBackground: {
 		type: 'boolean',
 		default: true,
+	},
+	useThemeColors: {
+		type: 'boolean',
+		default: false,
 	},
 	height: {
 		type: 'number',
@@ -50,7 +54,7 @@ const attributes = {
 				{
 					label: __( 'Data Set', 'hello-charts' ),
 					fill: true,
-					borderWidth: 3,
+					borderWidth: 2,
 					pointRadius: 3,
 					hoverRadius: 3,
 					pointBorderWidth: 0,
@@ -71,6 +75,9 @@ const attributes = {
 					display: false,
 					position: 'top',
 					align: 'center',
+				},
+				tooltip: {
+					displayColors: false,
 				},
 			},
 			scales: {
@@ -126,7 +133,6 @@ registerBlockType( 'hello-charts/block-radar', {
 				datasets: [
 					{
 						fill: true,
-						borderWidth: 3,
 						pointRadius: 3,
 						hoverRadius: 3,
 						pointBorderWidth: 0,
@@ -134,6 +140,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						pointStyle: 'circle',
 						data: [ 5, 19, 14, 15, 6, 15 ],
 						borderColor: '#0693e3',
+						borderWidth: 3,
 						pointBackgroundColor: '#0693e3',
 						backgroundColor: 'rgba(6, 147, 227, 0.6)',
 					},
@@ -144,6 +151,9 @@ registerBlockType( 'hello-charts/block-radar', {
 				responsive: false,
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},
@@ -192,8 +202,7 @@ registerBlockType( 'hello-charts/block-radar', {
 					 * Some chart types use an array of colors per dataset. This chart should
 					 * only use a single color (the first in the array) for each dataset.
 					 */
-					fromData.datasets.forEach( ( dataset ) => {
-						dataset.fill = dataset.fill ?? toData.datasets[ 0 ].fill;
+					fromData.datasets.forEach( ( dataset, index ) => {
 						dataset.borderWidth = dataset.borderWidth ?? toData.datasets[ 0 ].borderWidth;
 						dataset.pointRadius = dataset.pointRadius ?? toData.datasets[ 0 ].pointRadius;
 						dataset.pointStyle = dataset.pointStyle ?? toData.datasets[ 0 ].pointStyle;
@@ -202,14 +211,11 @@ registerBlockType( 'hello-charts/block-radar', {
 						delete dataset.lineTension; // Only keep one version of the similar tension properties.
 
 						if ( 'object' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = hex2rgba( dataset.backgroundColor[ 0 ], 0.6 );
-						} else {
-							dataset.backgroundColor = hex2rgba( dataset.backgroundColor, 0.6 );
+							dataset.backgroundColor = dataset.backgroundColor[ index % dataset.backgroundColor.length ];
 						}
 						if ( 'object' === typeof dataset.borderColor ) {
-							dataset.borderColor = rgba2hex( dataset.borderColor[ 0 ] );
-						} else if ( 'undefined' === typeof dataset.borderColor ) {
-							dataset.borderColor = rgba2hex( dataset.backgroundColor );
+							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
+							dataset.pointBackgroundColor = dataset.borderColor;
 						}
 					} );
 

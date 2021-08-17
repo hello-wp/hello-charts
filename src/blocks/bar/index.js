@@ -13,7 +13,7 @@ const { createBlock, registerBlockType } = wp.blocks;
  */
 import { Edit } from './components';
 import { Save } from '../../common/components';
-import { icons, rgba2hex } from '../../common/helpers';
+import { icons } from '../../common/helpers';
 
 const attributes = {
 	blockId: {
@@ -31,6 +31,10 @@ const attributes = {
 	showChartBackground: {
 		type: 'boolean',
 		default: true,
+	},
+	useThemeColors: {
+		type: 'boolean',
+		default: false,
 	},
 	height: {
 		type: 'number',
@@ -65,6 +69,9 @@ const attributes = {
 					display: false,
 					position: 'top',
 					align: 'center',
+				},
+				tooltip: {
+					displayColors: false,
 				},
 			},
 			scales: {
@@ -119,7 +126,9 @@ registerBlockType( 'hello-charts/block-bar', {
 					{
 						label: 'A',
 						data: [ 10, 19, 6, 3, 12, 15 ],
-						backgroundColor: '#0693e3',
+						borderColor: '#0693e3',
+						backgroundColor: 'rgba( 6, 147, 227, 0.8 )',
+						borderWidth: [ 3, 3, 3, 3 ],
 					},
 				],
 			} ),
@@ -128,6 +137,9 @@ registerBlockType( 'hello-charts/block-bar', {
 				responsive: false,
 				plugins: {
 					legend: {
+						display: false,
+					},
+					tooltip: {
 						display: false,
 					},
 				},
@@ -171,15 +183,14 @@ registerBlockType( 'hello-charts/block-bar', {
 					 * Some chart types use an array of colors per dataset. This chart should
 					 * only use a single color (the first in the array) for each dataset.
 					 */
-					fromData.datasets.forEach( ( dataset ) => {
+					fromData.datasets.forEach( ( dataset, index ) => {
 						if ( 'object' === typeof dataset.backgroundColor ) {
-							dataset.backgroundColor = rgba2hex( dataset.backgroundColor[ 0 ] );
-						} else {
-							dataset.backgroundColor = rgba2hex( dataset.backgroundColor );
+							dataset.backgroundColor = dataset.backgroundColor[ index % dataset.backgroundColor.length ];
 						}
-
-						/* We're intentionally using the background color as the border color for bar charts. */
-						dataset.borderColor = dataset.backgroundColor;
+						if ( 'object' === typeof dataset.borderColor ) {
+							dataset.borderColor = dataset.borderColor[ index % dataset.backgroundColor.length ];
+							dataset.pointBackgroundColor = dataset.borderColor;
+						}
 					} );
 
 					to.chartData = JSON.stringify( fromData );

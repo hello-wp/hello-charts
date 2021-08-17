@@ -7,35 +7,12 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, DataStyles } from '.';
+import { ChartStyles } from '.';
 import { Line } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
-import { hex2rgba, randomColors, randomValues } from '../../../common/helpers';
+import { legend, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
-	maybeGenerateData( datasets ) {
-		const themeColors = randomColors( datasets.length );
-
-		datasets.forEach( ( dataset, index ) => {
-			if ( 'generate' === dataset.data[ 0 ] ) {
-				dataset.data = randomValues( 6 );
-			}
-
-			if ( ! dataset.hasOwnProperty( 'backgroundColor' ) ) {
-				dataset.borderColor = themeColors[ index ];
-				dataset.pointBackgroundColor = themeColors[ index ];
-				dataset.backgroundColor = hex2rgba( themeColors[ index ], 0.6 );
-			}
-		} );
-	}
-
-	onNewDataset( dataset ) {
-		const color = randomColors( 1 ).shift();
-		dataset.borderColor = color;
-		dataset.pointBackgroundColor = color;
-		dataset.backgroundColor = hex2rgba( color, 0.6 );
-	}
-
 	render() {
 		const {
 			attributes: {
@@ -50,14 +27,20 @@ export default class Edit extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
+		parsedOptions.plugins.legend = {
+			...parsedOptions.plugins.legend,
+			labels: legend.labels,
+		};
+
 		return (
 			<ChartBlock
 				{ ...this.props }
 				ChartStyles={ ChartStyles }
-				DataStyles={ DataStyles }
+				hasPoints={ true }
 				chartType="line"
-				maybeGenerateData={ this.maybeGenerateData }
-				onNewDataset={ this.onNewDataset }
+				generateData={ () => {
+					return randomValues( 8 );
+				} }
 				titlePlaceholder={ __( 'Line Chart', 'hello-charts' ) }
 			>
 				<Line
