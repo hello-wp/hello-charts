@@ -33,10 +33,6 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	showChartBackground: {
-		type: 'boolean',
-		default: true,
-	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -69,6 +65,8 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			showChartBackground: false,
+			chartBackgroundColor: '#ffffff',
 			plugins: {
 				legend: {
 					display: true,
@@ -127,6 +125,8 @@ registerBlockType( 'hello-charts/block-pie', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
+				showChartBackground: false,
+				chartBackgroundColor: '#ffffff',
 				responsive: false,
 				layout: {
 					padding: 0,
@@ -163,6 +163,9 @@ registerBlockType( 'hello-charts/block-pie', {
 					to.showChartBackground = from.showChartBackground;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
+					toOptions.showChartBackground = fromOptions.showChartBackground;
+					toOptions.chartBackgroundColor = fromOptions.chartBackgroundColor;
+
 					to.chartOptions = JSON.stringify( toOptions );
 
 					/*

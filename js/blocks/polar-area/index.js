@@ -33,10 +33,6 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	showChartBackground: {
-		type: 'boolean',
-		default: true,
-	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -68,6 +64,8 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			showChartBackground: false,
+			chartBackgroundColor: '#ffffff',
 			plugins: {
 				legend: {
 					display: true,
@@ -138,6 +136,8 @@ registerBlockType( 'hello-charts/block-polar-area', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
+				showChartBackground: false,
+				chartBackgroundColor: '#ffffff',
 				responsive: false,
 				plugins: {
 					legend: {
@@ -181,6 +181,8 @@ registerBlockType( 'hello-charts/block-polar-area', {
 					to.showChartBackground = from.showChartBackground;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
+					toOptions.showChartBackground = fromOptions.showChartBackground;
+					toOptions.chartBackgroundColor = fromOptions.chartBackgroundColor;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
 					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
 

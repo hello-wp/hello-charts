@@ -28,10 +28,6 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	showChartBackground: {
-		type: 'boolean',
-		default: true,
-	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -81,6 +77,8 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			showChartBackground: false,
+			chartBackgroundColor: '#ffffff',
 			plugins: {
 				legend: {
 					display: true,
@@ -172,6 +170,8 @@ registerBlockType( 'hello-charts/block-line', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
+				showChartBackground: false,
+				chartBackgroundColor: '#ffffff',
 				responsive: false,
 				plugins: {
 					legend: {
@@ -206,6 +206,8 @@ registerBlockType( 'hello-charts/block-line', {
 					to.showChartBackground = from.showChartBackground;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
+					toOptions.showChartBackground = fromOptions.showChartBackground;
+					toOptions.chartBackgroundColor = fromOptions.chartBackgroundColor;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;

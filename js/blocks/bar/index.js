@@ -28,10 +28,6 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	showChartBackground: {
-		type: 'boolean',
-		default: true,
-	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -63,6 +59,8 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			showChartBackground: false,
+			chartBackgroundColor: '#ffffff',
 			indexAxis: 'x',
 			plugins: {
 				legend: {
@@ -134,6 +132,8 @@ registerBlockType( 'hello-charts/block-bar', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
+				showChartBackground: false,
+				chartBackgroundColor: '#ffffff',
 				responsive: false,
 				plugins: {
 					legend: {
@@ -172,6 +172,8 @@ registerBlockType( 'hello-charts/block-bar', {
 					 * however it should apply to both axes on a bar chart.
 					 */
 					toOptions.plugins.legend = fromOptions.plugins?.legend;
+					toOptions.showChartBackground = fromOptions.showChartBackground;
+					toOptions.chartBackgroundColor = fromOptions.chartBackgroundColor;
 					toOptions.scales.x.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
