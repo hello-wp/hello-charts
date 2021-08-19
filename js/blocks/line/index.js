@@ -28,6 +28,10 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
+	chartBackground: {
+		type: 'string',
+		default: '',
+	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -77,8 +81,6 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
-			showChartBackground: false,
-			chartBackgroundColor: '#ffffff',
 			plugins: {
 				legend: {
 					display: true,
@@ -133,6 +135,7 @@ registerBlockType( 'hello-charts/block-line', {
 		attributes: {
 			title: __( 'Line Chart', 'hello-charts' ),
 			showChartTitle: false,
+			chartBackground: '',
 			height: 280,
 			width: 450,
 			chartData: JSON.stringify( {
@@ -170,8 +173,6 @@ registerBlockType( 'hello-charts/block-line', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
-				showChartBackground: false,
-				chartBackgroundColor: '#ffffff',
 				responsive: false,
 				plugins: {
 					legend: {
@@ -203,11 +204,9 @@ registerBlockType( 'hello-charts/block-line', {
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
-					to.showChartBackground = from.showChartBackground;
+					to.chartBackground = from.chartBackground;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
-					toOptions.showChartBackground = fromOptions.showChartBackground;
-					toOptions.chartBackgroundColor = fromOptions.chartBackgroundColor;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;

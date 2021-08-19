@@ -158,7 +158,7 @@ export default class ChartBlock extends Component {
 			ChartStyles,
 			attributes: {
 				showChartTitle,
-				chartOptions,
+				chartBackground,
 				title,
 			},
 			children,
@@ -168,8 +168,11 @@ export default class ChartBlock extends Component {
 			titlePlaceholder,
 		} = this.props;
 
-		const parsedOptions = JSON.parse( chartOptions );
-		const background = parsedOptions.showChartBackground ? parsedOptions.chartBackgroundColor : 'none';
+		const styles = {
+			background: chartBackground ? chartBackground : 'none',
+		};
+
+		const classNames = `${ className } wrapper`;
 
 		this.toggleEditor = this.toggleEditor.bind( this );
 
@@ -190,7 +193,10 @@ export default class ChartBlock extends Component {
 					<ChartFormattingToolbar { ...this.props } />
 				</BlockControls>
 				<div className={ className } key="preview">
-					<div className="wrapper" style={ { background } } >
+					<div
+						className={ classNames }
+						style={ styles }
+					>
 						{ showChartTitle && (
 							<RichText
 								tagName="h3"
