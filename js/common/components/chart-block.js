@@ -156,6 +156,7 @@ export default class ChartBlock extends Component {
 	render() {
 		const {
 			ChartStyles,
+			AxisStyles,
 			attributes: {
 				showChartTitle,
 				showChartBackground,
@@ -176,6 +177,9 @@ export default class ChartBlock extends Component {
 					<EditDataButton toggleEditor={ this.toggleEditor } />
 					{ ChartStyles && (
 						<ChartStyles { ...this.props } />
+					) }
+					{ AxisStyles && (
+						<AxisStyles { ...this.props } />
 					) }
 					<DataStyles { ...this.props } />
 					{ hasSegments && (

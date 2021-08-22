@@ -45,6 +45,10 @@ const attributes = {
 	chartType: {
 		type: 'string',
 	},
+	autoScale: {
+		type: 'boolean',
+		default: true,
+	},
 	chartData: {
 		type: 'string',
 		default: JSON.stringify( {
@@ -93,6 +97,7 @@ const attributes = {
 					},
 					ticks: {
 						display: true,
+						precision: 0,
 					},
 					suggestedMin: 0,
 				},
@@ -164,6 +169,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						},
 						ticks: {
 							display: false,
+							precision: 0,
 						},
 						suggestedMin: 0,
 					},
@@ -191,10 +197,14 @@ registerBlockType( 'hello-charts/block-radar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
+					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
 					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
+					toOptions.scales.r.max = fromOptions.scales?.r?.max ?? 1;
+					toOptions.scales.r.min = fromOptions.scales?.r?.min ?? 1;
+					toOptions.scales.r.ticks.stepSize = fromOptions.scales?.r?.ticks?.stepSize ?? 1;
 
 					to.chartOptions = JSON.stringify( toOptions );
 
