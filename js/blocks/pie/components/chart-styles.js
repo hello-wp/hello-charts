@@ -11,7 +11,7 @@ const {
 export default class ChartStyles extends Component {
 	render() {
 		const {
-			attributes: { chartData },
+			attributes: { chartData, chartSize },
 			setAttributes,
 		} = this.props;
 
@@ -25,6 +25,10 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
+		function updateChartSize( width ) {
+			setAttributes( { chartSize: width } );
+		}
+
 		return (
 			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<RangeControl
@@ -34,6 +38,15 @@ export default class ChartStyles extends Component {
 					min={ 0 }
 					max={ 90 }
 					step={ 10 }
+				/>
+				<RangeControl
+					label={ __( 'Chart Size', 'hello-charts' ) }
+					value={ chartSize }
+					onChange={ ( width ) => updateChartSize( width ) }
+					min={ 1 }
+					max={ window.outerWidth }
+					allowReset
+					withInputField={ false }
 				/>
 			</PanelBody>
 		);

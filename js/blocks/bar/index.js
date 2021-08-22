@@ -42,6 +42,9 @@ const attributes = {
 	width: {
 		type: 'number',
 	},
+	chartSize: {
+		type: 'number',
+	},
 	chartType: {
 		type: 'string',
 	},
@@ -63,6 +66,7 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			responsive: true,
 			indexAxis: 'x',
 			plugins: {
 				legend: {
@@ -134,7 +138,7 @@ registerBlockType( 'hello-charts/block-bar', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
-				responsive: false,
+				responsive: true,
 				plugins: {
 					legend: {
 						display: false,
@@ -165,6 +169,7 @@ registerBlockType( 'hello-charts/block-bar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
+					to.chartSize = from.chartSize;
 
 					/*
 					 * We're intentionally setting the x stacked attribute to the same as y,

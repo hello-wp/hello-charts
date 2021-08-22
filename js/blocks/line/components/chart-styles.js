@@ -12,7 +12,7 @@ const {
 export default class ChartStyles extends Component {
 	render() {
 		const {
-			attributes: { chartData, chartOptions },
+			attributes: { chartData, chartOptions, chartSize },
 			setAttributes,
 		} = this.props;
 
@@ -63,6 +63,10 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
+		function updateChartSize( width ) {
+			setAttributes( { chartSize: width } );
+		}
+
 		return (
 			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<ToggleControl
@@ -90,6 +94,15 @@ export default class ChartStyles extends Component {
 					onChange={ ( tension ) => updateLineTension( tension / 20 ) }
 					min={ 0 }
 					max={ 10 }
+				/>
+				<RangeControl
+					label={ __( 'Chart Size', 'hello-charts' ) }
+					value={ chartSize }
+					onChange={ ( width ) => updateChartSize( width ) }
+					min={ 1 }
+					max={ window.outerWidth }
+					allowReset
+					withInputField={ false }
 				/>
 			</PanelBody>
 		);

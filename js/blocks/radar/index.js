@@ -42,6 +42,9 @@ const attributes = {
 	width: {
 		type: 'number',
 	},
+	chartSize: {
+		type: 'number',
+	},
 	chartType: {
 		type: 'string',
 	},
@@ -70,6 +73,7 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			responsive: true,
 			plugins: {
 				legend: {
 					display: false,
@@ -148,7 +152,7 @@ registerBlockType( 'hello-charts/block-radar', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
-				responsive: false,
+				responsive: true,
 				plugins: {
 					legend: {
 						display: false,
@@ -191,6 +195,7 @@ registerBlockType( 'hello-charts/block-radar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
+					to.chartSize = from.chartSize;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;

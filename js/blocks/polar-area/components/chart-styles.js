@@ -6,12 +6,13 @@ const { Component } = wp.element;
 const {
 	PanelBody,
 	ToggleControl,
+	RangeControl,
 } = wp.components;
 
 export default class ChartStyles extends Component {
 	render() {
 		const {
-			attributes: { chartOptions },
+			attributes: { chartOptions, chartSize },
 			setAttributes,
 		} = this.props;
 
@@ -29,6 +30,10 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
+		function updateChartSize( width ) {
+			setAttributes( { chartSize: width } );
+		}
+
 		return (
 			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
 				<ToggleControl
@@ -44,6 +49,15 @@ export default class ChartStyles extends Component {
 						parsedOptions.scales.r.ticks.display
 					}
 					onChange={ ( state ) => updateShowTicks( state ) }
+				/>
+				<RangeControl
+					label={ __( 'Chart Size', 'hello-charts' ) }
+					value={ chartSize }
+					onChange={ ( width ) => updateChartSize( width ) }
+					min={ 1 }
+					max={ window.outerWidth }
+					allowReset
+					withInputField={ false }
 				/>
 			</PanelBody>
 		);

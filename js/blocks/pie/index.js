@@ -47,6 +47,9 @@ const attributes = {
 	width: {
 		type: 'number',
 	},
+	chartSize: {
+		type: 'number',
+	},
 	chartType: {
 		type: 'string',
 	},
@@ -69,6 +72,7 @@ const attributes = {
 		default: JSON.stringify( {
 			init: false,
 			animation: false,
+			responsive: true,
 			plugins: {
 				legend: {
 					display: true,
@@ -127,7 +131,7 @@ registerBlockType( 'hello-charts/block-pie', {
 			} ),
 			chartOptions: JSON.stringify( {
 				animation: false,
-				responsive: false,
+				responsive: true,
 				layout: {
 					padding: 0,
 				},
@@ -161,6 +165,7 @@ registerBlockType( 'hello-charts/block-pie', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
+					to.chartSize = from.chartSize;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					to.chartOptions = JSON.stringify( toOptions );
