@@ -32,6 +32,7 @@ export default class ChartBlock extends Component {
 				chartData,
 				chartOptions,
 			},
+			chartType,
 			clientId,
 			setAttributes,
 		} = this.props;
@@ -51,6 +52,7 @@ export default class ChartBlock extends Component {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 			chartOptions: JSON.stringify( parsedOptions ),
+			chartType,
 		} );
 	}
 
