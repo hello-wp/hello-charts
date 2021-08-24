@@ -18,10 +18,7 @@ export default class Save extends Component {
 
 		return (
 			<div className={ className }>
-				<div
-					className={ className }
-					style={ styles }
-				>
+				<div style={ styles } >
 					<RichText.Content tagName="h3" className="chart-title" value={ title } />
 					<canvas id={ `chart-${ blockId }` }></canvas>
 				</div>

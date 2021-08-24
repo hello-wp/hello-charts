@@ -9,6 +9,7 @@ const {
 	SelectControl,
 	ToggleControl,
 	ColorPalette,
+	ColorIndicator,
 } = wp.components;
 
 import { colorPalettes } from '../../../common/helpers';
@@ -49,7 +50,7 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateColor( color ) {
+		function updateBackgroundColor( color ) {
 			setAttributes( { chartBackground: color } );
 		}
 
@@ -83,11 +84,16 @@ export default class ChartStyles extends Component {
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
 				/>
-				<PanelRow>Background Color</PanelRow>
+				<PanelRow className="hello-charts-custom-label-with-color-indicator">
+					{ __( 'Background Color', 'hello-charts' ) }
+					{ !! chartBackground && (
+						<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
+					) }
+				</PanelRow>
 				<ColorPalette
 					colors={ colorPalettes().themeColors }
 					value={ chartBackground }
-					onChange={ ( color ) => updateColor( color ) }
+					onChange={ ( color ) => updateBackgroundColor( color ) }
 					clearable
 				/>
 			</PanelBody>
