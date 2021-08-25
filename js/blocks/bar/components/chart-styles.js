@@ -55,7 +55,11 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
+			<PanelBody
+				title={ __( 'Chart Styles', 'hello-charts' ) }
+				initialOpen={ true }
+				className={ 'hello-charts-chart-styles' }
+			>
 				<SelectControl
 					label={ __( 'Bar Direction', 'hello-charts' ) }
 					value={ parsedOptions.indexAxis }
@@ -84,9 +88,9 @@ export default class ChartStyles extends Component {
 					}
 					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
 				/>
-				<PanelRow className="hello-charts-custom-label-with-color-indicator">
+				<PanelRow className="chart-background-color">
 					{ __( 'Background Color', 'hello-charts' ) }
-					{ !! chartBackground && (
+					{ chartBackground && (
 						<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
 					) }
 				</PanelRow>

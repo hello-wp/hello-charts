@@ -73,7 +73,11 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
+			<PanelBody
+				title={ __( 'Chart Styles', 'hello-charts' ) }
+				initialOpen={ true }
+				className={ 'hello-charts-chart-styles' }
+			>
 				<ToggleControl
 					label={ __( 'Stack Data Sets', 'hello-charts' ) }
 					checked={ parsedOptions.scales.y.stacked }
@@ -100,9 +104,9 @@ export default class ChartStyles extends Component {
 					min={ 0 }
 					max={ 10 }
 				/>
-				<PanelRow className="hello-charts-custom-label-with-color-indicator">
+				<PanelRow className="chart-background-color">
 					{ __( 'Background Color', 'hello-charts' ) }
-					{ !! chartBackground && (
+					{ chartBackground && (
 						<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
 					) }
 				</PanelRow>

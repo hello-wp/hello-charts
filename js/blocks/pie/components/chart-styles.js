@@ -35,7 +35,11 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
+			<PanelBody
+				title={ __( 'Chart Styles', 'hello-charts' ) }
+				initialOpen={ true }
+				className={ 'hello-charts-chart-styles' }
+			>
 				<RangeControl
 					label={ __( 'Cutout', 'hello-charts' ) }
 					value={ parseInt( parsedData.datasets[ 0 ].cutout ) }
@@ -44,9 +48,9 @@ export default class ChartStyles extends Component {
 					max={ 90 }
 					step={ 10 }
 				/>
-				<PanelRow className="hello-charts-custom-label-with-color-indicator">
+				<PanelRow className="chart-background-color">
 					{ __( 'Background Color', 'hello-charts' ) }
-					{ !! chartBackground && (
+					{ chartBackground && (
 						<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
 					) }
 				</PanelRow>

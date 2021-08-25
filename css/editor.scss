@@ -13,6 +13,12 @@
     }
 }
 
+.hello-charts-chart-styles {
+    .chart-background-color {
+        justify-content: flex-start;
+    }
+}
+
 .hello-charts-data-styles {
 	.dataset-label,
 	.segment-label {
@@ -242,8 +248,4 @@
 	canvas {
 		margin: 0.5em auto;
 	}
-}
-
-.components-panel__body .components-panel__row.hello-charts-custom-label-with-color-indicator {
-	justify-content: flex-start;
 }
