@@ -32,6 +32,7 @@ export default class ChartBlock extends Component {
 				chartData,
 				chartOptions,
 			},
+			chartType,
 			clientId,
 			setAttributes,
 		} = this.props;
@@ -51,6 +52,7 @@ export default class ChartBlock extends Component {
 			blockId: clientId,
 			chartData: JSON.stringify( parsedData ),
 			chartOptions: JSON.stringify( parsedOptions ),
+			chartType,
 		} );
 	}
 
@@ -156,6 +158,7 @@ export default class ChartBlock extends Component {
 	render() {
 		const {
 			ChartStyles,
+			AxisStyles,
 			attributes: {
 				showChartTitle,
 				chartBackground,
@@ -182,6 +185,9 @@ export default class ChartBlock extends Component {
 					<EditDataButton toggleEditor={ this.toggleEditor } />
 					{ ChartStyles && (
 						<ChartStyles { ...this.props } />
+					) }
+					{ AxisStyles && (
+						<AxisStyles { ...this.props } />
 					) }
 					<DataStyles { ...this.props } />
 					{ hasSegments && (

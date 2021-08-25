@@ -36,20 +36,6 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateShowGridLines( state, axis ) {
-			const options = JSON.parse( chartOptions );
-
-			if ( 'x' === axis ) {
-				options.scales.x.grid.display = state;
-			}
-
-			if ( 'y' === axis ) {
-				options.scales.y.grid.display = state;
-			}
-
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
-		}
-
 		function updateBackgroundColor( color ) {
 			setAttributes( { chartBackground: color } );
 		}
@@ -73,20 +59,6 @@ export default class ChartStyles extends Component {
 					label={ __( 'Stack Data Sets', 'hello-charts' ) }
 					checked={ parsedOptions.scales.y.stacked }
 					onChange={ ( state ) => updateStacked( state ) }
-				/>
-				<ToggleControl
-					label={ __( 'Show X Axis Grid Lines', 'hello-charts' ) }
-					checked={
-						parsedOptions.scales.x.grid.display
-					}
-					onChange={ ( state ) => updateShowGridLines( state, 'x' ) }
-				/>
-				<ToggleControl
-					label={ __( 'Show Y Axis Grid Lines', 'hello-charts' ) }
-					checked={
-						parsedOptions.scales.y.grid.display
-					}
-					onChange={ ( state ) => updateShowGridLines( state, 'y' ) }
 				/>
 				<PanelRow className="chart-background-color">
 					{ __( 'Background Color', 'hello-charts' ) }
