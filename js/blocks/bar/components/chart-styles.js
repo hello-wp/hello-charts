@@ -12,8 +12,6 @@ const {
 	ColorIndicator,
 } = wp.components;
 
-import { colorPalettes } from '../../../common/helpers';
-
 export default class ChartStyles extends Component {
 	render() {
 		const {
@@ -67,7 +65,7 @@ export default class ChartStyles extends Component {
 					) }
 				</PanelRow>
 				<ColorPalette
-					colors={ colorPalettes().themeColors }
+					colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
 					value={ chartBackground }
 					onChange={ ( color ) => updateBackgroundColor( color ) }
 					clearable
