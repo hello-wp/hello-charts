@@ -34,10 +34,6 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateBackgroundColor( color ) {
-			setAttributes( { chartBackground: color } );
-		}
-
 		return (
 			<PanelBody
 				title={ __( 'Chart Styles', 'hello-charts' ) }
@@ -67,7 +63,7 @@ export default class ChartStyles extends Component {
 				<ColorPalette
 					colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
 					value={ chartBackground }
-					onChange={ ( color ) => updateBackgroundColor( color ) }
+					onChange={ ( color ) => setAttributes( { chartBackground: color } ) }
 					clearable
 				/>
 			</PanelBody>
