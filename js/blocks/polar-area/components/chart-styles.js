@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
-	PanelRow,
+	BaseControl,
 	ColorPalette,
 	ColorIndicator,
 } = wp.components;
@@ -23,18 +23,21 @@ export default class ChartStyles extends Component {
 				initialOpen={ true }
 				className={ 'hello-charts-chart-styles' }
 			>
-				<PanelRow className="chart-background-color">
-					{ __( 'Background Color', 'hello-charts' ) }
+				<BaseControl
+					id="chart-background-color"
+					label={ __( 'Background Color', 'hello-charts' ) }
+				>
 					{ chartBackground && (
 						<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
 					) }
-				</PanelRow>
-				<ColorPalette
-					colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
-					value={ chartBackground }
-					onChange={ ( color ) => setAttributes( { chartBackground: color } ) }
-					clearable
-				/>
+					<ColorPalette
+						id="chart-background-color"
+						colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
+						value={ chartBackground }
+						onChange={ ( color ) => setAttributes( { chartBackground: color } ) }
+						clearable
+					/>
+				</BaseControl>
 			</PanelBody>
 		);
 	}
