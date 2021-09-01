@@ -19,7 +19,7 @@ import { icons } from '../helpers';
 export default class ChartFormattingToolbar extends Component {
 	render() {
 		const {
-			attributes: { showChartTitle, showChartBackground, chartOptions },
+			attributes: { showChartTitle, chartOptions },
 			setAttributes,
 		} = this.props;
 
@@ -93,13 +93,6 @@ export default class ChartFormattingToolbar extends Component {
 
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
-				<ToolbarButton
-					icon={ showChartBackground ? icons.backgroundOn : icons.backgroundOff }
-					label={ showChartBackground ? __( 'Hide Chart Background', 'hello-charts' ) : __( 'Show Chart Background', 'hello-charts' ) }
-					onClick={
-						() => setAttributes( { showChartBackground: showChartBackground ? false : true } )
-					}
-				/>
 				<ToolbarButton
 					icon={ showChartTitle ? icons.titleOn : icons.titleOff }
 					label={ showChartTitle ? __( 'Hide Chart Title', 'hello-charts' ) : __( 'Show Chart Title', 'hello-charts' ) }

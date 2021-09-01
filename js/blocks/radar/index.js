@@ -28,9 +28,9 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	showChartBackground: {
-		type: 'boolean',
-		default: true,
+	chartBackground: {
+		type: 'string',
+		default: '',
 	},
 	useThemeColors: {
 		type: 'boolean',
@@ -127,6 +127,7 @@ registerBlockType( 'hello-charts/block-radar', {
 		attributes: {
 			title: __( 'Radar Chart', 'hello-charts' ),
 			showChartTitle: false,
+			chartBackground: '',
 			height: 280,
 			chartData: JSON.stringify( {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
@@ -190,7 +191,7 @@ registerBlockType( 'hello-charts/block-radar', {
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
-					to.showChartBackground = from.showChartBackground;
+					to.chartBackground = from.chartBackground;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
