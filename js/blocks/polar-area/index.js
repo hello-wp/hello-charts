@@ -50,6 +50,10 @@ const attributes = {
 	chartType: {
 		type: 'string',
 	},
+	autoScale: {
+		type: 'boolean',
+		default: true,
+	},
 	chartData: {
 		type: 'string',
 		default: JSON.stringify( {
@@ -85,6 +89,7 @@ const attributes = {
 					},
 					ticks: {
 						display: true,
+						precision: 0,
 					},
 				},
 			},
@@ -154,6 +159,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 						},
 						ticks: {
 							display: false,
+							precision: 0,
 						},
 					},
 				},
@@ -179,10 +185,21 @@ registerBlockType( 'hello-charts/block-polar-area', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
+					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
 					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
+
+					if ( fromOptions.scales?.r?.min || 0 === fromOptions.scales?.r?.min ) {
+						toOptions.scales.r.min = fromOptions.scales.r.min;
+					}
+					if ( fromOptions.scales?.r?.max || 0 === fromOptions.scales?.r?.max ) {
+						toOptions.scales.r.max = fromOptions.scales.r.max;
+					}
+					if ( fromOptions.scales?.r?.ticks?.stepSize ) {
+						toOptions.scales.r.ticks.stepSize = fromOptions.scales.r.ticks.stepSize;
+					}
 
 					to.chartOptions = JSON.stringify( toOptions );
 

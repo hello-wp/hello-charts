@@ -162,6 +162,7 @@ export default class ChartBlock extends Component {
 			attributes: {
 				showChartTitle,
 				showChartBackground,
+				chartData,
 				title,
 			},
 			children,
@@ -170,6 +171,8 @@ export default class ChartBlock extends Component {
 			hasSegments,
 			titlePlaceholder,
 		} = this.props;
+
+		const parsedData = JSON.parse( chartData );
 
 		this.toggleEditor = this.toggleEditor.bind( this );
 
@@ -180,7 +183,7 @@ export default class ChartBlock extends Component {
 					{ ChartStyles && (
 						<ChartStyles { ...this.props } />
 					) }
-					{ AxisStyles && (
+					{ ( parsedData.init && AxisStyles ) && (
 						<AxisStyles { ...this.props } />
 					) }
 					<DataStyles { ...this.props } />

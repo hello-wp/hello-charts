@@ -45,6 +45,10 @@ const attributes = {
 	chartType: {
 		type: 'string',
 	},
+	autoScale: {
+		type: 'boolean',
+		default: true,
+	},
 	chartData: {
 		type: 'string',
 		default: JSON.stringify( {
@@ -103,6 +107,9 @@ const attributes = {
 						display: true,
 					},
 					stacked: false,
+					ticks: {
+						precision: 0,
+					},
 				},
 			},
 			layout: {
@@ -204,11 +211,22 @@ registerBlockType( 'hello-charts/block-line', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.showChartBackground = from.showChartBackground;
+					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
+
+					if ( fromOptions.scales?.y?.min || 0 === fromOptions.scales?.y?.min ) {
+						toOptions.scales.y.min = fromOptions.scales.y.min;
+					}
+					if ( fromOptions.scales?.y?.max || 0 === fromOptions.scales?.y?.max ) {
+						toOptions.scales.y.max = fromOptions.scales.y.max;
+					}
+					if ( fromOptions.scales?.y?.ticks?.stepSize ) {
+						toOptions.scales.y.ticks.stepSize = fromOptions.scales.y.ticks.stepSize;
+					}
 
 					to.chartOptions = JSON.stringify( toOptions );
 
