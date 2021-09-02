@@ -13,6 +13,7 @@ const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
  * Internal dependencies.
  */
 import {
+	ChartStyles,
 	ChartFormattingToolbar,
 	DataStyles,
 	EditDataButton,
@@ -157,11 +158,10 @@ export default class ChartBlock extends Component {
 
 	render() {
 		const {
-			ChartStyles,
 			AxisStyles,
 			attributes: {
+				backgroundColor,
 				showChartTitle,
-				chartBackground,
 				chartData,
 				title,
 			},
@@ -175,7 +175,7 @@ export default class ChartBlock extends Component {
 		const parsedData = JSON.parse( chartData );
 
 		const styles = {
-			background: chartBackground ? chartBackground : 'none',
+			background: backgroundColor ? backgroundColor : 'none',
 		};
 
 		this.toggleEditor = this.toggleEditor.bind( this );
@@ -184,9 +184,7 @@ export default class ChartBlock extends Component {
 			<>
 				<InspectorControls key="inspector">
 					<EditDataButton toggleEditor={ this.toggleEditor } />
-					{ ChartStyles && (
-						<ChartStyles { ...this.props } />
-					) }
+					<ChartStyles { ...this.props } />
 					{ ( parsedData.init && AxisStyles ) && (
 						<AxisStyles { ...this.props } />
 					) }
