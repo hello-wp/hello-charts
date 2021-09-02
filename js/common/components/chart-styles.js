@@ -17,9 +17,9 @@ export default class ChartStyles extends Component {
 	render() {
 		const {
 			attributes: {
+				backgroundColor,
 				chartData,
 				chartOptions,
-				chartBackground,
 			},
 			supports,
 			setAttributes,
@@ -105,14 +105,14 @@ export default class ChartStyles extends Component {
 						id="chart-background-color"
 						label={ __( 'Background Color', 'hello-charts' ) }
 					>
-						{ chartBackground && (
-							<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
+						{ backgroundColor && (
+							<ColorIndicator colorValue={ backgroundColor } aria-label={ backgroundColor } />
 						) }
 						<ColorPalette
 							id="chart-background-color"
 							colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
-							value={ chartBackground }
-							onChange={ ( color ) => setAttributes( { chartBackground: color } ) }
+							value={ backgroundColor }
+							onChange={ ( color ) => setAttributes( { backgroundColor: color } ) }
 							clearable
 						/>
 					</BaseControl>
