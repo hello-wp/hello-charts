@@ -5,14 +5,21 @@ const { __ } = wp.i18n;
 const { Component } = wp.element;
 const {
 	PanelBody,
+	BaseControl,
 	RangeControl,
 	ToggleControl,
+	ColorPalette,
+	ColorIndicator,
 } = wp.components;
 
 export default class ChartStyles extends Component {
 	render() {
 		const {
-			attributes: { chartData, chartOptions },
+			attributes: {
+				chartData,
+				chartOptions,
+				chartBackground,
+			},
 			setAttributes,
 		} = this.props;
 
@@ -50,7 +57,11 @@ export default class ChartStyles extends Component {
 		}
 
 		return (
-			<PanelBody title={ __( 'Chart Styles', 'hello-charts' ) } initialOpen={ true }>
+			<PanelBody
+				title={ __( 'Chart Styles', 'hello-charts' ) }
+				initialOpen={ true }
+				className={ 'hello-charts-chart-styles' }
+			>
 				<ToggleControl
 					label={ __( 'Stack Data Sets', 'hello-charts' ) }
 					checked={ parsedOptions.scales.y.stacked }
@@ -63,6 +74,21 @@ export default class ChartStyles extends Component {
 					min={ 0 }
 					max={ 10 }
 				/>
+				<BaseControl
+					id="chart-background-color"
+					label={ __( 'Background Color', 'hello-charts' ) }
+				>
+					{ chartBackground && (
+						<ColorIndicator colorValue={ chartBackground } aria-label={ chartBackground } />
+					) }
+					<ColorPalette
+						id="chart-background-color"
+						colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
+						value={ chartBackground }
+						onChange={ ( color ) => setAttributes( { chartBackground: color } ) }
+						clearable
+					/>
+				</BaseControl>
 			</PanelBody>
 		);
 	}

@@ -33,9 +33,9 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	showChartBackground: {
-		type: 'boolean',
-		default: true,
+	chartBackground: {
+		type: 'string',
+		default: '',
 	},
 	useThemeColors: {
 		type: 'boolean',
@@ -109,6 +109,7 @@ registerBlockType( 'hello-charts/block-pie', {
 		attributes: {
 			title: __( 'Pie Chart', 'hello-charts' ),
 			showChartTitle: false,
+			chartBackground: '',
 			height: 280,
 			chartData: JSON.stringify( {
 				datasets: [
@@ -160,9 +161,10 @@ registerBlockType( 'hello-charts/block-pie', {
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
-					to.showChartBackground = from.showChartBackground;
+					to.chartBackground = from.chartBackground;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
+
 					to.chartOptions = JSON.stringify( toOptions );
 
 					/*
