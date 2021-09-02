@@ -33,7 +33,7 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	chartBackground: {
+	backgroundColor: {
 		type: 'string',
 		default: '',
 	},
@@ -109,7 +109,7 @@ registerBlockType( 'hello-charts/block-pie', {
 		attributes: {
 			title: __( 'Pie Chart', 'hello-charts' ),
 			showChartTitle: false,
-			chartBackground: '',
+			backgroundColor: '',
 			height: 280,
 			chartData: JSON.stringify( {
 				datasets: [
@@ -161,7 +161,7 @@ registerBlockType( 'hello-charts/block-pie', {
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
-					to.chartBackground = from.chartBackground;
+					to.backgroundColor = from.backgroundColor;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 

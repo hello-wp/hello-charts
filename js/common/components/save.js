@@ -8,12 +8,16 @@ export default class Save extends Component {
 	render() {
 		// Setup the attributes
 		const {
-			attributes: { title, blockId, chartBackground },
+			attributes: {
+				backgroundColor,
+				blockId,
+				title,
+			},
 			className,
 		} = this.props;
 
 		const styles = {
-			background: chartBackground ? chartBackground : 'none',
+			background: backgroundColor ? backgroundColor : 'none',
 		};
 
 		return (
