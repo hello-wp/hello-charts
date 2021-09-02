@@ -7,7 +7,7 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { ChartStyles, AxisStyles } from '.';
+import { AxisStyles } from '.';
 import { Radar } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
 import { legend, randomValues } from '../../../common/helpers';
@@ -50,10 +50,13 @@ export default class Edit extends Component {
 		return (
 			<ChartBlock
 				{ ...this.props }
-				ChartStyles={ ChartStyles }
 				AxisStyles={ AxisStyles }
 				hasPoints={ true }
 				chartType="radar"
+				supports={ {
+					backgroundColor: true,
+					tension: true,
+				} }
 				generateData={ () => {
 					return randomValues( 7 );
 				} }
