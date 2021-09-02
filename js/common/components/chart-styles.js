@@ -41,18 +41,10 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateTension( tension ) {
+		function updateTension( property, tension ) {
 			const data = JSON.parse( chartData );
 			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].tension = tension;
-			} );
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
-		function updateLineTension( tension ) {
-			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].lineTension = tension;
+				data.datasets[ index ][ property ] = tension;
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
@@ -92,17 +84,8 @@ export default class ChartStyles extends Component {
 				{ supports.tension && (
 					<RangeControl
 						label={ __( 'Curve', 'hello-charts' ) }
-						value={ parsedData.datasets[ 0 ].tension * 20 }
-						onChange={ ( tension ) => updateTension( tension / 20 ) }
-						min={ 0 }
-						max={ 10 }
-					/>
-				) }
-				{ supports.lineTension && (
-					<RangeControl
-						label={ __( 'Curve', 'hello-charts' ) }
-						value={ parsedData.datasets[ 0 ].lineTension * 20 }
-						onChange={ ( tension ) => updateLineTension( tension / 20 ) }
+						value={ parsedData.datasets[ 0 ][ supports.tension ] * 20 }
+						onChange={ ( tension ) => updateTension( supports.tension, tension / 20 ) }
 						min={ 0 }
 						max={ 10 }
 					/>

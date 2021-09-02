@@ -40,7 +40,7 @@ export default class Edit extends Component {
 				chartType="line"
 				supports={ {
 					backgroundColor: true,
-					lineTension: true,
+					tension: 'lineTension',
 					stacked: true,
 				} }
 				generateData={ () => {

@@ -55,7 +55,7 @@ export default class Edit extends Component {
 				chartType="radar"
 				supports={ {
 					backgroundColor: true,
-					tension: true,
+					tension: 'tension',
 				} }
 				generateData={ () => {
 					return randomValues( 7 );
