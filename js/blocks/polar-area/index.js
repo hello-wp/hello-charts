@@ -33,7 +33,7 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	chartBackground: {
+	backgroundColor: {
 		type: 'string',
 		default: '',
 	},
@@ -118,7 +118,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 		attributes: {
 			title: __( 'Polar Area Chart', 'hello-charts' ),
 			showChartTitle: false,
-			chartBackground: '',
+			backgroundColor: '',
 			height: 280,
 			chartData: JSON.stringify( {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
@@ -179,7 +179,7 @@ registerBlockType( 'hello-charts/block-polar-area', {
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
-					to.chartBackground = from.chartBackground;
+					to.backgroundColor = from.backgroundColor;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;

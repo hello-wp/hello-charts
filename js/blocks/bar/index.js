@@ -28,7 +28,7 @@ const attributes = {
 		type: 'boolean',
 		default: true,
 	},
-	chartBackground: {
+	backgroundColor: {
 		type: 'string',
 		default: '',
 	},
@@ -118,7 +118,7 @@ registerBlockType( 'hello-charts/block-bar', {
 		attributes: {
 			title: __( 'Bar Chart', 'hello-charts' ),
 			showChartTitle: false,
-			chartBackground: '',
+			backgroundColor: '',
 			height: 280,
 			width: 450,
 			chartData: JSON.stringify( {
@@ -165,7 +165,7 @@ registerBlockType( 'hello-charts/block-bar', {
 
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
-					to.chartBackground = from.chartBackground;
+					to.backgroundColor = from.backgroundColor;
 
 					/*
 					 * We're intentionally setting the x stacked attribute to the same as y,

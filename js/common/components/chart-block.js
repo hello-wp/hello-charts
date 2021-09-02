@@ -160,8 +160,8 @@ export default class ChartBlock extends Component {
 		const {
 			AxisStyles,
 			attributes: {
+				backgroundColor,
 				showChartTitle,
-				chartBackground,
 				title,
 			},
 			children,
@@ -172,7 +172,7 @@ export default class ChartBlock extends Component {
 		} = this.props;
 
 		const styles = {
-			background: chartBackground ? chartBackground : 'none',
+			background: backgroundColor ? backgroundColor : 'none',
 		};
 
 		this.toggleEditor = this.toggleEditor.bind( this );
