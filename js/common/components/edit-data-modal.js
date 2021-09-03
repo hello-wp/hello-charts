@@ -11,13 +11,11 @@ const { createRef, Component } = wp.element;
 const {
 	Button,
 	DropdownMenu,
-	Icon,
 	KeyboardShortcuts,
 	MenuGroup,
 	MenuItem,
 	Modal,
 } = wp.components;
-const { RichText } = wp.blockEditor;
 
 /**
  * Internal dependencies.
@@ -28,12 +26,25 @@ export default class EditDataModal extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = { table: null };
+		this.state = {
+			table: null,
+			activeColumn: null,
+			activeRow: null,
+			activeSection: null,
+		};
+
 		this.tableRef = createRef();
 	}
 
 	componentDidMount() {
 		this.setState( { table: this.tableRef.current } );
+	}
+
+	updateActive( section, row, column ) {
+		this.setState( {
+			activeColumn: column,
+			activeRow: row,
+		} );
 	}
 
 	render() {
@@ -45,11 +56,15 @@ export default class EditDataModal extends Component {
 			toggleEditor,
 			hasSegments,
 		} = this.props;
-		const { state: { table } } = this;
+		const {
+			state: {
+				table,
+				activeColumn,
+				activeRow,
+			},
+		} = this;
 
 		const parsedData = JSON.parse( chartData );
-
-		let focusTimeout = false;
 
 		function getDatasetLabels() {
 			const data = JSON.parse( chartData );
@@ -231,45 +246,20 @@ export default class EditDataModal extends Component {
 			}
 		}
 
-		function setFocus( section, row, column, skipInput = false ) {
+		function setFocus( section, row, column ) {
 			if (
 				! section ||
 				! section.children[ row ] ||
 				! section.children[ row ].children[ column ] ||
-				! section.children[ row ].children[ column ].querySelector( 'button,input,[contenteditable="true"]' )
+				! section.children[ row ].children[ column ].querySelector( 'input,[contenteditable="true"]' )
 			) {
 				return;
 			}
 
 			const input = section.children[ row ].children[ column ].querySelector( 'input,[contenteditable="true"]' );
-			const button = section.children[ row ].children[ column ].querySelector( 'button' );
-			if ( input && ! skipInput ) {
+			if ( input ) {
 				input.focus();
-			} else {
-				button.focus();
 			}
-		}
-
-		function selectText( event ) {
-			clearTimeout( focusTimeout );
-
-			focusTimeout = setTimeout(
-				( target ) => {
-					if ( 'true' === target.getAttribute( 'contenteditable' ) ) {
-						// RichText contenteditable fields.
-						const selection = target.ownerDocument.getSelection();
-						const range = document.createRange();
-						range.selectNodeContents( target );
-						selection.removeAllRanges();
-						selection.addRange( range );
-					} else if ( target.select ) {
-						// Regular input fields.
-						target.select();
-					}
-				},
-				10,
-				event.target
-			);
 		}
 
 		/**
@@ -290,7 +280,6 @@ export default class EditDataModal extends Component {
 
 		function nextCell( event ) {
 			event.preventDefault();
-			clearTimeout( focusTimeout );
 
 			const cell = event.target.closest( 'td,th' );
 			const row = event.target.closest( 'tr' );
@@ -304,14 +293,11 @@ export default class EditDataModal extends Component {
 
 		function previousCell( event ) {
 			event.preventDefault();
-			clearTimeout( focusTimeout );
 
 			moveFocus( 'left' );
 		}
 
 		function nextRow( event ) {
-			clearTimeout( focusTimeout );
-
 			if ( 'BUTTON' === event.target.tagName && 'Enter' === event.key ) {
 				return;
 			}
@@ -330,7 +316,6 @@ export default class EditDataModal extends Component {
 		}
 
 		function previousRow( event ) {
-			clearTimeout( focusTimeout );
 			event.preventDefault();
 
 			moveFocus( 'up' );
@@ -367,166 +352,135 @@ export default class EditDataModal extends Component {
 						<thead>
 							<tr>
 								<th key="-1">
-									<RichText
-										value=""
-										multiline={ false }
-										allowedFormats={ [] }
-										withoutInteractiveFormatting={ true }
-										preserveWhiteSpace={ false }
-										onChange={ () => {
-											return false;
-										} }
-										onKeyPress={ ( event ) => {
+									<span
+										role="textbox"
+										tabIndex="0"
+										contentEditable="true"
+										onKeyPress={ ( event ) => { // ignore: jsx-a11y/no-noninteractive-element-interactions
 											event.preventDefault();
 										} }
-									/>
+									>&nbsp;
+									</span>
 								</th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
 									<th key={ index }>
-										<DropdownMenu
-											icon="ellipsis"
-											label={ __( 'Data Set Actions', 'hello-charts' ) }
-											disableOpenOnArrowDown={ true }
-										>
-											{ ( { onClose } ) => (
-												<MenuGroup>
-													<MenuItem
-														icon="table-col-after"
-														onClick={ () => duplicateDataset( index ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Duplicate Data Set', 'hello-charts' ) }
-													</MenuItem>
-													<MenuItem
-														icon="table-col-before"
-														onClick={ () => newDataset( index ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Insert Data Set Before', 'hello-charts' ) }
-													</MenuItem>
-													<MenuItem
-														icon="table-col-after"
-														onClick={ () => newDataset( index + 1 ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Insert Data Set After', 'hello-charts' ) }
-													</MenuItem>
-													<MenuItem
-														icon="table-col-delete"
-														onClick={ () => removeDataset( index ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Delete Data Set', 'hello-charts' ) }
-													</MenuItem>
-												</MenuGroup>
-											) }
-										</DropdownMenu>
-										<RichText
-											value={ dataset.label }
-											multiline={ false }
-											allowedFormats={ [] }
-											withoutInteractiveFormatting={ true }
-											preserveWhiteSpace={ false }
-											onChange={ ( text ) => updateDatasetLabel( text, index ) }
-											onFocus={ ( event ) => selectText( event ) }
-											style={ { whiteSpace: 'nowrap' } }
+										{ index === activeColumn && (
+											<DropdownMenu
+												icon="ellipsis"
+												label={ __( 'Data Set Actions', 'hello-charts' ) }
+												disableOpenOnArrowDown={ true }
+											>
+												{ ( { onClose } ) => (
+													<MenuGroup>
+														<MenuItem
+															icon="table-col-after"
+															onClick={ () => duplicateDataset( index ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Duplicate Data Set', 'hello-charts' ) }
+														</MenuItem>
+														<MenuItem
+															icon="table-col-before"
+															onClick={ () => newDataset( index ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Insert Data Set Before', 'hello-charts' ) }
+														</MenuItem>
+														<MenuItem
+															icon="table-col-after"
+															onClick={ () => newDataset( index + 1 ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Insert Data Set After', 'hello-charts' ) }
+														</MenuItem>
+														<MenuItem
+															icon="table-col-delete"
+															onClick={ () => removeDataset( index ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Delete Data Set', 'hello-charts' ) }
+														</MenuItem>
+													</MenuGroup>
+												) }
+											</DropdownMenu>
+										) }
+										<span
+											contentEditable="true"
+											onFocus={ () => this.updateActive( '', 0, index ) }
+											onChange={ ( event ) => updateDatasetLabel( event.target.value, index ) }
 											className={ index > getDatasetLabels().indexOf( dataset.label ) || '' === dataset.label ? 'input-error' : '' }
-										/>
+										>
+											{ dataset.label }
+										</span>
 									</th>
 								) ) }
-								<th key="new" className="new">
-									<Button
-										onClick={ () => newDataset( parsedData.datasets.length ) }
-										label={ __( 'New Data Set', 'hello-charts' ) }
-									>
-										<Icon icon="table-col-after" />
-									</Button>
-								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{ parsedData.labels.map( ( label, row ) => (
 								<tr key={ row }>
 									<th>
-										<RichText
-											value={ label }
-											multiline={ false }
-											allowedFormats={ [] }
-											withoutInteractiveFormatting={ true }
-											preserveWhiteSpace={ false }
-											onChange={ ( text ) => updateLabel( text, row ) }
-											onFocus={ ( event ) => selectText( event ) }
-										/>
+										{ row + 1 === activeRow && (
+											<DropdownMenu
+												icon="ellipsis"
+												label={ __( 'Row Actions', 'hello-charts' ) }
+												disableOpenOnArrowDown={ true }
+											>
+												{ ( { onClose } ) => (
+													<MenuGroup>
+														<MenuItem
+															icon="table-row-after"
+															onClick={ () => duplicateRow( row ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Duplicate Row', 'hello-charts' ) }
+														</MenuItem>
+														<MenuItem
+															icon="table-row-before"
+															onClick={ () => newRow( row ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Insert Row Before', 'hello-charts' ) }
+														</MenuItem>
+														<MenuItem
+															icon="table-row-after"
+															onClick={ () => newRow( row + 1 ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Insert Row After', 'hello-charts' ) }
+														</MenuItem>
+														<MenuItem
+															icon="table-row-delete"
+															onClick={ () => removeRow( row ) }
+															onBlur={ ( event ) => maybeClose( event, onClose ) }
+														>
+															{ __( 'Delete Row', 'hello-charts' ) }
+														</MenuItem>
+													</MenuGroup>
+												) }
+											</DropdownMenu>
+										) }
+										<span
+											contentEditable="true"
+											onFocus={ () => this.updateActive( '', row + 1, 0 ) }
+											onChange={ ( event ) => updateLabel( event.target.value, row ) }
+										>
+											{ label }
+										</span>
 									</th>
 									{ parsedData.datasets.map( ( dataset, index ) => (
 										<td key={ `${ row }-${ index }` }>
 											<input
 												type="number"
 												value={ parsedData.datasets[ index ].data[ row ] }
+												onFocus={ () => this.updateActive( '', row + 1, index ) }
 												onChange={ ( event ) => updateData( event.target.value, index, row ) }
-												onFocus={ ( event ) => selectText( event ) }
 											/>
 										</td>
 									) ) }
-									<td className="disabled">
-										<DropdownMenu
-											icon="ellipsis"
-											label={ __( 'Row Actions', 'hello-charts' ) }
-											disableOpenOnArrowDown={ true }
-										>
-											{ ( { onClose } ) => (
-												<MenuGroup>
-													<MenuItem
-														icon="table-row-after"
-														onClick={ () => duplicateRow( row ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Duplicate Row', 'hello-charts' ) }
-													</MenuItem>
-													<MenuItem
-														icon="table-row-before"
-														onClick={ () => newRow( row ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Insert Row Before', 'hello-charts' ) }
-													</MenuItem>
-													<MenuItem
-														icon="table-row-after"
-														onClick={ () => newRow( row + 1 ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Insert Row After', 'hello-charts' ) }
-													</MenuItem>
-													<MenuItem
-														icon="table-row-delete"
-														onClick={ () => removeRow( row ) }
-														onBlur={ ( event ) => maybeClose( event, onClose ) }
-													>
-														{ __( 'Delete Row', 'hello-charts' ) }
-													</MenuItem>
-												</MenuGroup>
-											) }
-										</DropdownMenu>
-									</td>
 								</tr>
 							) ) }
 						</tbody>
-						<tfoot>
-							<tr>
-								<th key="new" className="new">
-									<Button
-										onClick={ () => newRow( parsedData.datasets[ 0 ].data.length ) }
-										label={ __( 'New Row', 'hello-charts' ) }
-									>
-										<Icon icon="table-row-after" />
-									</Button>
-								</th>
-								<td
-									className="disabled"
-									colSpan={ parsedData.datasets.length }
-								></td>
-							</tr>
-						</tfoot>
 					</table>
 				</KeyboardShortcuts>
 			</Modal>
