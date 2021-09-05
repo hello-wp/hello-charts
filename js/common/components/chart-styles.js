@@ -74,7 +74,7 @@ export default class ChartStyles extends Component {
 						] }
 					/>
 				) }
-				{ supports.stacked && (
+				{ ( supports.stacked && parsedData.datasets.length > 1 ) && (
 					<ToggleControl
 						label={ __( 'Stack Data Sets', 'hello-charts' ) }
 						checked={ parsedOptions.scales.y.stacked }
