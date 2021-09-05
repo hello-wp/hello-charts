@@ -272,7 +272,7 @@ export default class DataStyles extends Component {
 							/>
 						) }
 						<RangeControl
-							label={ __( 'Opacity', 'hello-charts' ) }
+							label={ __( 'Background Opacity', 'hello-charts' ) }
 							value={ this.getAlpha() }
 							onChange={ ( opacity ) => this.updateAlpha( opacity ) }
 							min={ 0 }
