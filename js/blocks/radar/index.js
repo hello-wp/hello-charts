@@ -204,14 +204,23 @@ registerBlockType( 'hello-charts/block-radar', {
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
 					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
 
-					if ( fromOptions.scales?.r?.min || 0 === fromOptions.scales?.r?.min ) {
-						toOptions.scales.r.min = fromOptions.scales.r.min;
+					if ( undefined !== fromOptions.scales?.r?.min || undefined !== fromOptions.scales?.y?.min ) {
+						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;
+						if ( undefined !== min ) {
+							toOptions.scales.r.min = min;
+						}
 					}
-					if ( fromOptions.scales?.r?.max || 0 === fromOptions.scales?.r?.max ) {
-						toOptions.scales.r.max = fromOptions.scales.r.max;
+					if ( undefined !== fromOptions.scales?.r?.max || undefined !== fromOptions.scales?.y?.max ) {
+						const max = fromOptions.scales?.y?.max ?? fromOptions.scales?.r?.max;
+						if ( undefined !== max ) {
+							toOptions.scales.r.max = max;
+						}
 					}
-					if ( fromOptions.scales?.r?.ticks?.stepSize ) {
-						toOptions.scales.r.ticks.stepSize = fromOptions.scales.r.ticks.stepSize;
+					if ( undefined !== fromOptions.scales?.r?.ticks?.stepSize || undefined !== fromOptions.scales?.y?.ticks?.stepSize ) {
+						const stepSize = fromOptions.scales?.y?.ticks?.stepSize ?? fromOptions.scales?.r?.ticks?.stepSize;
+						if ( undefined !== stepSize ) {
+							toOptions.scales.r.ticks.stepSize = stepSize;
+						}
 					}
 
 					to.chartOptions = JSON.stringify( toOptions );

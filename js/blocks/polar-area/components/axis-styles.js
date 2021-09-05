@@ -8,6 +8,7 @@ const {
 	ToggleControl,
 	TextControl,
 	BaseControl,
+	Button,
 } = wp.components;
 
 export default class AxisStyles extends Component {
@@ -15,63 +16,71 @@ export default class AxisStyles extends Component {
 		super( props );
 
 		const options = JSON.parse( this.props.attributes.chartOptions );
+		const parsedData = JSON.parse( this.props.attributes.chartData );
 
 		this.state = {
-			rmin: options.scales.r.min || this.getMinDataPoint(),
-			rmax: options.scales.r.max || this.getMaxDataPoint(),
-			stepSize: options.scales.r.ticks.stepSize || 2,
+			rmin: options?.scales?.r?.min || this.getMinValue( parsedData ),
+			rmax: options?.scales?.r?.max || this.getMaxValue( parsedData ),
+			stepSize: options?.scales?.r?.ticks?.stepSize || 1,
 		};
 	}
 
-	getMaxDataPoint() {
-		let maxInDatasets = 0;
-
-		const parsedData = JSON.parse( this.props.attributes.chartData );
-
-		parsedData.datasets.forEach( ( dataset ) => {
-			const maxInSet = Math.max( ...dataset.data );
-			if ( maxInSet > maxInDatasets ) {
-				maxInDatasets = maxInSet;
-			}
-		} );
-
-		// Rounds up to nearest even number
-		return 2 * Math.round( maxInDatasets / 2 );
+	getMaxValue( parsedData ) {
+		const maxValues = parsedData.datasets.map( ( dataset ) => Math.max( ...dataset.data ) );
+		const maxValue = Math.max( ...maxValues );
+		return Math.round( maxValue );
 	}
 
-	getMinDataPoint() {
-		let minInDatasets = 0;
-
-		const parsedData = JSON.parse( this.props.attributes.chartData );
-
-		parsedData.datasets.forEach( ( dataset ) => {
-			const minInSet = Math.min( ...dataset.data );
-			if ( minInSet < minInDatasets ) {
-				minInDatasets = minInSet;
-			}
-		} );
-
-		// Rounds down to nearest even number
-		return 2 * Math.floor( minInDatasets / 2 );
+	getMinValue( parsedData ) {
+		const minValues = parsedData.datasets.map( ( dataset ) => Math.min( ...dataset.data ) );
+		const minValue = Math.min( ...minValues );
+		if ( 0 < minValue ) {
+			return 0;
+		}
+		return Math.floor( minValue );
 	}
 
-	componentWillReceiveProps( nextProps ) {
-		const options = JSON.parse( nextProps.attributes.chartOptions );
+	componentDidUpdate( prevProps ) {
+		const parsedData = JSON.parse( this.props.attributes.chartData );
 
-		if ( options.scales?.r?.min ) {
+		if (
+			prevProps.editorOpen &&
+			! this.props.editorOpen
+		) {
+			this.setState( {
+				rmin: this.getMinValue( parsedData ),
+				rmax: this.getMaxValue( parsedData ),
+				stepSize: 1,
+			} );
+			return;
+		}
+
+		const options = JSON.parse( this.props.attributes.chartOptions );
+		const prevOptions = JSON.parse( prevProps.attributes.chartOptions );
+
+		if (
+			undefined !== options.scales?.r?.min &&
+			prevOptions.scales?.r?.min !== options.scales?.r?.min
+		) {
 			this.setState( { rmin: options.scales.r.min } );
 		}
-		if ( options.scales?.r?.max ) {
+		if (
+			undefined !== options.scales?.r?.max &&
+			prevOptions.scales?.r?.max !== options.scales?.r?.max
+		) {
 			this.setState( { rmax: options.scales.r.max } );
 		}
-		if ( options.scales?.r?.ticks?.stepSize ) {
+		if (
+			undefined !== options.scales?.r?.ticks?.stepSize &&
+			prevOptions.scales?.r?.ticks?.stepSize !== options.scales?.r?.ticks?.stepSize
+		) {
 			this.setState( { stepSize: options.scales.r.ticks.stepSize } );
 		}
 	}
 
 	render() {
 		const {
-			attributes: { autoScale, chartOptions },
+			attributes: { autoScale, chartOptions, chartData },
 			setAttributes,
 		} = this.props;
 
@@ -81,7 +90,11 @@ export default class AxisStyles extends Component {
 			stepSize,
 		} = this.state;
 
-		const parsedOptions = JSON.parse( chartOptions );
+		this.getMinValue = this.getMinValue.bind( this );
+		this.getMaxValue = this.getMaxValue.bind( this );
+
+		const getMin = this.getMinValue;
+		const getMax = this.getMaxValue;
 
 		function updateShowGridLines( state ) {
 			const options = JSON.parse( chartOptions );
@@ -111,14 +124,14 @@ export default class AxisStyles extends Component {
 			setAttributes( { autoScale: state, chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateMinMax( state, axis ) {
+		function updateMinMax( state, property ) {
 			const options = JSON.parse( chartOptions );
 
-			if ( 'rmin' === axis ) {
+			if ( 'rmin' === property && state < options.scales.r.max ) {
 				options.scales.r.min = Math.floor( state );
 			}
 
-			if ( 'rmax' === axis ) {
+			if ( 'rmax' === property && state > options.scales.r.min ) {
 				options.scales.r.max = Math.round( state );
 			}
 
@@ -132,6 +145,19 @@ export default class AxisStyles extends Component {
 
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
+
+		function resetScale() {
+			const parsedData = JSON.parse( chartData );
+			const options = JSON.parse( chartOptions );
+
+			options.scales.r.min = getMin( parsedData );
+			options.scales.r.max = getMax( parsedData );
+			options.scales.r.ticks.stepSize = 1;
+
+			setAttributes( { chartOptions: JSON.stringify( options ) } );
+		}
+
+		const parsedOptions = JSON.parse( chartOptions );
 
 		return (
 			<PanelBody title={ __( 'Axis Styles', 'hello-charts' ) } initialOpen={ false }>
@@ -151,37 +177,33 @@ export default class AxisStyles extends Component {
 				/>
 				<ToggleControl
 					label={ __( 'Auto Scale', 'hello-charts' ) }
-					checked={
-						autoScale
-					}
-					onChange={ ( state ) => updateAutoScale( state, 'r' ) }
+					checked={ autoScale }
+					onChange={ ( state ) => updateAutoScale( state ) }
 				/>
 				{ ! autoScale && (
-					<BaseControl
-						id="chart-manual-scale"
-						label={ __( 'R Scale' ) }
-					>
-						<div className="chart-manual-scale-controls">
-							<TextControl
-								type="number"
-								label={ __( 'Min' ) }
-								value={ parsedOptions.scales.r.min }
-								onChange={ ( state ) => updateMinMax( state, 'rmin' ) }
-							/>
-							<TextControl
-								type="number"
-								label={ __( 'Max' ) }
-								value={ parsedOptions.scales.r.max }
-								onChange={ ( state ) => updateMinMax( state, 'rmax' ) }
-							/>
-							<TextControl
-								type="number"
-								label={ __( 'Step Size' ) }
-								value={ parsedOptions.scales.r.ticks.stepSize }
-								min={ 1 }
-								onChange={ ( state ) => updateStepSize( state ) }
-							/>
-						</div>
+					<BaseControl className="chart-manual-scale" >
+						<TextControl
+							type="number"
+							label={ __( 'Min', 'hello-charts' ) }
+							value={ parsedOptions.scales.r.min }
+							onChange={ ( state ) => updateMinMax( state, 'rmin' ) }
+						/>
+						<TextControl
+							type="number"
+							label={ __( 'Max', 'hello-charts' ) }
+							value={ parsedOptions.scales.r.max }
+							onChange={ ( state ) => updateMinMax( state, 'rmax' ) }
+						/>
+						<TextControl
+							type="number"
+							label={ __( 'Step Size', 'hello-charts' ) }
+							value={ parsedOptions.scales.r.ticks.stepSize }
+							min={ 1 }
+							onChange={ ( state ) => updateStepSize( state ) }
+						/>
+						<Button isSmall onClick={ () => resetScale() } >
+							{ __( 'Reset', 'hello-charts' ) }
+						</Button>
 					</BaseControl>
 				) }
 			</PanelBody>
