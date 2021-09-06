@@ -28,7 +28,7 @@ export default class ChartStyles extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
-		if ( parsedData.datasets.length <= 1 ) {
+		if ( supports.stacked && parsedData.datasets.length <= 1 ) {
 			updateStacked( false );
 		}
 
