@@ -44,7 +44,7 @@ export default class EditDataModal extends Component {
 			setAttributes,
 			toggleEditor,
 			hasSegments,
-			chartType,
+			defaultAlpha,
 		} = this.props;
 		const { state: { table } } = this;
 
@@ -90,7 +90,7 @@ export default class EditDataModal extends Component {
 
 			if ( ! hasSegments ) {
 				const color = tinycolor( randomColors( 1 ).shift() );
-				color.setAlpha( 'line' === chartType ? 0 : 0.8 );
+				color.setAlpha( defaultAlpha || 0 === defaultAlpha ? defaultAlpha : 0.8 );
 				dataset.borderColor = color.toHexString();
 				dataset.pointBackgroundColor = color.toHexString();
 				dataset.backgroundColor = color.toRgbString();
