@@ -55,18 +55,17 @@
 		border-spacing: 0;
 		table-layout: fixed;
 
-		thead th {
+		tr:first-child th {
 			border-top: 0;
 			text-align: left;
 
-		  span[contenteditable="true"] {
-				padding-right: 36px;
+			span[contenteditable="true"] {
+				padding: 0 36px 0 8px;
 			}
 
 			.components-dropdown-menu {
-				position: absolute;
+				left: auto;
 				right: 0;
-				top: 0;
 			}
 
 			.input-error:not(:focus) {
@@ -78,32 +77,20 @@
 			}
 		}
 
-		tbody th {
-			text-align: right;
-
-			span[contenteditable="true"] {
-				padding-left: 36px;
-			}
-
-			.components-dropdown-menu {
-				position: absolute;
-				left: 0;
-				top: 0;
-			}
-		}
-
 		th {
 			position: relative;
 			border: 1px solid #dcdcde;
 			width: 120px;
 			background-color: #f1f1f1;
 			padding: 2px;
+			white-space: nowrap;
+			text-align: right;
 
 			span[contenteditable="true"] {
 				display: inline-block;
 				line-height: 32px;
 				width: 100%;
-				padding: 0 8px;
+				padding: 0 8px 0 36px;
 				background: transparent;
 				border: none;
 				border-radius: 0;
@@ -115,14 +102,19 @@
 					cursor: auto;
 				}
 			}
+
+			.components-dropdown-menu {
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
 		}
 
 		td {
 			width: 100px;
 			border: 1px solid #dcdcde;
-			padding: 0;
+			padding: 0 1px 0 0;
 			position: relative;
-			padding-right: 1px;
 
 			input[type="number"] {
 				position: relative;
