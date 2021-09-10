@@ -66,7 +66,7 @@ export default class EditDataModal extends Component {
 		let blurTimeout = false;
 
 		const tableBlur = ( event ) => {
-			if ( ! event.currentTarget.contains( event.relatedTarget ) ) {
+			if ( ! event.currentTarget.contains( event.relatedTarget ) && 'menuitem' !== event.relatedTarget.getAttribute( 'role' ) ) {
 				blurTimeout = setTimeout( () => this.updateActiveCell( null, null ), 200 );
 			}
 		};
