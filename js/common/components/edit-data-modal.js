@@ -198,8 +198,68 @@ export default class EditDataModal extends Component {
 			}
 		};
 
+		const moveCarat = ( direction ) => {
+			const owner = table.ownerDocument;
+			const activeElement = owner.activeElement;
+
+			let position = 0; // Default to start;
+
+			if ( 'end' === direction ) {
+				const value = activeElement.value ?? activeElement.textContent;
+				position = value.length;
+			}
+
+			if ( activeElement ) {
+				if ( 'true' === activeElement.contentEditable && activeElement.childNodes.length > 0 ) {
+					const range = owner.createRange();
+					const selection = owner.getSelection();
+					range.setStart( activeElement.childNodes[ 0 ], position );
+					range.collapse( true );
+					selection.removeAllRanges();
+					selection.addRange( range );
+				} else {
+					activeElement.selectionStart = position;
+					activeElement.selectionEnd = position;
+				}
+			}
+		};
+
+		function canMoveCarat( direction ) {
+			const { activeElement } = table.ownerDocument;
+			const value = activeElement.value ?? activeElement.textContent;
+
+			let selectionStart = activeElement.selectionStart;
+			let selectionEnd = activeElement.selectionEnd;
+
+			if ( 'true' === activeElement.contentEditable ) {
+				const selection = table.ownerDocument.getSelection();
+				selectionStart = selection.anchorOffset;
+				selectionEnd = selection.focusOffset;
+			}
+
+			// If there's a selection, it's always possible to move the carat in either direction.
+			if ( selectionStart !== selectionEnd ) {
+				return true;
+			}
+
+			if ( 'left' === direction && 0 === selectionStart ) {
+				return false;
+			}
+
+			if ( 'right' === direction && value.length === selectionEnd ) {
+				return false;
+			}
+
+			return true;
+		}
+
 		function nextCell( event ) {
+			if ( 'ArrowRight' === event.key && canMoveCarat( 'right' ) ) {
+				return;
+			}
+
 			event.preventDefault();
+
 			const totalCols = table.children[ 0 ].children.length - 1;
 			const totalRows = table.children.length - 1;
 
@@ -212,10 +272,19 @@ export default class EditDataModal extends Component {
 			} else {
 				setFocus( activeRow, activeCol + 1 );
 			}
+
+			if ( 'ArrowRight' === event.key ) {
+				moveCarat( 'start' );
+			}
 		}
 
 		function previousCell( event ) {
+			if ( 'ArrowLeft' === event.key && canMoveCarat( 'left' ) ) {
+				return;
+			}
+
 			event.preventDefault();
+
 			const totalCols = table.children[ 0 ].children.length - 1;
 
 			if ( 0 === activeCol ) {
@@ -223,10 +292,15 @@ export default class EditDataModal extends Component {
 			} else {
 				setFocus( activeRow, activeCol - 1 );
 			}
+
+			if ( 'ArrowLeft' === event.key ) {
+				moveCarat( 'end' );
+			}
 		}
 
 		function nextRow( event ) {
 			event.preventDefault();
+
 			const totalRows = table.children.length - 1;
 
 			if ( activeRow === totalRows && 'Enter' === event.key ) {
@@ -235,6 +309,8 @@ export default class EditDataModal extends Component {
 			} else {
 				setFocus( activeRow + 1, activeCol );
 			}
+
+			moveCarat( 'end' );
 		}
 
 		function previousRow( event ) {
@@ -243,6 +319,8 @@ export default class EditDataModal extends Component {
 			if ( 0 !== activeRow ) {
 				setFocus( activeRow - 1, activeCol );
 			}
+
+			moveCarat( 'end' );
 		}
 
 		return (
@@ -282,8 +360,7 @@ export default class EditDataModal extends Component {
 									onKeyPress={ ( event ) => { // ignore: jsx-a11y/no-noninteractive-element-interactions
 										event.preventDefault();
 									} }
-								>&nbsp;
-								</span>
+								/>
 							</th>
 							{ parsedData.datasets.map( ( dataset, index ) => (
 								<th key={ index }>
