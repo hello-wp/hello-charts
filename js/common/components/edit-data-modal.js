@@ -90,7 +90,8 @@ export default class EditDataModal extends Component {
 
 			if ( ! hasSegments ) {
 				const color = tinycolor( randomColors( 1 ).shift() );
-				color.setAlpha( defaultAlpha || 0 === defaultAlpha ? defaultAlpha : 0.8 );
+				const alpha = defaultAlpha ?? 0.8;
+				color.setAlpha( alpha );
 				dataset.borderColor = color.toHexString();
 				dataset.pointBackgroundColor = color.toHexString();
 				dataset.backgroundColor = color.toRgbString();

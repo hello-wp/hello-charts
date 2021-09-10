@@ -118,7 +118,8 @@ export default class ChartBlock extends Component {
 					dataset.backgroundColor = parsedData.datasets[ 0 ].backgroundColor;
 				} else {
 					const backgroundColor = tinycolor( colors[ index ] );
-					backgroundColor.setAlpha( defaultAlpha || 0 === defaultAlpha ? defaultAlpha : 0.8 );
+					const alpha = defaultAlpha ?? 0.8;
+					backgroundColor.setAlpha( alpha );
 					dataset.backgroundColor = backgroundColor.toRgbString();
 				}
 			}
