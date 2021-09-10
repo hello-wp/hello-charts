@@ -57,10 +57,10 @@
 
 		tr:first-child th {
 			border-top: 0;
-			text-align: left;
 
-			span[contenteditable="true"] {
+			input {
 				padding: 0 36px 0 8px;
+				text-align: left;
 			}
 
 			.components-dropdown-menu {
@@ -72,7 +72,7 @@
 				box-shadow: #d63638 0px 0px 0px 2px;
 			}
 
-			&:first-child span[contenteditable="true"] {
+			&:first-child input {
 				color: transparent;
 			}
 		}
@@ -84,9 +84,8 @@
 			background-color: #f1f1f1;
 			padding: 2px;
 			white-space: nowrap;
-			text-align: right;
 
-			span[contenteditable="true"] {
+			input {
 				display: inline-block;
 				line-height: 32px;
 				width: 100%;
@@ -94,6 +93,7 @@
 				background: transparent;
 				border: none;
 				border-radius: 0;
+				text-align: right;
 
 				&:focus {
 					box-shadow: rgb(59 130 246) 0px 0px 0px 2px;

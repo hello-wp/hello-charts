@@ -190,7 +190,7 @@ export default class EditDataModal extends Component {
 		};
 
 		const setFocus = ( row, column ) => {
-			const input = table.children[ row ]?.children[ column ]?.querySelector( 'input,[contenteditable="true"]' );
+			const input = table.children[ row ]?.children[ column ]?.querySelector( 'input' );
 			if ( input ) {
 				input.focus();
 				clearTimeout( blurTimeout );
@@ -205,48 +205,30 @@ export default class EditDataModal extends Component {
 			let position = 0; // Default to start;
 
 			if ( 'end' === direction ) {
-				const value = activeElement.value ?? activeElement.textContent;
+				const value = activeElement.value;
 				position = value.length;
 			}
 
 			if ( activeElement ) {
-				if ( 'true' === activeElement.contentEditable && activeElement.childNodes.length > 0 ) {
-					const range = owner.createRange();
-					const selection = owner.getSelection();
-					range.setStart( activeElement.childNodes[ 0 ], position );
-					range.collapse( true );
-					selection.removeAllRanges();
-					selection.addRange( range );
-				} else {
-					activeElement.selectionStart = position;
-					activeElement.selectionEnd = position;
-				}
+				activeElement.selectionStart = position;
+				activeElement.selectionEnd = position;
 			}
 		};
 
 		function canMoveCarat( direction ) {
 			const { activeElement } = table.ownerDocument;
-			const value = activeElement.value ?? activeElement.textContent;
-
-			let selectionStart = activeElement.selectionStart;
-			let selectionEnd = activeElement.selectionEnd;
-
-			if ( 'true' === activeElement.contentEditable ) {
-				const selection = table.ownerDocument.getSelection();
-				selectionStart = selection.anchorOffset;
-				selectionEnd = selection.focusOffset;
-			}
+			const value = activeElement.value;
 
 			// If there's a selection, it's always possible to move the carat in either direction.
-			if ( selectionStart !== selectionEnd ) {
+			if ( activeElement.selectionStart !== activeElement.selectionEnd ) {
 				return true;
 			}
 
-			if ( 'left' === direction && 0 === selectionStart ) {
+			if ( 'left' === direction && 0 === activeElement.selectionStart ) {
 				return false;
 			}
 
-			if ( 'right' === direction && value.length === selectionEnd ) {
+			if ( 'right' === direction && value.length === activeElement.selectionEnd ) {
 				return false;
 			}
 
@@ -353,10 +335,9 @@ export default class EditDataModal extends Component {
 					<table ref={ this.tableRef } onBlur={ tableBlur }>
 						<tr>
 							<th key="-1">
-								<span
-									role="textbox"
+								<input
+									type="text"
 									tabIndex="0"
-									contentEditable="true"
 									onKeyPress={ ( event ) => { // ignore: jsx-a11y/no-noninteractive-element-interactions
 										event.preventDefault();
 									} }
@@ -375,14 +356,13 @@ export default class EditDataModal extends Component {
 											onClick={ () => clearTimeout( blurTimeout ) }
 										/>
 									) }
-									<span
-										contentEditable="true"
+									<input
+										type="text"
 										onFocus={ () => this.updateActiveCell( 0, index + 1 ) }
 										onChange={ ( event ) => updateDatasetLabel( event.target.value, index ) }
 										className={ index > getDatasetLabels().indexOf( dataset.label ) || '' === dataset.label ? 'input-error' : '' }
-									>
-										{ dataset.label }
-									</span>
+										value={ dataset.label }
+									/>
 								</th>
 							) ) }
 						</tr>
@@ -400,13 +380,12 @@ export default class EditDataModal extends Component {
 											onClick={ () => clearTimeout( blurTimeout ) }
 										/>
 									) }
-									<span
-										contentEditable="true"
+									<input
+										type="text"
 										onFocus={ () => this.updateActiveCell( row + 1, 0 ) }
 										onChange={ ( event ) => updateLabel( event.target.value, row ) }
-									>
-										{ label }
-									</span>
+										value={ label }
+									/>
 								</th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
 									<td key={ `${ row }-${ index }` }>
