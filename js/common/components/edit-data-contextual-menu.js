@@ -65,7 +65,7 @@ export default class EditDataContextualMenu extends Component {
 						>
 							{
 								/* Translators: Placeholder describes a row ("row") or column ("data set") */
-								sprintf( __( 'Insert %s Before', 'hello-charts' ), itemName )
+								sprintf( __( 'Add %s Before', 'hello-charts' ), itemName )
 							}
 						</MenuItem>
 						<MenuItem
@@ -75,7 +75,7 @@ export default class EditDataContextualMenu extends Component {
 						>
 							{
 								/* Translators: Placeholder describes a row ("row") or column ("data set") */
-								sprintf( __( 'Insert %s After', 'hello-charts' ), itemName )
+								sprintf( __( 'Add %s After', 'hello-charts' ), itemName )
 							}
 						</MenuItem>
 						<MenuItem
