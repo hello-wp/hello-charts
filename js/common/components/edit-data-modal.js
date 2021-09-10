@@ -198,26 +198,30 @@ export default class EditDataModal extends Component {
 			}
 		};
 
-		const moveCarat = ( direction ) => {
+		const setSelection = ( type ) => {
 			const owner = table.ownerDocument;
 			const activeElement = owner.activeElement;
 
-			let position = 0; // Default to start;
+			let selectionStart = 0;
+			let selectionEnd = 0;
 
-			if ( 'end' === direction ) {
-				const value = activeElement.value;
-				position = value.length;
+			if ( 'end' === type ) {
+				selectionStart = activeElement.value.length;
+				selectionEnd = activeElement.value.length;
+			}
+
+			if ( 'all' === type ) {
+				selectionEnd = activeElement.value.length;
 			}
 
 			if ( activeElement ) {
-				activeElement.selectionStart = position;
-				activeElement.selectionEnd = position;
+				activeElement.selectionStart = selectionStart;
+				activeElement.selectionEnd = selectionEnd;
 			}
 		};
 
 		function canMoveCarat( direction ) {
 			const { activeElement } = table.ownerDocument;
-			const value = activeElement.value;
 
 			// If there's a selection, it's always possible to move the carat in either direction.
 			if ( activeElement.selectionStart !== activeElement.selectionEnd ) {
@@ -228,7 +232,7 @@ export default class EditDataModal extends Component {
 				return false;
 			}
 
-			if ( 'right' === direction && value.length === activeElement.selectionEnd ) {
+			if ( 'right' === direction && activeElement.value.length === activeElement.selectionEnd ) {
 				return false;
 			}
 
@@ -255,8 +259,10 @@ export default class EditDataModal extends Component {
 				setFocus( activeRow, activeCol + 1 );
 			}
 
-			if ( 'ArrowRight' === event.key ) {
-				moveCarat( 'start' );
+			if ( 'Tab' === event.key ) {
+				setSelection( 'all' );
+			} else {
+				setSelection( 'start' );
 			}
 		}
 
@@ -275,8 +281,10 @@ export default class EditDataModal extends Component {
 				setFocus( activeRow, activeCol - 1 );
 			}
 
-			if ( 'ArrowLeft' === event.key ) {
-				moveCarat( 'end' );
+			if ( 'Tab' === event.key ) {
+				setSelection( 'all' );
+			} else {
+				setSelection( 'end' );
 			}
 		}
 
@@ -292,7 +300,11 @@ export default class EditDataModal extends Component {
 				setFocus( activeRow + 1, activeCol );
 			}
 
-			moveCarat( 'end' );
+			if ( 'Enter' === event.key ) {
+				setSelection( 'all' );
+			} else {
+				setSelection( 'end' );
+			}
 		}
 
 		function previousRow( event ) {
@@ -302,7 +314,11 @@ export default class EditDataModal extends Component {
 				setFocus( activeRow - 1, activeCol );
 			}
 
-			moveCarat( 'end' );
+			if ( 'Enter' === event.key ) {
+				setSelection( 'all' );
+			} else {
+				setSelection( 'end' );
+			}
 		}
 
 		return (
