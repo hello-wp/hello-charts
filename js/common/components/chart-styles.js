@@ -84,7 +84,10 @@ export default class ChartStyles extends Component {
 						checked={ parsedOptions.scales.y.stacked }
 						onChange={ ( state ) => updateStacked( state ) }
 						disabled={ parsedData.datasets.length <= 1 }
-						help={ __( 'A stacked chart requires two or more data sets.', 'hello-charts' ) }
+						help={
+							parsedData.datasets.length <= 1 &&
+							__( 'A stacked chart requires two or more data sets.', 'hello-charts' )
+						}
 					/>
 				) }
 				{ supports.tension && (
