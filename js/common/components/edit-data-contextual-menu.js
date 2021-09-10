@@ -19,6 +19,7 @@ export default class EditDataContextualMenu extends Component {
 				itemIconKey,
 				itemName,
 				onClick,
+				onBlur,
 				remove,
 			},
 		} = this;
@@ -35,7 +36,13 @@ export default class EditDataContextualMenu extends Component {
 		 */
 		function maybeClose( event, close ) {
 			if ( ! event.relatedTarget || 'menuitem' !== event.relatedTarget.getAttribute( 'role' ) ) {
-				setTimeout( close, 200 );
+				if ( onBlur ) {
+					onBlur();
+				}
+
+				setTimeout( () => {
+					close();
+				}, 200 );
 			}
 		}
 
@@ -45,6 +52,7 @@ export default class EditDataContextualMenu extends Component {
 				label={ __( 'Data Set Actions', 'hello-charts' ) }
 				disableOpenOnArrowDown={ true }
 				toggleProps={ { onClick } }
+				popoverProps={ { noArrow: false } }
 			>
 				{ ( { onClose } ) => (
 					<MenuGroup>

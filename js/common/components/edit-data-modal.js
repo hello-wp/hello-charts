@@ -66,9 +66,15 @@ export default class EditDataModal extends Component {
 		let blurTimeout = false;
 
 		const tableBlur = ( event ) => {
-			if ( ! event.currentTarget.contains( event.relatedTarget ) && 'menuitem' !== event.relatedTarget.getAttribute( 'role' ) ) {
-				blurTimeout = setTimeout( () => this.updateActiveCell( null, null ), 200 );
+			if ( event.currentTarget && event.relatedTarget && event.currentTarget.contains( event.relatedTarget ) ) {
+				return;
 			}
+
+			if ( event.relatedTarget && 'menuitem' === event.relatedTarget.getAttribute( 'role' ) ) {
+				return;
+			}
+
+			blurTimeout = setTimeout( () => this.updateActiveCell( null, null ), 200 );
 		};
 
 		function getDatasetLabels() {
@@ -191,11 +197,43 @@ export default class EditDataModal extends Component {
 
 		const setFocus = ( row, column ) => {
 			const input = table.children[ row ]?.children[ column ]?.querySelector( 'input' );
-			if ( input ) {
-				input.focus();
-				clearTimeout( blurTimeout );
-				this.updateActiveCell( row, column );
+
+			if ( ! input ) {
+				return;
 			}
+
+			clearTimeout( blurTimeout );
+			input.focus();
+			this.updateActiveCell( row, column );
+		};
+
+		const setGroupFocus = ( event ) => {
+			const cell = event.target.closest( 'th' );
+			const row = cell.closest( 'tr' );
+
+			if ( ! cell || ! row ) {
+				return;
+			}
+
+			clearTimeout( blurTimeout );
+
+			if ( row === table.firstChild ) {
+				const index = Array.prototype.indexOf.call( row.childNodes, cell );
+				table.childNodes.forEach( ( selectedRow ) => {
+					selectedRow.childNodes[ index ].classList.add( 'selected-in-column' );
+				} );
+			} else {
+				row.childNodes.forEach( ( selectedCell ) => {
+					selectedCell.classList.add( 'selected-in-row' );
+				} );
+			}
+		};
+
+		const removeGroupFocus = () => {
+			const cells = table.querySelectorAll( '.selected-in-row, .selected-in-column' );
+			cells.forEach( ( cell ) => {
+				cell.classList.remove( 'selected-in-row', 'selected-in-column' );
+			} );
 		};
 
 		const setSelection = ( type ) => {
@@ -369,7 +407,8 @@ export default class EditDataModal extends Component {
 											duplicate={ duplicateDataset }
 											add={ addDataset }
 											remove={ removeDataset }
-											onClick={ () => clearTimeout( blurTimeout ) }
+											onClick={ setGroupFocus }
+											onBlur={ removeGroupFocus }
 										/>
 									) }
 									<input
@@ -393,7 +432,8 @@ export default class EditDataModal extends Component {
 											duplicate={ duplicateRow }
 											add={ addRow }
 											remove={ removeRow }
-											onClick={ () => clearTimeout( blurTimeout ) }
+											onClick={ setGroupFocus }
+											onBlur={ removeGroupFocus }
 										/>
 									) }
 									<input
