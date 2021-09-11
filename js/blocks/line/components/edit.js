@@ -7,7 +7,6 @@ const { Component } = wp.element;
 /**
  * Internal dependencies.
  */
-import { AxisStyles } from '.';
 import { Line } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
 import { legend, randomValues } from '../../../common/helpers';
@@ -35,7 +34,7 @@ export default class Edit extends Component {
 		return (
 			<ChartBlock
 				{ ...this.props }
-				AxisStyles={ AxisStyles }
+				hasAxis={ true }
 				hasPoints={ true }
 				defaultAlpha={ 0 }
 				chartType="line"
@@ -43,6 +42,9 @@ export default class Edit extends Component {
 					backgroundColor: true,
 					tension: 'lineTension',
 					stacked: true,
+					xGridDisplay: true,
+					yGridDisplay: true,
+					scale: 'y',
 				} }
 				generateData={ () => {
 					return randomValues( 8 );

@@ -1,3 +1,4 @@
+export { default as AxisStyles } from './axis-styles';
 export { default as ChartBlock } from './chart-block';
 export { default as ChartFormattingToolbar } from './chart-formatting-toolbar';
 export { default as ChartStyles } from './chart-styles';
