@@ -37,6 +37,7 @@ export default class Edit extends Component {
 				{ ...this.props }
 				AxisStyles={ AxisStyles }
 				hasPoints={ true }
+				defaultAlpha={ 0 }
 				chartType="line"
 				supports={ {
 					backgroundColor: true,
