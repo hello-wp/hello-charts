@@ -86,7 +86,7 @@ export default class ChartStyles extends Component {
 						disabled={ parsedData.datasets.length <= 1 }
 						help={
 							parsedData.datasets.length <= 1 &&
-							__( 'A stacked chart requires two or more data sets.', 'hello-charts' )
+							__( 'Requires two or more data sets.', 'hello-charts' )
 						}
 					/>
 				) }
