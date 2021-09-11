@@ -95,6 +95,7 @@ export default class ChartBlock extends Component {
 			setAttributes,
 			generateData,
 			hasSegments,
+			defaultAlpha,
 		} = this.props;
 
 		const colors = randomColors( parsedData.datasets.length );
@@ -117,7 +118,8 @@ export default class ChartBlock extends Component {
 					dataset.backgroundColor = parsedData.datasets[ 0 ].backgroundColor;
 				} else {
 					const backgroundColor = tinycolor( colors[ index ] );
-					backgroundColor.setAlpha( 0.8 );
+					const alpha = defaultAlpha ?? 0.8;
+					backgroundColor.setAlpha( alpha );
 					dataset.backgroundColor = backgroundColor.toRgbString();
 				}
 			}

@@ -28,6 +28,10 @@ export default class ChartStyles extends Component {
 		const parsedData = JSON.parse( chartData );
 		const parsedOptions = JSON.parse( chartOptions );
 
+		if ( supports.stacked && parsedData.datasets.length <= 1 ) {
+			updateStacked( false );
+		}
+
 		function updateIndexAxis( axis ) {
 			const options = JSON.parse( chartOptions );
 			options.indexAxis = axis;
@@ -79,6 +83,11 @@ export default class ChartStyles extends Component {
 						label={ __( 'Stack Data Sets', 'hello-charts' ) }
 						checked={ parsedOptions.scales.y.stacked }
 						onChange={ ( state ) => updateStacked( state ) }
+						disabled={ parsedData.datasets.length <= 1 }
+						help={
+							parsedData.datasets.length <= 1 &&
+							__( 'A stacked chart requires two or more data sets.', 'hello-charts' )
+						}
 					/>
 				) }
 				{ supports.tension && (
