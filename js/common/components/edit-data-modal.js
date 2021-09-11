@@ -58,7 +58,7 @@ export default class EditDataModal extends Component {
 				setAttributes,
 				toggleEditor,
 				hasSegments,
-        defaultAlpha,
+				defaultAlpha,
 			},
 		} = this;
 
