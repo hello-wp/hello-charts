@@ -59,7 +59,6 @@ export default class Edit extends Component {
 					rGridDisplay: true,
 					ticks: true,
 					pointLabels: true,
-					zeroAtCenter: true,
 					scale: 'r',
 				} }
 				generateData={ () => {

@@ -97,23 +97,14 @@ export default class AxisStyles extends Component {
 			stepSize,
 		} = this.state;
 
-		this.getMinValue = this.getMinValue.bind( this );
-		this.getMaxValue = this.getMaxValue.bind( this );
-
-		const getMin = this.getMinValue;
-		const getMax = this.getMaxValue;
+		const getMin = this.getMinValue.bind( this );
+		const getMax = this.getMaxValue.bind( this );
 
 		function updateShowAxisProperty( state, axis, property ) {
 			const options = JSON.parse( chartOptions );
 
 			options.scales[ axis ][ property ].display = state;
 
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
-		}
-
-		function updateSuggestedMin( state ) {
-			const options = JSON.parse( chartOptions );
-			options.scales.r.suggestedMin = state ? 0 : null;
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
@@ -222,15 +213,6 @@ export default class AxisStyles extends Component {
 							parsedOptions.scales.r.pointLabels.display
 						}
 						onChange={ ( state ) => updateShowAxisProperty( state, 'r', 'pointLabels' ) }
-					/>
-				) }
-				{ supports.zeroAtCenter && (
-					<ToggleControl
-						label={ __( 'Zero At Centre', 'hello-charts' ) }
-						checked={
-							parsedOptions.scales.r.suggestedMin === 0
-						}
-						onChange={ ( state ) => updateSuggestedMin( state ) }
 					/>
 				) }
 				{ supports.scale && (

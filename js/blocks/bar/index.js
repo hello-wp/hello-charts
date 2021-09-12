@@ -91,6 +91,7 @@ const attributes = {
 					},
 					stacked: false,
 					ticks: {
+						autoSkip: false,
 						precision: 0,
 					},
 				},
