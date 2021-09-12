@@ -82,6 +82,11 @@ const attributes = {
 			layout: {
 				padding: 20,
 			},
+			elements: {
+				arc: {
+					offset: 0,
+				},
+			},
 		} ),
 	},
 };
@@ -138,6 +143,11 @@ registerBlockType( 'hello-charts/block-pie', {
 					},
 					tooltip: {
 						display: false,
+					},
+				},
+				elements: {
+					arc: {
+						offset: 0,
 					},
 				},
 			} ),
