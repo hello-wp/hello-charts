@@ -45,7 +45,6 @@ export default class Edit extends Component {
 					backgroundColor: true,
 					cutout: true,
 					offset: true,
-					hoverOffset: true,
 				} }
 				generateData={ () => {
 					return randomValues( 4, 1, 10 );

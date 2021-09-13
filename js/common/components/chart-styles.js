@@ -63,16 +63,6 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateHoverOffset( hoverOffset ) {
-			const options = JSON.parse( chartOptions );
-			if ( 0 === hoverOffset ) {
-				delete options.elements.arc.hoverOffset;
-			} else {
-				options.elements.arc.hoverOffset = hoverOffset;
-			}
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
-		}
-
 		return (
 			<PanelBody
 				title={ __( 'Chart Styles', 'hello-charts' ) }
@@ -121,16 +111,6 @@ export default class ChartStyles extends Component {
 						label={ __( 'Segment Offset', 'hello-charts' ) }
 						value={ parsedOptions.elements.arc.offset }
 						onChange={ ( offset ) => updateOffset( offset ) }
-						min={ 0 }
-						max={ 30 }
-						step={ 1 }
-					/>
-				) }
-				{ supports.hoverOffset && (
-					<RangeControl
-						label={ __( 'Segment Hover Offset', 'hello-charts' ) }
-						value={ parsedOptions.elements.arc.hoverOffset ?? 0 }
-						onChange={ ( hoverOffset ) => updateHoverOffset( hoverOffset ) }
 						min={ 0 }
 						max={ 50 }
 						step={ 1 }
