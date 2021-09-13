@@ -59,6 +59,7 @@ export default class Edit extends Component {
 				chartType="polarArea"
 				supports={ {
 					backgroundColor: true,
+					titleColor: true,
 					rGridDisplay: true,
 					ticks: true,
 					scale: 'r',

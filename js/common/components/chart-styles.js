@@ -18,6 +18,7 @@ export default class ChartStyles extends Component {
 		const {
 			attributes: {
 				backgroundColor,
+				titleColor,
 				chartData,
 				chartOptions,
 			},
@@ -122,6 +123,23 @@ export default class ChartStyles extends Component {
 							colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
 							value={ backgroundColor }
 							onChange={ ( color ) => setAttributes( { backgroundColor: color } ) }
+							clearable
+						/>
+					</BaseControl>
+				) }
+				{ supports.titleColor && (
+					<BaseControl
+						id="chart-title-color"
+						label={ __( 'Title Color', 'hello-charts' ) }
+					>
+						{ titleColor && (
+							<ColorIndicator colorValue={ titleColor } aria-label={ titleColor } />
+						) }
+						<ColorPalette
+							id="chart-title-color"
+							colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
+							value={ titleColor }
+							onChange={ ( color ) => setAttributes( { titleColor: color } ) }
 							clearable
 						/>
 					</BaseControl>

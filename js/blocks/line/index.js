@@ -32,6 +32,10 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
+	titleColor: {
+		type: 'string',
+		default: '',
+	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -144,6 +148,7 @@ registerBlockType( 'hello-charts/block-line', {
 			title: __( 'Line Chart', 'hello-charts' ),
 			showChartTitle: false,
 			backgroundColor: '',
+			titleColor: '',
 			height: 280,
 			width: 450,
 			chartData: JSON.stringify( {
@@ -213,6 +218,7 @@ registerBlockType( 'hello-charts/block-line', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
+					to.titleColor = from.titleColor;
 					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;

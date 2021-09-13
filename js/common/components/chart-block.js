@@ -163,6 +163,7 @@ export default class ChartBlock extends Component {
 		const {
 			attributes: {
 				backgroundColor,
+				titleColor,
 				showChartTitle,
 				chartData,
 				title,
@@ -183,6 +184,7 @@ export default class ChartBlock extends Component {
 
 		const styles = {
 			background: backgroundColor ? backgroundColor : 'none',
+			color: titleColor ? titleColor : 'inherit',
 		};
 
 		this.toggleEditor = this.toggleEditor.bind( this );

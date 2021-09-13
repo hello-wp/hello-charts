@@ -32,6 +32,10 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
+	titleColor: {
+		type: 'string',
+		default: '',
+	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -133,6 +137,7 @@ registerBlockType( 'hello-charts/block-radar', {
 			title: __( 'Radar Chart', 'hello-charts' ),
 			showChartTitle: false,
 			backgroundColor: '',
+			titleColor: '',
 			height: 280,
 			chartData: JSON.stringify( {
 				labels: [ 'A', 'B', 'C', 'D', 'E', 'F' ],
@@ -198,6 +203,7 @@ registerBlockType( 'hello-charts/block-radar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
+					to.titleColor = from.titleColor;
 					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;

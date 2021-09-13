@@ -10,6 +10,7 @@ export default class Save extends Component {
 		const {
 			attributes: {
 				backgroundColor,
+				titleColor,
 				blockId,
 				title,
 			},
@@ -18,6 +19,7 @@ export default class Save extends Component {
 
 		const styles = {
 			background: backgroundColor ? backgroundColor : 'none',
+			color: titleColor ? titleColor : 'inherit',
 		};
 
 		return (

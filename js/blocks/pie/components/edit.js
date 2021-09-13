@@ -43,6 +43,7 @@ export default class Edit extends Component {
 				chartType="pie"
 				supports={ {
 					backgroundColor: true,
+					titleColor: true,
 					cutout: true,
 				} }
 				generateData={ () => {

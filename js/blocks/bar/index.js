@@ -32,6 +32,10 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
+	titleColor: {
+		type: 'string',
+		default: '',
+	},
 	useThemeColors: {
 		type: 'boolean',
 		default: false,
@@ -127,6 +131,7 @@ registerBlockType( 'hello-charts/block-bar', {
 			title: __( 'Bar Chart', 'hello-charts' ),
 			showChartTitle: false,
 			backgroundColor: '',
+			titleColor: '',
 			height: 280,
 			width: 450,
 			chartData: JSON.stringify( {
@@ -174,6 +179,7 @@ registerBlockType( 'hello-charts/block-bar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
+					to.titleColor = from.titleColor;
 					to.autoScale = from.autoScale;
 
 					/*

@@ -40,6 +40,7 @@ export default class Edit extends Component {
 				chartType="line"
 				supports={ {
 					backgroundColor: true,
+					titleColor: true,
 					tension: 'lineTension',
 					stacked: true,
 					xGridDisplay: true,

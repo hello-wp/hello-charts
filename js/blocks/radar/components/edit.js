@@ -54,6 +54,7 @@ export default class Edit extends Component {
 				chartType="radar"
 				supports={ {
 					backgroundColor: true,
+					titleColor: true,
 					tension: 'tension',
 					angleLines: true,
 					rGridDisplay: true,

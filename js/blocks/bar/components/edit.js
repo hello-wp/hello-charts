@@ -38,6 +38,7 @@ export default class Edit extends Component {
 				hasAxis={ true }
 				supports={ {
 					backgroundColor: true,
+					titleColor: true,
 					indexAxis: true,
 					stacked: true,
 					xGridDisplay: true,
