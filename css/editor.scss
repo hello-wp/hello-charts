@@ -17,11 +17,9 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	> div {
+	> .chart-manual-scale-control {
+		margin-bottom: 8px;
 		margin-right: 5px;
-	}
-	> button {
-		margin-bottom: 5px
 	}
 }
 

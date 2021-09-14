@@ -8,120 +8,51 @@ const {
 	ToggleControl,
 	TextControl,
 	BaseControl,
-	Button,
 } = wp.components;
 
 export default class AxisStyles extends Component {
-	constructor( props ) {
-		super( props );
-
-		const options = JSON.parse( this.props.attributes.chartOptions );
-		const parsedData = JSON.parse( this.props.attributes.chartData );
-		const scale = this.props.supports.scale;
-
-		this.state = {
-			min: options?.scales[ scale ]?.min || this.getMinValue( parsedData ),
-			max: options?.scales[ scale ]?.max || this.getMaxValue( parsedData ),
-			stepSize: options?.scales[ scale ]?.ticks?.stepSize || 1,
-		};
-	}
-
-	getMaxValue( parsedData ) {
-		const maxValues = parsedData.datasets.map( ( dataset ) => Math.max( ...dataset.data ) );
-		const maxValue = Math.max( ...maxValues );
-		return Math.round( maxValue );
-	}
-
-	getMinValue( parsedData ) {
-		const minValues = parsedData.datasets.map( ( dataset ) => Math.min( ...dataset.data ) );
-		const minValue = Math.min( ...minValues );
-		if ( 0 < minValue ) {
-			return 0;
-		}
-		return Math.floor( minValue );
-	}
-
-	componentDidUpdate( prevProps ) {
-		const parsedData = JSON.parse( this.props.attributes.chartData );
-
-		if (
-			prevProps.editorOpen &&
-			! this.props.editorOpen
-		) {
-			this.setState( {
-				min: this.getMinValue( parsedData ),
-				max: this.getMaxValue( parsedData ),
-				stepSize: 1,
-			} );
-			return;
-		}
-
-		const options = JSON.parse( this.props.attributes.chartOptions );
-		const prevOptions = JSON.parse( prevProps.attributes.chartOptions );
-		const scale = this.props.supports.scale;
-
-		if (
-			undefined !== options.scales[ scale ]?.min &&
-			prevOptions.scales[ scale ]?.min !== options.scales[ scale ]?.min
-		) {
-			this.setState( { min: options.scales[ scale ].min } );
-		}
-		if (
-			undefined !== options.scales[ scale ]?.max &&
-			prevOptions.scales[ scale ]?.max !== options.scales[ scale ]?.max
-		) {
-			this.setState( { max: options.scales[ scale ].max } );
-		}
-		if (
-			undefined !== options.scales[ scale ]?.ticks?.stepSize &&
-			prevOptions.scales[ scale ]?.ticks?.stepSize !== options.scales[ scale ]?.ticks?.stepSize
-		) {
-			this.setState( { stepSize: options.scales[ scale ].ticks.stepSize } );
-		}
-	}
-
 	render() {
 		const {
 			attributes: {
 				autoScale,
 				chartOptions,
-				chartData,
 			},
-			supports,
+			chartRef,
 			setAttributes,
+			supports,
 		} = this.props;
 
-		const {
-			min,
-			max,
-			stepSize,
-		} = this.state;
+		function getMaxValue( axis ) {
+			return chartRef.current.scales[ axis ].max;
+		}
 
-		const getMin = this.getMinValue.bind( this );
-		const getMax = this.getMaxValue.bind( this );
+		function getMinValue( axis ) {
+			return chartRef.current.scales[ axis ].min;
+		}
 
-		function updateShowAxisProperty( state, axis, property ) {
-			const options = JSON.parse( chartOptions );
-
-			options.scales[ axis ][ property ].display = state;
-
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
+		function getStepSize( axis ) {
+			const firstTick = chartRef.current.scales[ axis ].ticks[ 0 ].value;
+			const secondTick = chartRef.current.scales[ axis ].ticks[ 1 ].value;
+			return secondTick - firstTick;
 		}
 
 		function updateAutoScale( state, axis ) {
 			const options = JSON.parse( chartOptions );
 
 			if ( ! state ) {
-				options.scales[ axis ].min = min;
-				options.scales[ axis ].max = max;
-				options.scales[ axis ].ticks.stepSize = stepSize;
+				options.scales[ axis ].min = getMinValue( supports.scale );
+				options.scales[ axis ].max = getMaxValue( supports.scale );
+				options.scales[ axis ].ticks.stepSize = getStepSize( supports.scale );
 			} else {
 				delete options.scales[ axis ].min;
 				delete options.scales[ axis ].max;
 				delete options.scales[ axis ].ticks.stepSize;
 			}
 
-			setAttributes( { autoScale: state, chartOptions: JSON.stringify( options ) } );
+			setAttributes( {
+				autoScale: state,
+				chartOptions: JSON.stringify( options ),
+			} );
 		}
 
 		function updateMinMax( state, axis, property ) {
@@ -138,21 +69,18 @@ export default class AxisStyles extends Component {
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function updateStepSize( state, axis ) {
+		function updateStepSize( stepSize, axis ) {
 			const options = JSON.parse( chartOptions );
 
-			options.scales[ axis ].ticks.stepSize = state;
+			options.scales[ axis ].ticks.stepSize = stepSize;
 
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
 
-		function resetScale( axis ) {
-			const parsedData = JSON.parse( chartData );
+		function updateShowAxisProperty( state, axis, property ) {
 			const options = JSON.parse( chartOptions );
 
-			options.scales[ axis ].min = getMin( parsedData );
-			options.scales[ axis ].max = getMax( parsedData );
-			options.scales[ axis ].ticks.stepSize = 1;
+			options.scales[ axis ][ property ].display = state;
 
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
@@ -226,26 +154,26 @@ export default class AxisStyles extends Component {
 					<BaseControl className="chart-manual-scale" >
 						<TextControl
 							type="number"
+							className="chart-manual-scale-control"
 							label={ __( 'Min', 'hello-charts' ) }
 							value={ parsedOptions.scales[ supports.scale ].min }
 							onChange={ ( state ) => updateMinMax( state, supports.scale, 'min' ) }
 						/>
 						<TextControl
 							type="number"
+							className="chart-manual-scale-control"
 							label={ __( 'Max', 'hello-charts' ) }
 							value={ parsedOptions.scales[ supports.scale ].max }
 							onChange={ ( state ) => updateMinMax( state, supports.scale, 'max' ) }
 						/>
 						<TextControl
 							type="number"
+							className="chart-manual-scale-control"
 							label={ __( 'Step Size', 'hello-charts' ) }
 							value={ parsedOptions.scales[ supports.scale ].ticks.stepSize }
 							min={ 1 }
-							onChange={ ( state ) => updateStepSize( state, supports.scale ) }
+							onChange={ ( stepSize ) => updateStepSize( stepSize, supports.scale ) }
 						/>
-						<Button isSmall onClick={ () => resetScale( supports.scale ) }>
-							{ __( 'Reset', 'hello-charts' ) }
-						</Button>
 					</BaseControl>
 				) }
 			</PanelBody>

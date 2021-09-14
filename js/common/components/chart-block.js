@@ -43,7 +43,7 @@ export default class ChartBlock extends Component {
 		const parsedOptions = JSON.parse( chartOptions );
 
 		this.state = { editorOpen: false, refreshChart: false };
-		this.chartRef = createRef();
+		this.chartWrapperRef = createRef();
 
 		parsedData.init = true;
 		parsedOptions.init = true;
@@ -59,7 +59,7 @@ export default class ChartBlock extends Component {
 	}
 
 	componentDidUpdate() {
-		const { current } = this.chartRef;
+		const { current } = this.chartWrapperRef;
 
 		if ( this.state.refreshChart ) {
 			this.setState( { refreshChart: false } );
@@ -189,6 +189,29 @@ export default class ChartBlock extends Component {
 
 		return (
 			<>
+				<div className={ className } key="preview">
+					<div className="wrapper" style={ styles }>
+						{ showChartTitle && (
+							<RichText
+								tagName="h3"
+								className="chart-title"
+								placeholder={ titlePlaceholder }
+								value={ title }
+								allowedFormats={ [] }
+								withoutInteractiveFormatting={ true }
+								onChange={ ( value ) => setAttributes( { title: value } ) }
+							/>
+						) }
+						{ ! this.state.editorOpen && ! this.state.refreshChart && (
+							<div className="chart" ref={ this.chartWrapperRef }>
+								{ children }
+							</div>
+						) }
+						{ this.state.editorOpen && (
+							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
+						) }
+					</div>
+				</div>
 				<InspectorControls key="inspector">
 					<EditDataButton toggleEditor={ this.toggleEditor } />
 					<ChartStyles { ...this.props } />
@@ -204,29 +227,6 @@ export default class ChartBlock extends Component {
 					<EditDataToolbar toggleEditor={ this.toggleEditor } />
 					<ChartFormattingToolbar { ...this.props } />
 				</BlockControls>
-				<div className={ className } key="preview">
-					<div className="wrapper" style={ styles }>
-						{ showChartTitle && (
-							<RichText
-								tagName="h3"
-								className="chart-title"
-								placeholder={ titlePlaceholder }
-								value={ title }
-								allowedFormats={ [] }
-								withoutInteractiveFormatting={ true }
-								onChange={ ( value ) => setAttributes( { title: value } ) }
-							/>
-						) }
-						{ ! this.state.editorOpen && ! this.state.refreshChart && (
-							<div className="chart" ref={ this.chartRef }>
-								{ children }
-							</div>
-						) }
-						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
-						) }
-					</div>
-				</div>
 			</>
 		);
 	}
