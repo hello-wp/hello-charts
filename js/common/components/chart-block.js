@@ -216,7 +216,7 @@ export default class ChartBlock extends Component {
 					<EditDataButton toggleEditor={ this.toggleEditor } />
 					<ChartStyles { ...this.props } />
 					{ hasAxis && (
-						<AxisStyles { ...this.props } editorOpen={ this.state.editorOpen } />
+						<AxisStyles { ...this.props } />
 					) }
 					<DataStyles { ...this.props } />
 					{ hasSegments && (
