@@ -242,6 +242,10 @@ export default class EditDataModal extends Component {
 			const owner = table.ownerDocument;
 			const activeElement = owner.activeElement;
 
+			if ( ! activeElement ) {
+				return;
+			}
+
 			let selectionStart = 0;
 			let selectionEnd = 0;
 
@@ -254,25 +258,28 @@ export default class EditDataModal extends Component {
 				selectionEnd = activeElement.value.length;
 			}
 
-			if ( activeElement ) {
-				activeElement.selectionStart = selectionStart;
-				activeElement.selectionEnd = selectionEnd;
-			}
+			activeElement.setSelectionRange( selectionStart, selectionEnd );
 		};
 
 		function canMoveCarat( direction ) {
 			const { activeElement } = table.ownerDocument;
 
-			// If there's a selection, it's always possible to move the carat in either direction.
-			if ( activeElement.selectionStart !== activeElement.selectionEnd ) {
-				return true;
-			}
-
-			if ( 'left' === direction && 0 === activeElement.selectionStart ) {
+			if ( ! activeElement ) {
 				return false;
 			}
 
-			if ( 'right' === direction && activeElement.value.length === activeElement.selectionEnd ) {
+			const { selectionStart, selectionEnd } = activeElement;
+
+			// If there's a selection, it's always possible to move the carat in either direction.
+			if ( selectionStart !== selectionEnd ) {
+				return true;
+			}
+
+			if ( 'left' === direction && 0 === selectionStart ) {
+				return false;
+			}
+
+			if ( 'right' === direction && activeElement.value.length === selectionEnd ) {
 				return false;
 			}
 
@@ -397,6 +404,7 @@ export default class EditDataModal extends Component {
 									onKeyPress={ ( event ) => { // ignore: jsx-a11y/no-noninteractive-element-interactions
 										event.preventDefault();
 									} }
+									onFocus={ () => this.updateActiveCell( 0, 0 ) }
 								/>
 							</th>
 							{ parsedData.datasets.map( ( dataset, index ) => (
@@ -447,8 +455,17 @@ export default class EditDataModal extends Component {
 								</th>
 								{ parsedData.datasets.map( ( dataset, index ) => (
 									<td key={ `${ row }-${ index }` }>
+										{
+										/**
+										 * We can't use an input type number here, due to a chromium bug
+										 * that prevents selection positions for number inputs.
+										 *
+										 * @see https://bugs.chromium.org/p/chromium/issues/detail?id=349432
+										 */
+										}
 										<input
-											type="number"
+											type="text"
+											inputMode="numeric"
 											value={ dataset.data[ row ] }
 											onFocus={ () => this.updateActiveCell( row + 1, index + 1 ) }
 											onChange={ ( event ) => updateData( event.target.value, index, row ) }
