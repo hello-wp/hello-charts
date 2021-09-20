@@ -13,6 +13,16 @@
     }
 }
 
+.chart-manual-scale > div {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	> .chart-manual-scale-control {
+		margin-bottom: 8px;
+		margin-right: 5px;
+	}
+}
+
 .hello-charts-data-styles {
 	.dataset-label,
 	.segment-label {

@@ -2,7 +2,7 @@
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
-const { Component } = wp.element;
+const { createRef, Component } = wp.element;
 
 /**
  * Internal dependencies.
@@ -12,6 +12,11 @@ import { ChartBlock } from '../../../common/components';
 import { legend, randomValues, tooltip } from '../../../common/helpers';
 
 export default class Edit extends Component {
+	constructor( props ) {
+		super( props );
+		this.chartRef = createRef();
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -39,6 +44,7 @@ export default class Edit extends Component {
 		return (
 			<ChartBlock
 				{ ...this.props }
+				chartRef={ this.chartRef }
 				hasSegments={ true }
 				chartType="pie"
 				supports={ {
@@ -56,6 +62,7 @@ export default class Edit extends Component {
 					id={ blockId }
 					data={ parsedData }
 					options={ parsedOptions }
+					ref={ this.chartRef }
 				/>
 			</ChartBlock>
 		);

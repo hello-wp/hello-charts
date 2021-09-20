@@ -45,6 +45,10 @@ const attributes = {
 	chartType: {
 		type: 'string',
 	},
+	autoScale: {
+		type: 'boolean',
+		default: true,
+	},
 	chartData: {
 		type: 'string',
 		default: JSON.stringify( {
@@ -86,6 +90,10 @@ const attributes = {
 						display: true,
 					},
 					stacked: false,
+					ticks: {
+						autoSkip: false,
+						precision: 0,
+					},
 				},
 			},
 			layout: {
@@ -166,6 +174,7 @@ registerBlockType( 'hello-charts/block-bar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
+					to.autoScale = from.autoScale;
 
 					/*
 					 * We're intentionally setting the x stacked attribute to the same as y,
@@ -177,6 +186,25 @@ registerBlockType( 'hello-charts/block-bar', {
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
+
+					if ( undefined !== fromOptions.scales?.y?.min || undefined !== fromOptions.scales?.r?.min ) {
+						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;
+						if ( undefined !== min ) {
+							toOptions.scales.y.min = min;
+						}
+					}
+					if ( undefined !== fromOptions.scales?.y?.max || undefined !== fromOptions.scales?.r?.max ) {
+						const max = fromOptions.scales?.y?.max ?? fromOptions.scales?.r?.max;
+						if ( undefined !== max ) {
+							toOptions.scales.y.max = max;
+						}
+					}
+					if ( undefined !== fromOptions.scales?.y?.ticks?.stepSize || undefined !== fromOptions.scales?.r?.ticks?.stepSize ) {
+						const stepSize = fromOptions.scales?.y?.ticks?.stepSize ?? fromOptions.scales?.r?.ticks?.stepSize;
+						if ( undefined !== stepSize ) {
+							toOptions.scales.y.ticks.stepSize = stepSize;
+						}
+					}
 
 					to.chartOptions = JSON.stringify( toOptions );
 

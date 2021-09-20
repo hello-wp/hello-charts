@@ -2,17 +2,21 @@
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
-const { Component } = wp.element;
+const { createRef, Component } = wp.element;
 
 /**
  * Internal dependencies.
  */
-import { AxisStyles } from '.';
 import { Line } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
 import { legend, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
+	constructor( props ) {
+		super( props );
+		this.chartRef = createRef();
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -35,7 +39,8 @@ export default class Edit extends Component {
 		return (
 			<ChartBlock
 				{ ...this.props }
-				AxisStyles={ AxisStyles }
+				chartRef={ this.chartRef }
+				hasAxis={ true }
 				hasPoints={ true }
 				defaultAlpha={ 0 }
 				chartType="line"
@@ -43,6 +48,9 @@ export default class Edit extends Component {
 					backgroundColor: true,
 					tension: 'lineTension',
 					stacked: true,
+					xGridDisplay: true,
+					yGridDisplay: true,
+					scale: 'y',
 				} }
 				generateData={ () => {
 					return randomValues( 8 );
@@ -55,6 +63,7 @@ export default class Edit extends Component {
 					id={ blockId }
 					data={ parsedData }
 					options={ parsedOptions }
+					ref={ this.chartRef }
 				/>
 			</ChartBlock>
 		);

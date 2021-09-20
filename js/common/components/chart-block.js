@@ -13,6 +13,7 @@ const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
  * Internal dependencies.
  */
 import {
+	AxisStyles,
 	ChartStyles,
 	ChartFormattingToolbar,
 	DataStyles,
@@ -42,7 +43,7 @@ export default class ChartBlock extends Component {
 		const parsedOptions = JSON.parse( chartOptions );
 
 		this.state = { editorOpen: false, refreshChart: false };
-		this.chartRef = createRef();
+		this.chartWrapperRef = createRef();
 
 		parsedData.init = true;
 		parsedOptions.init = true;
@@ -58,7 +59,7 @@ export default class ChartBlock extends Component {
 	}
 
 	componentDidUpdate() {
-		const { current } = this.chartRef;
+		const { current } = this.chartWrapperRef;
 
 		if ( this.state.refreshChart ) {
 			this.setState( { refreshChart: false } );
@@ -160,18 +161,25 @@ export default class ChartBlock extends Component {
 
 	render() {
 		const {
-			AxisStyles,
 			attributes: {
 				backgroundColor,
 				showChartTitle,
+				chartData,
 				title,
 			},
 			children,
 			className,
-			setAttributes,
+			hasAxis,
 			hasSegments,
+			setAttributes,
 			titlePlaceholder,
 		} = this.props;
+
+		const parsedData = JSON.parse( chartData );
+
+		if ( ! parsedData.init ) {
+			return '';
+		}
 
 		const styles = {
 			background: backgroundColor ? backgroundColor : 'none',
@@ -181,21 +189,6 @@ export default class ChartBlock extends Component {
 
 		return (
 			<>
-				<InspectorControls key="inspector">
-					<EditDataButton toggleEditor={ this.toggleEditor } />
-					<ChartStyles { ...this.props } />
-					{ AxisStyles && (
-						<AxisStyles { ...this.props } />
-					) }
-					<DataStyles { ...this.props } />
-					{ hasSegments && (
-						<SegmentStyles { ...this.props } />
-					) }
-				</InspectorControls>
-				<BlockControls>
-					<EditDataToolbar toggleEditor={ this.toggleEditor } />
-					<ChartFormattingToolbar { ...this.props } />
-				</BlockControls>
 				<div className={ className } key="preview">
 					<div className="wrapper" style={ styles }>
 						{ showChartTitle && (
@@ -210,7 +203,7 @@ export default class ChartBlock extends Component {
 							/>
 						) }
 						{ ! this.state.editorOpen && ! this.state.refreshChart && (
-							<div className="chart" ref={ this.chartRef }>
+							<div className="chart" ref={ this.chartWrapperRef }>
 								{ children }
 							</div>
 						) }
@@ -219,6 +212,21 @@ export default class ChartBlock extends Component {
 						) }
 					</div>
 				</div>
+				<InspectorControls key="inspector">
+					<EditDataButton toggleEditor={ this.toggleEditor } />
+					<ChartStyles { ...this.props } />
+					{ hasAxis && (
+						<AxisStyles { ...this.props } />
+					) }
+					<DataStyles { ...this.props } />
+					{ hasSegments && (
+						<SegmentStyles { ...this.props } />
+					) }
+				</InspectorControls>
+				<BlockControls>
+					<EditDataToolbar toggleEditor={ this.toggleEditor } />
+					<ChartFormattingToolbar { ...this.props } />
+				</BlockControls>
 			</>
 		);
 	}

@@ -45,6 +45,10 @@ const attributes = {
 	chartType: {
 		type: 'string',
 	},
+	autoScale: {
+		type: 'boolean',
+		default: true,
+	},
 	chartData: {
 		type: 'string',
 		default: JSON.stringify( {
@@ -93,6 +97,7 @@ const attributes = {
 					},
 					ticks: {
 						display: true,
+						precision: 0,
 					},
 					suggestedMin: 0,
 				},
@@ -165,6 +170,7 @@ registerBlockType( 'hello-charts/block-radar', {
 						},
 						ticks: {
 							display: false,
+							precision: 0,
 						},
 						suggestedMin: 0,
 					},
@@ -192,10 +198,30 @@ registerBlockType( 'hello-charts/block-radar', {
 					to.title = from.title;
 					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
+					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
 					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
+
+					if ( undefined !== fromOptions.scales?.r?.min || undefined !== fromOptions.scales?.y?.min ) {
+						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;
+						if ( undefined !== min ) {
+							toOptions.scales.r.min = min;
+						}
+					}
+					if ( undefined !== fromOptions.scales?.r?.max || undefined !== fromOptions.scales?.y?.max ) {
+						const max = fromOptions.scales?.y?.max ?? fromOptions.scales?.r?.max;
+						if ( undefined !== max ) {
+							toOptions.scales.r.max = max;
+						}
+					}
+					if ( undefined !== fromOptions.scales?.r?.ticks?.stepSize || undefined !== fromOptions.scales?.y?.ticks?.stepSize ) {
+						const stepSize = fromOptions.scales?.y?.ticks?.stepSize ?? fromOptions.scales?.r?.ticks?.stepSize;
+						if ( undefined !== stepSize ) {
+							toOptions.scales.r.ticks.stepSize = stepSize;
+						}
+					}
 
 					to.chartOptions = JSON.stringify( toOptions );
 
