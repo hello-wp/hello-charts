@@ -97,10 +97,13 @@ export default class EditDataModal extends Component {
 
 		function updateData( value, index, row ) {
 			const data = JSON.parse( chartData );
-			const int = parseInt( value.replace( /\D/g, '' ) ); // Strip non-numeric characters.
 
-			if ( '' === value || ! isNaN( int ) ) {
-				data.datasets[ index ].data[ row ] = int;
+			if (
+				'' === value ||
+				'-' === value ||
+				! isNaN( value )
+			) {
+				data.datasets[ index ].data[ row ] = value;
 			}
 
 			setAttributes( { chartData: JSON.stringify( data ) } );
@@ -466,7 +469,7 @@ export default class EditDataModal extends Component {
 										}
 										<input
 											type="text"
-											inputMode="numeric"
+											inputMode="decimal"
 											value={ dataset.data[ row ] }
 											onFocus={ () => this.updateActiveCell( row + 1, index + 1 ) }
 											onChange={ ( event ) => updateData( event.target.value, index, row ) }
