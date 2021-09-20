@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
 const { createRef, Component } = wp.element;
 
 /**
@@ -53,7 +52,6 @@ export default class Edit extends Component {
 				generateData={ () => {
 					return randomValues( 8 );
 				} }
-				titlePlaceholder={ __( 'Bar Chart', 'hello-charts' ) }
 			>
 				<Bar
 					height={ height }

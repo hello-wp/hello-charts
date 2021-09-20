@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
 const { createRef, Component } = wp.element;
 
 /**
@@ -72,7 +71,6 @@ export default class Edit extends Component {
 				generateData={ () => {
 					return randomValues( 5, 3, 10 );
 				} }
-				titlePlaceholder={ __( 'Polar Area Chart', 'hello-charts' ) }
 			>
 				<PolarArea
 					height={ height }
