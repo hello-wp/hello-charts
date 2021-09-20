@@ -220,6 +220,7 @@ export default class EditDataModal extends Component {
 			clearTimeout( blurTimeout );
 
 			if ( row === table.firstChild ) {
+				row.classList.add( 'has-a-selected-column' );
 				const index = Array.prototype.indexOf.call( row.childNodes, cell );
 				table.childNodes.forEach( ( selectedRow ) => {
 					selectedRow.childNodes[ index ].classList.add( 'selected-in-column' );
@@ -232,9 +233,9 @@ export default class EditDataModal extends Component {
 		};
 
 		const removeGroupFocus = () => {
-			const cells = table.querySelectorAll( '.selected-in-row, .selected-in-column' );
-			cells.forEach( ( cell ) => {
-				cell.classList.remove( 'selected-in-row', 'selected-in-column' );
+			const focused = table.querySelectorAll( '.has-a-selected-column, .selected-in-row, .selected-in-column' );
+			focused.forEach( ( element ) => {
+				element.classList.remove( 'has-a-selected-column', 'selected-in-row', 'selected-in-column' );
 			} );
 		};
 
