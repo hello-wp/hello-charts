@@ -203,6 +203,7 @@ registerBlockType( 'hello-charts/block-radar', {
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
 					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
+					toOptions.scales.r.grid.color = fromOptions.scales?.r?.grid?.color || fromOptions.scales?.y?.grid?.color || fromOptions.scales?.x?.grid?.color;
 
 					if ( undefined !== fromOptions.scales?.r?.min || undefined !== fromOptions.scales?.y?.min ) {
 						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;

@@ -186,6 +186,8 @@ registerBlockType( 'hello-charts/block-bar', {
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
+					toOptions.scales.x.grid.color = fromOptions.scales?.x?.grid?.color || fromOptions.scales?.r?.grid?.color;
+					toOptions.scales.y.grid.color = fromOptions.scales?.y?.grid?.color || fromOptions.scales?.r?.grid?.color;
 
 					if ( undefined !== fromOptions.scales?.y?.min || undefined !== fromOptions.scales?.r?.min ) {
 						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;

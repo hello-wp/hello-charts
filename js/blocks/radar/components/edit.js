@@ -66,6 +66,7 @@ export default class Edit extends Component {
 					ticks: true,
 					pointLabels: true,
 					scale: 'r',
+					axisColor: true,
 				} }
 				generateData={ () => {
 					return randomValues( 7 );
