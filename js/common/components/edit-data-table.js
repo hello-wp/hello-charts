@@ -8,11 +8,7 @@ import tinycolor from 'tinycolor2';
  */
 const { __ } = wp.i18n;
 const { createRef, Component } = wp.element;
-const {
-	Button,
-	KeyboardShortcuts,
-	Modal,
-} = wp.components;
+const { KeyboardShortcuts } = wp.components;
 
 /**
  * Internal dependencies.
@@ -20,7 +16,7 @@ const {
 import { EditDataContextualMenu } from '.';
 import { randomColors } from '../helpers';
 
-export default class EditDataModal extends Component {
+export default class EditDataTable extends Component {
 	constructor( props ) {
 		super( props );
 
@@ -56,7 +52,6 @@ export default class EditDataModal extends Component {
 					chartData,
 				},
 				setAttributes,
-				toggleEditor,
 				hasSegments,
 				defaultAlpha,
 			},
@@ -373,114 +368,100 @@ export default class EditDataModal extends Component {
 		}
 
 		return (
-			<Modal
-				title={ (
-					<>
-						{ __( 'Edit Chart Data', 'hello-charts' ) }
-						<Button isPrimary className="data-editor-done" onClick={ toggleEditor }>{ __( 'Done', 'hello-charts' ) }</Button>
-					</>
-				) }
-				className="hello-charts-data-editor"
-				onRequestClose={ toggleEditor }
-				shouldCloseOnClickOutside={ true }
-				isDismissible={ false }
+			<KeyboardShortcuts
+				shortcuts={ {
+					tab: nextCell,
+					right: nextCell,
+					enter: nextRow,
+					down: nextRow,
+					'shift+tab': previousCell,
+					left: previousCell,
+					'shift+enter': previousRow,
+					up: previousRow,
+				} }
+				bindGlobal={ true }
 			>
-				<KeyboardShortcuts
-					shortcuts={ {
-						tab: nextCell,
-						right: nextCell,
-						enter: nextRow,
-						down: nextRow,
-						'shift+tab': previousCell,
-						left: previousCell,
-						'shift+enter': previousRow,
-						up: previousRow,
-						'mod+shift+s': toggleEditor,
-					} }
-					bindGlobal={ true }
-				>
-					<table ref={ this.tableRef } onBlur={ tableBlur }>
-						<tr>
-							<th key="-1">
+				<table ref={ this.tableRef } onBlur={ tableBlur }>
+					<tr>
+						<th key="-1">
+							<input
+								type="text"
+								tabIndex="0"
+								onKeyPress={ ( event ) => { // ignore: jsx-a11y/no-noninteractive-element-interactions
+									event.preventDefault();
+								} }
+								onFocus={ () => this.updateActiveCell( 0, 0 ) }
+							/>
+						</th>
+						{ parsedData.datasets.map( ( dataset, index ) => (
+							<th key={ index }>
+								{ index + 1 === activeCol && (
+									<EditDataContextualMenu
+										index={ index }
+										itemIconKey="col"
+										itemName={ __( 'Data Set', 'hello-charts' ) }
+										duplicate={ duplicateDataset }
+										add={ addDataset }
+										remove={ removeDataset }
+										onClick={ setGroupFocus }
+										onBlur={ removeGroupFocus }
+									/>
+								) }
 								<input
 									type="text"
-									tabIndex="0"
-									onKeyPress={ ( event ) => { // ignore: jsx-a11y/no-noninteractive-element-interactions
-										event.preventDefault();
-									} }
-									onFocus={ () => this.updateActiveCell( 0, 0 ) }
+									onFocus={ () => this.updateActiveCell( 0, index + 1 ) }
+									onChange={ ( event ) => updateDatasetLabel( event.target.value, index ) }
+									className={ index > getDatasetLabels().indexOf( dataset.label ) || '' === dataset.label ? 'input-error' : '' }
+									value={ dataset.label }
+								/>
+							</th>
+						) ) }
+					</tr>
+					{ parsedData.labels.map( ( label, row ) => (
+						<tr key={ row }>
+							<th>
+								{ row + 1 === activeRow && (
+									<EditDataContextualMenu
+										index={ row }
+										itemIconKey="row"
+										itemName={ __( 'Row', 'hello-charts' ) }
+										duplicate={ duplicateRow }
+										add={ addRow }
+										remove={ removeRow }
+										onClick={ setGroupFocus }
+										onBlur={ removeGroupFocus }
+									/>
+								) }
+								<input
+									type="text"
+									onFocus={ () => this.updateActiveCell( row + 1, 0 ) }
+									onChange={ ( event ) => updateLabel( event.target.value, row ) }
+									value={ label }
 								/>
 							</th>
 							{ parsedData.datasets.map( ( dataset, index ) => (
-								<th key={ index }>
-									{ index + 1 === activeCol && (
-										<EditDataContextualMenu
-											index={ index }
-											itemIconKey="col"
-											itemName={ __( 'Data Set', 'hello-charts' ) }
-											duplicate={ duplicateDataset }
-											add={ addDataset }
-											remove={ removeDataset }
-											onClick={ setGroupFocus }
-											onBlur={ removeGroupFocus }
-										/>
-									) }
+								<td key={ `${ row }-${ index }` }>
+									{
+									/**
+									 * We can't use an input type number here, due to a chromium bug
+									 * that prevents selection positions for number inputs.
+									 *
+									 * @see https://bugs.chromium.org/p/chromium/issues/detail?id=349432
+									 */
+									}
 									<input
 										type="text"
-										onFocus={ () => this.updateActiveCell( 0, index + 1 ) }
-										onChange={ ( event ) => updateDatasetLabel( event.target.value, index ) }
-										className={ index > getDatasetLabels().indexOf( dataset.label ) || '' === dataset.label ? 'input-error' : '' }
-										value={ dataset.label }
+										inputMode="decimal"
+										value={ dataset.data[ row ] }
+										onFocus={ () => this.updateActiveCell( row + 1, index + 1 ) }
+										onChange={ ( event ) => updateData( event.target.value, index, row ) }
 									/>
-								</th>
+								</td>
 							) ) }
 						</tr>
-						{ parsedData.labels.map( ( label, row ) => (
-							<tr key={ row }>
-								<th>
-									{ row + 1 === activeRow && (
-										<EditDataContextualMenu
-											index={ row }
-											itemIconKey="row"
-											itemName={ __( 'Row', 'hello-charts' ) }
-											duplicate={ duplicateRow }
-											add={ addRow }
-											remove={ removeRow }
-											onClick={ setGroupFocus }
-											onBlur={ removeGroupFocus }
-										/>
-									) }
-									<input
-										type="text"
-										onFocus={ () => this.updateActiveCell( row + 1, 0 ) }
-										onChange={ ( event ) => updateLabel( event.target.value, row ) }
-										value={ label }
-									/>
-								</th>
-								{ parsedData.datasets.map( ( dataset, index ) => (
-									<td key={ `${ row }-${ index }` }>
-										{
-										/**
-										 * We can't use an input type number here, due to a chromium bug
-										 * that prevents selection positions for number inputs.
-										 *
-										 * @see https://bugs.chromium.org/p/chromium/issues/detail?id=349432
-										 */
-										}
-										<input
-											type="text"
-											inputMode="decimal"
-											value={ dataset.data[ row ] }
-											onFocus={ () => this.updateActiveCell( row + 1, index + 1 ) }
-											onChange={ ( event ) => updateData( event.target.value, index, row ) }
-										/>
-									</td>
-								) ) }
-							</tr>
-						) ) }
-					</table>
-				</KeyboardShortcuts>
-			</Modal>
+					) ) }
+				</table>
+			</KeyboardShortcuts>
 		);
 	}
 }

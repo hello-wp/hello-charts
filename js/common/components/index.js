@@ -6,7 +6,7 @@ export { default as CustomColorPalette } from './custom-color-palette';
 export { default as DataStyles } from './data-styles';
 export { default as EditDataButton } from './edit-data-button';
 export { default as EditDataContextualMenu } from './edit-data-contextual-menu';
-export { default as EditDataModal } from './edit-data-modal';
+export { default as EditDataTable } from './edit-data-table';
 export { default as EditDataToolbar } from './edit-data-toolbar';
 export { default as Save } from './save';
 export { default as SegmentStyles } from './segment-styles';
