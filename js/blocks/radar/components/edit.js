@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
 const { createRef, Component } = wp.element;
 
 /**
@@ -70,7 +69,6 @@ export default class Edit extends Component {
 				generateData={ () => {
 					return randomValues( 7 );
 				} }
-				titlePlaceholder={ __( 'Radar Chart', 'hello-charts' ) }
 			>
 				<Radar
 					height={ height }
