@@ -20,14 +20,6 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
-	title: {
-		type: 'string',
-		default: '',
-	},
-	showChartTitle: {
-		type: 'boolean',
-		default: true,
-	},
 	backgroundColor: {
 		type: 'string',
 		default: '',
@@ -44,6 +36,10 @@ const attributes = {
 	},
 	chartType: {
 		type: 'string',
+	},
+	autoScale: {
+		type: 'boolean',
+		default: true,
 	},
 	chartData: {
 		type: 'string',
@@ -103,6 +99,10 @@ const attributes = {
 						display: true,
 					},
 					stacked: false,
+					ticks: {
+						autoSkip: false,
+						precision: 0,
+					},
 				},
 			},
 			layout: {
@@ -133,8 +133,6 @@ registerBlockType( 'hello-charts/block-line', {
 	attributes,
 	example: {
 		attributes: {
-			title: __( 'Line Chart', 'hello-charts' ),
-			showChartTitle: false,
 			backgroundColor: '',
 			height: 280,
 			width: 450,
@@ -202,14 +200,32 @@ registerBlockType( 'hello-charts/block-line', {
 					const fromOptions = JSON.parse( from.chartOptions );
 					const fromData = JSON.parse( from.chartData );
 
-					to.title = from.title;
-					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
+					to.autoScale = from.autoScale;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
 					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
 					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
 					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
+
+					if ( undefined !== fromOptions.scales?.y?.min || undefined !== fromOptions.scales?.r?.min ) {
+						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;
+						if ( undefined !== min ) {
+							toOptions.scales.y.min = min;
+						}
+					}
+					if ( undefined !== fromOptions.scales?.y?.max || undefined !== fromOptions.scales?.r?.max ) {
+						const max = fromOptions.scales?.y?.max ?? fromOptions.scales?.r?.max;
+						if ( undefined !== max ) {
+							toOptions.scales.y.max = max;
+						}
+					}
+					if ( undefined !== fromOptions.scales?.y?.ticks?.stepSize || undefined !== fromOptions.scales?.r?.ticks?.stepSize ) {
+						const stepSize = fromOptions.scales?.y?.ticks?.stepSize ?? fromOptions.scales?.r?.ticks?.stepSize;
+						if ( undefined !== stepSize ) {
+							toOptions.scales.y.ticks.stepSize = stepSize;
+						}
+					}
 
 					to.chartOptions = JSON.stringify( toOptions );
 

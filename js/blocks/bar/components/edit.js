@@ -1,18 +1,21 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
-const { Component } = wp.element;
+const { createRef, Component } = wp.element;
 
 /**
  * Internal dependencies.
  */
-import { AxisStyles } from '.';
 import { Bar } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
 import { legend, randomValues } from '../../../common/helpers';
 
 export default class Edit extends Component {
+	constructor( props ) {
+		super( props );
+		this.chartRef = createRef();
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -35,17 +38,20 @@ export default class Edit extends Component {
 		return (
 			<ChartBlock
 				{ ...this.props }
-				AxisStyles={ AxisStyles }
+				chartRef={ this.chartRef }
 				chartType="bar"
+				hasAxis={ true }
 				supports={ {
 					backgroundColor: true,
 					indexAxis: true,
 					stacked: true,
+					xGridDisplay: true,
+					yGridDisplay: true,
+					scale: 'y',
 				} }
 				generateData={ () => {
 					return randomValues( 8 );
 				} }
-				titlePlaceholder={ __( 'Bar Chart', 'hello-charts' ) }
 			>
 				<Bar
 					height={ height }
@@ -53,6 +59,7 @@ export default class Edit extends Component {
 					id={ blockId }
 					data={ parsedData }
 					options={ parsedOptions }
+					ref={ this.chartRef }
 				/>
 			</ChartBlock>
 		);

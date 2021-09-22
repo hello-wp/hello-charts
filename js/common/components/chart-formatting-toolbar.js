@@ -7,7 +7,6 @@ const {
 	DropdownMenu,
 	MenuGroup,
 	MenuItem,
-	ToolbarButton,
 	ToolbarGroup,
 } = wp.components;
 
@@ -19,7 +18,7 @@ import { icons } from '../helpers';
 export default class ChartFormattingToolbar extends Component {
 	render() {
 		const {
-			attributes: { showChartTitle, chartOptions },
+			attributes: { chartOptions },
 			setAttributes,
 		} = this.props;
 
@@ -93,13 +92,6 @@ export default class ChartFormattingToolbar extends Component {
 
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
-				<ToolbarButton
-					icon={ showChartTitle ? icons.titleOn : icons.titleOff }
-					label={ showChartTitle ? __( 'Hide Chart Title', 'hello-charts' ) : __( 'Show Chart Title', 'hello-charts' ) }
-					onClick={
-						() => setAttributes( { showChartTitle: showChartTitle ? false : true } )
-					}
-				/>
 				<DropdownMenu
 					popoverProps={ { isAlternate: true } }
 					icon={ parsedOptions.plugins.legend.display ? icons.legendOn : icons.legendOff }

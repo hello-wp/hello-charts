@@ -25,14 +25,6 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
-	title: {
-		type: 'string',
-		default: '',
-	},
-	showChartTitle: {
-		type: 'boolean',
-		default: true,
-	},
 	backgroundColor: {
 		type: 'string',
 		default: '',
@@ -107,8 +99,6 @@ registerBlockType( 'hello-charts/block-pie', {
 	attributes,
 	example: {
 		attributes: {
-			title: __( 'Pie Chart', 'hello-charts' ),
-			showChartTitle: false,
 			backgroundColor: '',
 			height: 280,
 			chartData: JSON.stringify( {
@@ -159,8 +149,6 @@ registerBlockType( 'hello-charts/block-pie', {
 					const fromOptions = JSON.parse( from.chartOptions );
 					const fromData = JSON.parse( from.chartData );
 
-					to.title = from.title;
-					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
 
 					toOptions.plugins.legend = fromOptions.plugins.legend;
