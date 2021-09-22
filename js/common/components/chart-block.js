@@ -7,7 +7,7 @@ import tinycolor from 'tinycolor2';
  * WordPress dependencies.
  */
 const { createRef, Component } = wp.element;
-const { BlockControls, InspectorControls, RichText } = wp.blockEditor;
+const { BlockControls, InspectorControls } = wp.blockEditor;
 
 /**
  * Internal dependencies.
@@ -163,16 +163,12 @@ export default class ChartBlock extends Component {
 		const {
 			attributes: {
 				backgroundColor,
-				showChartTitle,
 				chartData,
-				title,
 			},
 			children,
 			className,
 			hasAxis,
 			hasSegments,
-			setAttributes,
-			titlePlaceholder,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -191,17 +187,6 @@ export default class ChartBlock extends Component {
 			<>
 				<div className={ className } key="preview">
 					<div className="wrapper" style={ styles }>
-						{ showChartTitle && (
-							<RichText
-								tagName="h3"
-								className="chart-title"
-								placeholder={ titlePlaceholder }
-								value={ title }
-								allowedFormats={ [] }
-								withoutInteractiveFormatting={ true }
-								onChange={ ( value ) => setAttributes( { title: value } ) }
-							/>
-						) }
 						{ ! this.state.editorOpen && ! this.state.refreshChart && (
 							<div className="chart" ref={ this.chartWrapperRef }>
 								{ children }

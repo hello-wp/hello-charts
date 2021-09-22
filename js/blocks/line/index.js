@@ -20,14 +20,6 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
-	title: {
-		type: 'string',
-		default: '',
-	},
-	showChartTitle: {
-		type: 'boolean',
-		default: true,
-	},
 	backgroundColor: {
 		type: 'string',
 		default: '',
@@ -141,8 +133,6 @@ registerBlockType( 'hello-charts/block-line', {
 	attributes,
 	example: {
 		attributes: {
-			title: __( 'Line Chart', 'hello-charts' ),
-			showChartTitle: false,
 			backgroundColor: '',
 			height: 280,
 			width: 450,
@@ -210,8 +200,6 @@ registerBlockType( 'hello-charts/block-line', {
 					const fromOptions = JSON.parse( from.chartOptions );
 					const fromData = JSON.parse( from.chartData );
 
-					to.title = from.title;
-					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
 					to.autoScale = from.autoScale;
 

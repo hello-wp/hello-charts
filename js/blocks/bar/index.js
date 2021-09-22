@@ -20,14 +20,6 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
-	title: {
-		type: 'string',
-		default: '',
-	},
-	showChartTitle: {
-		type: 'boolean',
-		default: true,
-	},
 	backgroundColor: {
 		type: 'string',
 		default: '',
@@ -124,8 +116,6 @@ registerBlockType( 'hello-charts/block-bar', {
 	attributes,
 	example: {
 		attributes: {
-			title: __( 'Bar Chart', 'hello-charts' ),
-			showChartTitle: false,
 			backgroundColor: '',
 			height: 280,
 			width: 450,
@@ -171,8 +161,6 @@ registerBlockType( 'hello-charts/block-bar', {
 					const toOptions = JSON.parse( attributes.chartOptions.default );
 					const fromData = JSON.parse( from.chartData );
 
-					to.title = from.title;
-					to.showChartTitle = from.showChartTitle;
 					to.backgroundColor = from.backgroundColor;
 					to.autoScale = from.autoScale;
 
