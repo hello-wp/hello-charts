@@ -110,7 +110,7 @@ class Blocks {
 		wp_register_script(
 			'hello-charts-block-js',
 			plugins_url( '/build/blocks.js', dirname( __FILE__ ) ),
-			[ 'chart-js', 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ],
+			[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ],
 			$version,
 			true
 		);
@@ -153,7 +153,8 @@ class Blocks {
 	 * @return string Modified block content.
 	 */
 	public function render_block( string $block_content, array $block ): string {
-		if ( is_admin() ) {
+		global $current_screen;
+		if ( $current_screen->is_block_editor() ) {
 			return $block_content;
 		}
 
