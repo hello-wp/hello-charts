@@ -154,7 +154,7 @@ class Blocks {
 	 */
 	public function render_block( string $block_content, array $block ): string {
 		global $current_screen;
-		if ( $current_screen->is_block_editor() ) {
+		if ( $current_screen && $current_screen->is_block_editor() ) {
 			return $block_content;
 		}
 
