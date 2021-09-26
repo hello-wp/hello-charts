@@ -6,11 +6,11 @@
  */
 
 .edit-post-sidebar {
-    .edit-data-card {
-        .edit-data-card-body {
-            padding-top: 0;
-        }
-    }
+	.edit-data-card {
+		.edit-data-card-body {
+			padding-top: 0;
+		}
+	}
 }
 
 .chart-manual-scale > div {
@@ -38,12 +38,12 @@
 	height: 100%;
 	background-color: #f7f7f7;
 	max-height: calc(100% - 32px);
-    > div {
-        padding: 0;
-    }
+	> div {
+		padding: 0;
+	}
 
-    .components-modal__header {
-        margin: 0;
+	.components-modal__header {
+		margin: 0;
 
 		h1 {
 			flex-grow: 1;
@@ -53,68 +53,88 @@
 				float: right;
 			}
 		}
-    }
-
-	.components-modal__content:before {
-		margin-bottom: 0;
 	}
 
-    table {
-        position: relative;
-        border-collapse: collapse;
-        border-spacing: 0;
-        table-layout: fixed;
-
-        thead th {
-			border-top: 0;
-			text-align: left;
+	.components-modal__content {
+		> div + div {
 			position: relative;
+			z-index: 10;
+		}
 
-			&:first-child div[contenteditable="true"] {
-				color: transparent;
-			}
+		&:before {
+			margin-bottom: 0;
+		}
+	}
 
-			div[contenteditable="true"] {
-				padding-right: 36px;
+	table {
+		position: relative;
+		border-collapse: collapse;
+		border-spacing: 0;
+		table-layout: fixed;
+
+		tr {
+			background: #fff;
+		}
+
+		tr.has-a-selected-column th input {
+			margin-top: -2px;
+		}
+
+		tr:first-child th {
+			border-top: 0;
+
+			input {
+				padding: 0 36px 0 8px;
+				text-align: left;
 			}
 
 			.components-dropdown-menu {
-				position: absolute;
+				left: auto;
 				right: 0;
-				top: 0;
-			}
-
-			&:hover button.components-dropdown-menu__toggle,
-			&:focus-within button.components-dropdown-menu__toggle {
-				opacity: 1;
 			}
 
 			.input-error:not(:focus) {
 				box-shadow: #d63638 0px 0px 0px 2px;
 			}
-        }
 
-        tbody {
-			th {
-	            text-align: right;
+			&.selected-in-column {
+				border-top: 2px solid rgb(59 130 246);
+				border-left: 2px solid rgb(59 130 246);
+				border-right: 2px solid rgb(59 130 246);
+
+				input {
+					padding-left: 7.5px;
+				}
 			}
-        }
 
-		tbody tr:hover button.components-dropdown-menu__toggle,
-		tbody td:focus-within button.components-dropdown-menu__toggle,
-		button.components-dropdown-menu__toggle.is-opened {
-			opacity: 1;
+			&:first-child input {
+				color: transparent;
+			}
 		}
 
-        th {
-            border: 1px solid #dcdcde;
+		th {
+			position: relative;
+			border: 1px solid #dcdcde;
 			width: 120px;
-			background-color: #f1f1f1;
-			padding: 2px;
+			/*
+			 * Workaround for Firefox border color bug.
+			 *
+			 * @see https://stackoverflow.com/questions/7517127/
+			 */
+			background-image: linear-gradient( #f1f1f1, #f1f1f1 );
+			white-space: nowrap;
 
-			div[contenteditable="true"] {
-				white-space: nowrap !important;
-				padding: 7px 6px;
+			input {
+				z-index: 10;
+				line-height: 36px;
+				width: 100%;
+				height: 36px;
+				padding: 0 8px 0 36px;
+				background: transparent;
+				border: none;
+				border-radius: 0;
+				text-align: right;
+				margin: 0;
 
 				&:focus {
 					box-shadow: rgb(59 130 246) 0px 0px 0px 2px;
@@ -123,21 +143,39 @@
 					cursor: auto;
 				}
 			}
-        }
+
+			&.selected-in-row {
+				border-left: 2px solid rgb(59 130 246);
+				border-top: 2px solid rgb(59 130 246);
+				border-bottom: 2px solid rgb(59 130 246);
+
+				input {
+					margin-top: -2px;
+					padding-top: 2px;
+				}
+			}
+
+			.components-dropdown-menu {
+				position: absolute;
+				z-index: 20;
+				left: 0;
+				top: 0;
+			}
+		}
 
 		td {
 			width: 100px;
 			border: 1px solid #dcdcde;
-			padding: 0;
+			padding: 0 1px 0 0;
 			position: relative;
-			padding-right: 1px;
 
-			input[type="number"] {
-				position: relative;
+			input {
 				height: 36px;
 				border: none;
 				width: 100%;
 				border-radius: 0;
+				margin: 0;
+				background: transparent;
 
 				&:hover {
 					background-color: #f4f4f4;
@@ -151,15 +189,41 @@
 					cursor: auto;
 				}
 			}
+
+			&.selected-in-column {
+				border-left: 2px solid rgb(59 130 246);
+				border-right: 2px solid rgb(59 130 246);
+
+				input {
+					padding-left: 7.5px;
+				}
+			}
+
+			&.selected-in-row {
+				border-top: 2px solid rgb(59 130 246);
+				border-bottom: 2px solid rgb(59 130 246);
+
+				input {
+					margin-top: -2px;
+					padding-top: 2px;
+				}
+			}
+		}
+
+		tr:last-child td {
+			&.selected-in-column {
+				border-bottom: 2px solid rgb(59 130 246);
+			}
+		}
+
+		tr td:last-child, tr th:last-child {
+			&.selected-in-row {
+				border-right: 2px solid rgb(59 130 246);
+			}
 		}
 
 		.components-dropdown-menu__toggle {
 			padding: 0;
-			opacity: 0;
-
-			&:focus {
-				opacity: 1;
-			}
 
 			.dashicon {
 				margin: 0;
@@ -170,19 +234,19 @@
 			}
 		}
 
-        .new {
-            text-align: center;
-        }
+		.new {
+			text-align: center;
+		}
 
-        .disabled {
-            background: #f6f7f7;
-            border: none;
-            text-align: center;
-        }
+		.disabled {
+			background: #f6f7f7;
+			border: none;
+			text-align: center;
+		}
 
-        .dashicons {
-            vertical-align: middle;
-        }
+		.dashicons {
+			vertical-align: middle;
+		}
 
 		.new button {
 			width: 100%;
@@ -196,7 +260,7 @@
 		.new button .dashicon:before {
 			font-size: 16px;
 		}
-    }
+	}
 }
 
 .popover-slot {

@@ -6,8 +6,10 @@ import tinycolor from 'tinycolor2';
 /**
  * WordPress dependencies.
  */
+const { __ } = wp.i18n;
 const { createRef, Component } = wp.element;
 const { BlockControls, InspectorControls } = wp.blockEditor;
+const { Button, Modal } = wp.components;
 
 /**
  * Internal dependencies.
@@ -18,7 +20,7 @@ import {
 	ChartFormattingToolbar,
 	DataStyles,
 	EditDataButton,
-	EditDataModal,
+	EditDataTable,
 	EditDataToolbar,
 	SegmentStyles,
 } from '.';
@@ -193,7 +195,20 @@ export default class ChartBlock extends Component {
 							</div>
 						) }
 						{ this.state.editorOpen && (
-							<EditDataModal toggleEditor={ this.toggleEditor } { ...this.props } />
+							<Modal
+								title={ (
+									<>
+										{ __( 'Edit Chart Data', 'hello-charts' ) }
+										<Button isPrimary className="data-editor-done" onClick={ this.toggleEditor }>{ __( 'Done', 'hello-charts' ) }</Button>
+									</>
+								) }
+								className="hello-charts-data-editor"
+								onRequestClose={ this.toggleEditor }
+								shouldCloseOnClickOutside={ true }
+								isDismissible={ false }
+							>
+								<EditDataTable { ...this.props } />
+							</Modal>
 						) }
 					</div>
 				</div>
