@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import tinycolor from 'tinycolor2';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -61,6 +66,48 @@ export default class ChartStyles extends Component {
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
+		function updateBackgroundColor( color ) {
+			dynamicallyChangeLabelAndAxisColor( color );
+			setAttributes( { backgroundColor: color } );
+		}
+
+		function dynamicallyChangeLabelAndAxisColor( color ) {
+			if ( color ) {
+				const newAxisColor = tinycolor.mostReadable( color, [ 'rgba ( 255, 255, 255, 0.1 )', 'rgba ( 0, 0, 0, 0.1 )' ] ).toRgbString();
+				const newLabelColor = tinycolor.mostReadable( color, [ 'rgba ( 170, 170, 170, 1 )', 'rgba ( 85, 85, 85, 1 )' ] ).toRgbString();
+				parsedOptions.color = newLabelColor;
+				if ( parsedOptions.scales ) {
+					Object.keys( parsedOptions.scales ).forEach( ( scale ) => {
+						parsedOptions.scales[ scale ].grid.color = newAxisColor;
+						parsedOptions.scales[ scale ].ticks.color = newLabelColor;
+
+						if ( parsedOptions.scales[ scale ].pointLabels ) {
+							parsedOptions.scales[ scale ].pointLabels.color = newLabelColor;
+						}
+						if ( parsedOptions.scales[ scale ].angleLines ) {
+							parsedOptions.scales[ scale ].angleLines.color = newAxisColor;
+						}
+					} );
+				}
+			} else {
+				delete parsedOptions.color;
+				if ( parsedOptions.scales ) {
+					Object.keys( parsedOptions.scales ).forEach( ( scale ) => {
+						delete parsedOptions.scales[ scale ].grid.color;
+						delete parsedOptions.scales[ scale ].ticks.color;
+
+						if ( parsedOptions.scales[ scale ].pointLabels ) {
+							delete parsedOptions.scales[ scale ].pointLabels.color;
+						}
+						if ( parsedOptions.scales[ scale ].angleLines ) {
+							delete parsedOptions.scales[ scale ].angleLines.color;
+						}
+					} );
+				}
+			}
+			setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
+		}
+
 		return (
 			<PanelBody
 				title={ __( 'Chart Styles', 'hello-charts' ) }
@@ -121,7 +168,7 @@ export default class ChartStyles extends Component {
 							id="chart-background-color"
 							colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
 							value={ backgroundColor }
-							onChange={ ( color ) => setAttributes( { backgroundColor: color } ) }
+							onChange={ ( color ) => updateBackgroundColor( color ) }
 							clearable
 						/>
 					</BaseControl>

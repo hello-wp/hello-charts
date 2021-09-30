@@ -93,6 +93,8 @@ const attributes = {
 						display: true,
 					},
 					stacked: false,
+					ticks: {
+					},
 				},
 				y: {
 					grid: {

@@ -90,6 +90,7 @@ const attributes = {
 					ticks: {
 						display: true,
 						precision: 0,
+						showLabelBackdrop: false,
 					},
 					suggestedMin: 0,
 				},

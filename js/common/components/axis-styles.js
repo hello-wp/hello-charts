@@ -8,8 +8,6 @@ const {
 	ToggleControl,
 	TextControl,
 	BaseControl,
-	ColorPalette,
-	ColorIndicator,
 } = wp.components;
 
 export default class AxisStyles extends Component {
@@ -75,14 +73,6 @@ export default class AxisStyles extends Component {
 			const options = JSON.parse( chartOptions );
 
 			options.scales[ axis ].ticks.stepSize = stepSize;
-
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
-		}
-
-		function updateAxisColor( color, axis ) {
-			const options = JSON.parse( chartOptions );
-
-			options.scales[ axis ].grid.color = color;
 
 			setAttributes( { chartOptions: JSON.stringify( options ) } );
 		}
@@ -186,26 +176,6 @@ export default class AxisStyles extends Component {
 						/>
 					</BaseControl>
 				) }
-				{ supports.axisColor &&
-				Object.keys( parsedOptions.scales ).map( ( scale ) => (
-					<BaseControl
-						key={ scale }
-						id="chart-axis-color"
-						label={ scale.toUpperCase() + __( ' Axis Line Color', 'hello-charts' ) }
-					>
-						{ parsedOptions.scales[ scale ].grid.color && (
-							<ColorIndicator colorValue={ parsedOptions.scales[ scale ].grid.color } aria-label={ parsedOptions.scales[ scale ].grid.color } />
-						) }
-						<ColorPalette
-							id="chart-axis-color"
-							colors={ wp.data.select( 'core/block-editor' ).getSettings().colors }
-							value={ parsedOptions.scales[ scale ].grid.color }
-							onChange={ ( color ) => updateAxisColor( color, scale ) }
-							clearable
-						/>
-					</BaseControl>
-				) )
-				}
 			</PanelBody>
 		);
 	}
