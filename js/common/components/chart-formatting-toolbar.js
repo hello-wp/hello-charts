@@ -4,7 +4,7 @@
 const { __ } = wp.i18n;
 const { Component, Fragment } = wp.element;
 const {
-	DropdownMenu,
+	ToolbarDropdownMenu,
 	MenuGroup,
 	MenuItem,
 	ToolbarGroup,
@@ -92,7 +92,7 @@ export default class ChartFormattingToolbar extends Component {
 
 		return (
 			<ToolbarGroup className="chart-formatting-toolbar" label={ __( 'Chart Formatting', 'hello-charts' ) }>
-				<DropdownMenu
+				<ToolbarDropdownMenu
 					popoverProps={ { isAlternate: true } }
 					icon={ parsedOptions.plugins.legend.display ? icons.legendOn : icons.legendOff }
 					label={ __( 'Legend Position' ) }
@@ -139,7 +139,7 @@ export default class ChartFormattingToolbar extends Component {
 							) }
 						</Fragment>
 					) }
-				</DropdownMenu>
+				</ToolbarDropdownMenu>
 			</ToolbarGroup>
 		);
 	}
