@@ -53,6 +53,10 @@ export default class SegmentStyles extends Component {
 			setAttributes,
 		} = this.props;
 
+		if ( ! color ) {
+			return;
+		}
+
 		const data = JSON.parse( chartData );
 		const segment = this.state.activeSegment;
 
