@@ -11,6 +11,30 @@ const {
 } = wp.components;
 
 export default class AxisStyles extends Component {
+	componentDidUpdate( prevProps ) {
+		const {
+			attributes: {
+				autoScale,
+				chartOptions,
+			},
+			setAttributes,
+		} = this.props;
+
+		const prevOptions = JSON.parse( prevProps.attributes.chartOptions );
+		const options = JSON.parse( chartOptions );
+
+		if ( prevOptions.indexAxis !== options.indexAxis && ! autoScale ) {
+			delete options.scales[ options.indexAxis ].min;
+			delete options.scales[ options.indexAxis ].max;
+			delete options.scales[ options.indexAxis ].ticks.stepSize;
+
+			setAttributes( {
+				autoScale: true,
+				chartOptions: JSON.stringify( options ),
+			} );
+		}
+	}
+
 	render() {
 		const {
 			attributes: {
