@@ -138,6 +138,36 @@ export default class DataStyles extends Component {
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
+	updateDashLength( length ) {
+		const {
+			attributes: { chartData },
+			setAttributes,
+		} = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		const space = data.datasets[ dataset ].borderDash[ 1 ];
+
+		data.datasets[ dataset ].borderDash = [ length, space ];
+		setAttributes( { chartData: JSON.stringify( data ) } );
+	}
+
+	updateDashSpacing( space ) {
+		const {
+			attributes: { chartData },
+			setAttributes,
+		} = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		const length = data.datasets[ dataset ].borderDash[ 0 ];
+
+		data.datasets[ dataset ].borderDash = [ length, space ];
+		setAttributes( { chartData: JSON.stringify( data ) } );
+	}
+
 	getColor() {
 		const {
 			attributes: { chartData },
@@ -197,6 +227,24 @@ export default class DataStyles extends Component {
 		return data.datasets[ dataset ].pointStyle;
 	}
 
+	getDashLength() {
+		const { attributes: { chartData } } = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		return data.datasets[ dataset ].borderDash[ 0 ];
+	}
+
+	getDashSpacing() {
+		const { attributes: { chartData } } = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		return data.datasets[ dataset ].borderDash[ 1 ];
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -207,6 +255,7 @@ export default class DataStyles extends Component {
 			setAttributes,
 			hasSegments,
 			hasPoints,
+			hasLineStyling,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -310,6 +359,26 @@ export default class DataStyles extends Component {
 								] }
 								onChange={ ( style ) => this.updatePointStyle( style ) }
 							/>
+						) }
+						{ hasLineStyling && (
+							<>
+								<RangeControl
+									label={ __( 'Dash Length', 'hello-charts' ) }
+									value={ this.getDashLength() }
+									onChange={ ( length ) => this.updateDashLength( length ) }
+									min={ 0 }
+									max={ 20 }
+									step={ 1 }
+								/>
+								<RangeControl
+									label={ __( 'Dash Spacing', 'hello-charts' ) }
+									value={ this.getDashSpacing() }
+									onChange={ ( space ) => this.updateDashSpacing( space ) }
+									min={ 0 }
+									max={ 20 }
+									step={ 1 }
+								/>
+							</>
 						) }
 					</CardBody>
 				</Card>
