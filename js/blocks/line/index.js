@@ -45,7 +45,7 @@ const attributes = {
 		type: 'string',
 		default: JSON.stringify( {
 			init: false,
-			labels: [ '1', '2', '3', '4', '5', '6', '7', '8' ],
+			labels: [ '1', '2', '3', '4', '5', '6' ],
 			datasets: [
 				{
 					label: 'A',

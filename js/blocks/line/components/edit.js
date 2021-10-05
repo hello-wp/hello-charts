@@ -52,7 +52,7 @@ export default class Edit extends Component {
 					scale: 'y',
 				} }
 				generateData={ () => {
-					return randomValues( 8 );
+					return randomValues( 6 );
 				} }
 			>
 				<Line
