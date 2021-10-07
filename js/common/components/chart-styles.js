@@ -2,6 +2,7 @@
  * External components.
  */
 import tinycolor from 'tinycolor2';
+import { set } from 'lodash';
 
 /**
  * WordPress dependencies.
@@ -52,59 +53,46 @@ export default class ChartStyles extends Component {
 
 		function updateTension( property, tension ) {
 			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ][ property ] = tension;
+			data.datasets.forEach( ( dataset ) => {
+				dataset[ property ] = tension;
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
 		function updateCutout( cutout ) {
 			const data = JSON.parse( chartData );
-			data.datasets.forEach( ( dataset, index ) => {
-				data.datasets[ index ].cutout = cutout + '%';
+			data.datasets.forEach( ( dataset ) => {
+				dataset.cutout = cutout + '%';
 			} );
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
 		function updateBackgroundColor( color ) {
-			dynamicallyChangeLabelAndAxisColor( color );
+			dynamicallyUpdateAxisColors( color );
 			setAttributes( { backgroundColor: color } );
 		}
 
-		function dynamicallyChangeLabelAndAxisColor( color ) {
-			if ( color ) {
-				const newAxisColor = tinycolor.mostReadable( color, [ 'rgba ( 255, 255, 255, 0.1 )', 'rgba ( 0, 0, 0, 0.1 )' ] ).toRgbString();
-				const newLabelColor = tinycolor.mostReadable( color, [ 'rgba ( 170, 170, 170, 1 )', 'rgba ( 85, 85, 85, 1 )' ] ).toRgbString();
-				parsedOptions.color = newLabelColor;
-				if ( parsedOptions.scales ) {
-					Object.keys( parsedOptions.scales ).forEach( ( scale ) => {
-						parsedOptions.scales[ scale ].grid.color = newAxisColor;
-						parsedOptions.scales[ scale ].ticks.color = newLabelColor;
+		function dynamicallyUpdateAxisColors( color ) {
+			const axisColors = [
+				tinycolor( 'black' ).setAlpha( 0.1 ),
+				tinycolor( 'white' ).setAlpha( 0.1 ),
+			];
+			const labelColors = [
+				tinycolor( 'black' ).lighten( 33.33 ),
+				tinycolor( 'white' ).darken( 33.33 ),
+			];
 
-						if ( parsedOptions.scales[ scale ].pointLabels ) {
-							parsedOptions.scales[ scale ].pointLabels.color = newLabelColor;
-						}
-						if ( parsedOptions.scales[ scale ].angleLines ) {
-							parsedOptions.scales[ scale ].angleLines.color = newAxisColor;
-						}
-					} );
-				}
-			} else {
-				delete parsedOptions.color;
-				if ( parsedOptions.scales ) {
-					Object.keys( parsedOptions.scales ).forEach( ( scale ) => {
-						delete parsedOptions.scales[ scale ].grid.color;
-						delete parsedOptions.scales[ scale ].ticks.color;
+			const axisColor = color ? tinycolor.mostReadable( color, axisColors ).toRgbString() : undefined;
+			const labelColor = color ? tinycolor.mostReadable( color, labelColors ).toRgbString() : undefined;
 
-						if ( parsedOptions.scales[ scale ].pointLabels ) {
-							delete parsedOptions.scales[ scale ].pointLabels.color;
-						}
-						if ( parsedOptions.scales[ scale ].angleLines ) {
-							delete parsedOptions.scales[ scale ].angleLines.color;
-						}
-					} );
-				}
+			parsedOptions.color = labelColor;
+			for ( const [ , scaleOptions ] of Object.entries( parsedOptions.scales ) ) {
+				set( scaleOptions, `grid.color`, axisColor );
+				set( scaleOptions, `pointLabels.color`, axisColor );
+				set( scaleOptions, `ticks.color`, labelColor );
+				set( scaleOptions, `angleLines.color`, labelColor );
 			}
+
 			setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
 		}
 
