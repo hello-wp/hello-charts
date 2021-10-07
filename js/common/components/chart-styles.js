@@ -87,10 +87,10 @@ export default class ChartStyles extends Component {
 
 			parsedOptions.color = labelColor;
 			for ( const [ , scaleOptions ] of Object.entries( parsedOptions.scales ) ) {
-				set( scaleOptions, `grid.color`, axisColor );
-				set( scaleOptions, `pointLabels.color`, axisColor );
-				set( scaleOptions, `ticks.color`, labelColor );
-				set( scaleOptions, `angleLines.color`, labelColor );
+				set( scaleOptions, 'grid.color', axisColor );
+				set( scaleOptions, 'pointLabels.color', axisColor );
+				set( scaleOptions, 'ticks.color', labelColor );
+				set( scaleOptions, 'angleLines.color', labelColor );
 			}
 
 			setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
