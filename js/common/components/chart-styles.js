@@ -2,7 +2,7 @@
  * External components.
  */
 import tinycolor from 'tinycolor2';
-import { set } from 'lodash';
+import { set, isEmpty } from 'lodash';
 
 /**
  * WordPress dependencies.
@@ -73,6 +73,10 @@ export default class ChartStyles extends Component {
 		}
 
 		function dynamicallyUpdateAxisColors( color ) {
+			if ( isEmpty( parsedOptions.scales ) ) {
+				return;
+			}
+
 			const axisColors = [
 				tinycolor( 'black' ).setAlpha( 0.1 ),
 				tinycolor( 'white' ).setAlpha( 0.1 ),
@@ -90,7 +94,7 @@ export default class ChartStyles extends Component {
 				set( scaleOptions, 'grid.color', axisColor );
 				set( scaleOptions, 'pointLabels.color', axisColor );
 				set( scaleOptions, 'ticks.color', labelColor );
-				set( scaleOptions, 'angleLines.color', labelColor );
+				set( scaleOptions, 'angleLines.color', axisColor );
 			}
 
 			setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
