@@ -108,6 +108,8 @@ export default class DataStyles extends Component {
 
 		data.datasets[ dataset ].borderWidth = width;
 
+		this.updateBorderStyle( data.datasets[ dataset ].borderStyle, width );
+
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
@@ -138,7 +140,7 @@ export default class DataStyles extends Component {
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
-	updateDashLength( length ) {
+	updateBorderStyle( style, width ) {
 		const {
 			attributes: { chartData },
 			setAttributes,
@@ -147,24 +149,24 @@ export default class DataStyles extends Component {
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		const space = data.datasets[ dataset ].borderDash[ 1 ];
+		switch ( style ) {
+			case 'solid':
+				data.datasets[ dataset ].borderDash = [ 0, 0 ];
+				break;
 
-		data.datasets[ dataset ].borderDash = [ length, space ];
-		setAttributes( { chartData: JSON.stringify( data ) } );
-	}
+			case 'dotted':
+				data.datasets[ dataset ].borderDash = [ width, width ];
+				break;
 
-	updateDashSpacing( space ) {
-		const {
-			attributes: { chartData },
-			setAttributes,
-		} = this.props;
+			case 'dashed':
+				data.datasets[ dataset ].borderDash = [ width * 5, width * 3 ];
+				break;
 
-		const data = JSON.parse( chartData );
-		const dataset = this.state.activeDataset;
+			default:
+				break;
+		}
 
-		const length = data.datasets[ dataset ].borderDash[ 0 ];
-
-		data.datasets[ dataset ].borderDash = [ length, space ];
+		data.datasets[ dataset ].borderStyle = style;
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
@@ -227,22 +229,13 @@ export default class DataStyles extends Component {
 		return data.datasets[ dataset ].pointStyle;
 	}
 
-	getDashLength() {
+	getBorderStyle() {
 		const { attributes: { chartData } } = this.props;
 
 		const data = JSON.parse( chartData );
 		const dataset = this.state.activeDataset;
 
-		return data.datasets[ dataset ].borderDash[ 0 ];
-	}
-
-	getDashSpacing() {
-		const { attributes: { chartData } } = this.props;
-
-		const data = JSON.parse( chartData );
-		const dataset = this.state.activeDataset;
-
-		return data.datasets[ dataset ].borderDash[ 1 ];
+		return data.datasets[ dataset ].borderStyle;
 	}
 
 	render() {
@@ -255,7 +248,7 @@ export default class DataStyles extends Component {
 			setAttributes,
 			hasSegments,
 			hasPoints,
-			hasLineStyling,
+			hasBorderStyling,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -336,6 +329,18 @@ export default class DataStyles extends Component {
 							max={ 12 }
 							step={ 1 }
 						/>
+						{ hasBorderStyling && (
+							<SelectControl
+								label={ __( 'Border Style', 'hello-charts' ) }
+								value={ this.getBorderStyle() }
+								options={ [
+									{ label: __( 'Solid', 'hello-charts' ), value: 'solid' },
+									{ label: __( 'Dotted', 'hello-charts' ), value: 'dotted' },
+									{ label: __( 'Dashed', 'hello-charts' ), value: 'dashed' },
+								] }
+								onChange={ ( style ) => this.updateBorderStyle( style, this.getBorderWidth() ) }
+							/>
+						) }
 						{ hasPoints && (
 							<RangeControl
 								label={ __( 'Point Size', 'hello-charts' ) }
@@ -359,26 +364,6 @@ export default class DataStyles extends Component {
 								] }
 								onChange={ ( style ) => this.updatePointStyle( style ) }
 							/>
-						) }
-						{ hasLineStyling && (
-							<>
-								<RangeControl
-									label={ __( 'Dash Length', 'hello-charts' ) }
-									value={ this.getDashLength() }
-									onChange={ ( length ) => this.updateDashLength( length ) }
-									min={ 0 }
-									max={ 20 }
-									step={ 1 }
-								/>
-								<RangeControl
-									label={ __( 'Dash Spacing', 'hello-charts' ) }
-									value={ this.getDashSpacing() }
-									onChange={ ( space ) => this.updateDashSpacing( space ) }
-									min={ 0 }
-									max={ 20 }
-									step={ 1 }
-								/>
-							</>
 						) }
 					</CardBody>
 				</Card>
