@@ -38,7 +38,6 @@ const legend = {
 					lineWidth: dataset.borderWidth <= 4 ? dataset.borderWidth : 4,
 					strokeStyle: dataset.borderColor,
 					pointStyle: dataset.pointStyle,
-					lineDash: dataset.borderDash,
 				};
 			} );
 
