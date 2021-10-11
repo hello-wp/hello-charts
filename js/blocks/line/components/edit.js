@@ -50,6 +50,7 @@ export default class Edit extends Component {
 					xGridDisplay: true,
 					yGridDisplay: true,
 					scale: 'y',
+					axisColor: true,
 				} }
 				generateData={ () => {
 					return randomValues( 6 );

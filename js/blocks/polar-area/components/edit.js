@@ -67,6 +67,7 @@ export default class Edit extends Component {
 					rGridDisplay: true,
 					ticks: true,
 					scale: 'r',
+					axisColor: true,
 				} }
 				generateData={ () => {
 					return randomValues( 5, 3, 10 );

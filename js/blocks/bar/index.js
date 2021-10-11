@@ -3,6 +3,11 @@
  */
 
 /**
+ * External components.
+ */
+import { get, set } from 'lodash';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -169,30 +174,20 @@ registerBlockType( 'hello-charts/block-bar', {
 					 * because the "Stack Data Sets" option usually only applies to the y axis,
 					 * however it should apply to both axes on a bar chart.
 					 */
-					toOptions.plugins.legend = fromOptions.plugins?.legend;
-					toOptions.scales.x.stacked = fromOptions.scales?.y?.stacked ?? false;
-					toOptions.scales.y.stacked = fromOptions.scales?.y?.stacked ?? false;
-					toOptions.scales.x.grid.display = fromOptions.scales?.x?.grid?.display ?? true;
-					toOptions.scales.y.grid.display = fromOptions.scales?.y?.grid?.display ?? true;
-
-					if ( undefined !== fromOptions.scales?.y?.min || undefined !== fromOptions.scales?.r?.min ) {
-						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;
-						if ( undefined !== min ) {
-							toOptions.scales.y.min = min;
-						}
-					}
-					if ( undefined !== fromOptions.scales?.y?.max || undefined !== fromOptions.scales?.r?.max ) {
-						const max = fromOptions.scales?.y?.max ?? fromOptions.scales?.r?.max;
-						if ( undefined !== max ) {
-							toOptions.scales.y.max = max;
-						}
-					}
-					if ( undefined !== fromOptions.scales?.y?.ticks?.stepSize || undefined !== fromOptions.scales?.r?.ticks?.stepSize ) {
-						const stepSize = fromOptions.scales?.y?.ticks?.stepSize ?? fromOptions.scales?.r?.ticks?.stepSize;
-						if ( undefined !== stepSize ) {
-							toOptions.scales.y.ticks.stepSize = stepSize;
-						}
-					}
+					set( toOptions, 'plugins.legend', get( fromOptions, 'plugins.legend' ) );
+					set( toOptions, 'scales.x.stacked', get( fromOptions, 'scales.y.stacked', false ) );
+					set( toOptions, 'scales.y.stacked', get( fromOptions, 'scales.y.stacked', false ) );
+					set( toOptions, 'scales.x.grid.display', get( fromOptions, 'scales.x.grid.display', true ) );
+					set( toOptions, 'scales.y.grid.display', get( fromOptions, 'scales.y.grid.display', true ) );
+					set( toOptions, 'scales.x.grid.color', get( fromOptions, 'scales.x.grid.color' ) || get( fromOptions, 'scales.r.grid.color' ) );
+					set( toOptions, 'scales.y.grid.color', get( fromOptions, 'scales.y.grid.color' ) || get( fromOptions, 'scales.r.grid.color' ) );
+					set( toOptions, 'scales.x.pointLabels.color', get( fromOptions, 'scales.x.pointLabels.color' ) || get( fromOptions, 'scales.r.pointLabels.color' ) );
+					set( toOptions, 'scales.y.pointLabels.color', get( fromOptions, 'scales.y.pointLabels.color' ) || get( fromOptions, 'scales.r.pointLabels.color' ) );
+					set( toOptions, 'scales.x.ticks.color', get( fromOptions, 'scales.x.ticks.color' ) || get( fromOptions, 'scales.r.ticks.color' ) );
+					set( toOptions, 'scales.y.ticks.color', get( fromOptions, 'scales.y.ticks.color' ) || get( fromOptions, 'scales.r.ticks.color' ) );
+					set( toOptions, 'scales.y.min', get( fromOptions, 'scales.y.min' ) || get( fromOptions, 'scales.r.min' ) );
+					set( toOptions, 'scales.y.max', get( fromOptions, 'scales.y.max' ) || get( fromOptions, 'scales.r.max' ) );
+					set( toOptions, 'scales.y.ticks.stepSize', get( fromOptions, 'scales.y.ticks.stepSize' ) || get( fromOptions, 'scales.r.ticks.stepSize' ) );
 
 					to.chartOptions = JSON.stringify( toOptions );
 
