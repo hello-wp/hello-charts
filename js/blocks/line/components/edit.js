@@ -41,7 +41,7 @@ export default class Edit extends Component {
 				chartRef={ this.chartRef }
 				hasAxis={ true }
 				hasPoints={ true }
-				hasBorderStyling={ true }
+				hasBorderStyle={ true }
 				defaultAlpha={ 0 }
 				chartType="line"
 				supports={ {

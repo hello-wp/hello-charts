@@ -98,6 +98,16 @@ export default class DataStyles extends Component {
 	}
 
 	updateBorderWidth( width ) {
+		const style = this.getBorderStyle();
+		this.updateBorder( width, style );
+	}
+
+	updateBorderStyle( style ) {
+		const width = this.getBorderWidth();
+		this.updateBorder( width, style );
+	}
+
+	updateBorder( width, style ) {
 		const {
 			attributes: { chartData },
 			setAttributes,
@@ -108,7 +118,22 @@ export default class DataStyles extends Component {
 
 		data.datasets[ dataset ].borderWidth = width;
 
-		this.updateBorderStyle( data.datasets[ dataset ].borderStyle, width );
+		switch ( style ) {
+			case 'dotted':
+				data.datasets[ dataset ].borderDash = [ width, width ];
+				break;
+
+			case 'dashed':
+				data.datasets[ dataset ].borderDash = [ width * 3, width * 2 ];
+				break;
+
+			case 'solid':
+			default:
+				data.datasets[ dataset ].borderDash = [ 0, 0 ];
+				break;
+		}
+
+		data.datasets[ dataset ].borderStyle = style;
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
@@ -137,36 +162,6 @@ export default class DataStyles extends Component {
 		const dataset = this.state.activeDataset;
 
 		data.datasets[ dataset ].pointStyle = style;
-		setAttributes( { chartData: JSON.stringify( data ) } );
-	}
-
-	updateBorderStyle( style, width ) {
-		const {
-			attributes: { chartData },
-			setAttributes,
-		} = this.props;
-
-		const data = JSON.parse( chartData );
-		const dataset = this.state.activeDataset;
-
-		switch ( style ) {
-			case 'solid':
-				data.datasets[ dataset ].borderDash = [ 0, 0 ];
-				break;
-
-			case 'dotted':
-				data.datasets[ dataset ].borderDash = [ width, width ];
-				break;
-
-			case 'dashed':
-				data.datasets[ dataset ].borderDash = [ width * 5, width * 3 ];
-				break;
-
-			default:
-				break;
-		}
-
-		data.datasets[ dataset ].borderStyle = style;
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
 
@@ -230,6 +225,10 @@ export default class DataStyles extends Component {
 	}
 
 	getBorderStyle() {
+		if ( ! this.props.hasBorderStyle ) {
+			return false;
+		}
+
 		const { attributes: { chartData } } = this.props;
 
 		const data = JSON.parse( chartData );
@@ -248,7 +247,7 @@ export default class DataStyles extends Component {
 			setAttributes,
 			hasSegments,
 			hasPoints,
-			hasBorderStyling,
+			hasBorderStyle,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -329,7 +328,7 @@ export default class DataStyles extends Component {
 							max={ 12 }
 							step={ 1 }
 						/>
-						{ hasBorderStyling && (
+						{ hasBorderStyle && (
 							<SelectControl
 								label={ __( 'Border Style', 'hello-charts' ) }
 								value={ this.getBorderStyle() }
@@ -338,7 +337,7 @@ export default class DataStyles extends Component {
 									{ label: __( 'Dotted', 'hello-charts' ), value: 'dotted' },
 									{ label: __( 'Dashed', 'hello-charts' ), value: 'dashed' },
 								] }
-								onChange={ ( style ) => this.updateBorderStyle( style, this.getBorderWidth() ) }
+								onChange={ ( style ) => this.updateBorderStyle( style ) }
 							/>
 						) }
 						{ hasPoints && (
