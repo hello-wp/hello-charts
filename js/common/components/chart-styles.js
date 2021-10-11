@@ -73,10 +73,6 @@ export default class ChartStyles extends Component {
 		}
 
 		function dynamicallyUpdateAxisColors( color ) {
-			if ( isEmpty( parsedOptions.scales ) ) {
-				return;
-			}
-
 			const axisColors = [
 				tinycolor( 'black' ).setAlpha( 0.1 ),
 				tinycolor( 'white' ).setAlpha( 0.1 ),
@@ -90,7 +86,15 @@ export default class ChartStyles extends Component {
 			const labelColor = color ? tinycolor.mostReadable( color, labelColors ).toRgbString() : undefined;
 
 			parsedOptions.color = labelColor;
-			for ( const [ , scaleOptions ] of Object.entries( parsedOptions.scales ) ) {
+
+			if ( ! parsedOptions.hasOwnProperty( 'scales' ) ) {
+				setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
+				return;
+			}
+
+			const scales = Object.entries( parsedOptions.scales );
+
+			for ( const [ , scaleOptions ] of scales ) {
 				set( scaleOptions, 'grid.color', axisColor );
 				set( scaleOptions, 'pointLabels.color', axisColor );
 				set( scaleOptions, 'ticks.color', labelColor );
