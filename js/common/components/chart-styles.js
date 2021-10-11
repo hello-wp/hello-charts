@@ -2,7 +2,7 @@
  * External components.
  */
 import tinycolor from 'tinycolor2';
-import { set, isEmpty } from 'lodash';
+import { set } from 'lodash';
 
 /**
  * WordPress dependencies.
