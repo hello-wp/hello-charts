@@ -87,18 +87,15 @@ export default class ChartStyles extends Component {
 
 			parsedOptions.color = labelColor;
 
-			if ( ! parsedOptions.hasOwnProperty( 'scales' ) ) {
-				setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
-				return;
-			}
+			if ( parsedOptions.hasOwnProperty( 'scales' ) ) {
+				const scales = Object.entries( parsedOptions.scales );
 
-			const scales = Object.entries( parsedOptions.scales );
-
-			for ( const [ , scaleOptions ] of scales ) {
-				set( scaleOptions, 'grid.color', axisColor );
-				set( scaleOptions, 'pointLabels.color', axisColor );
-				set( scaleOptions, 'ticks.color', labelColor );
-				set( scaleOptions, 'angleLines.color', axisColor );
+				for ( const [ , scaleOptions ] of scales ) {
+					set( scaleOptions, 'grid.color', axisColor );
+					set( scaleOptions, 'angleLines.color', axisColor );
+					set( scaleOptions, 'pointLabels.color', labelColor );
+					set( scaleOptions, 'ticks.color', labelColor );
+				}
 			}
 
 			setAttributes( { chartOptions: JSON.stringify( parsedOptions ) } );
