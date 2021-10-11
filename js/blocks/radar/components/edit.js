@@ -56,6 +56,7 @@ export default class Edit extends Component {
 				chartRef={ this.chartRef }
 				hasAxis={ true }
 				hasPoints={ true }
+				hasBorderStyle={ true }
 				chartType="radar"
 				supports={ {
 					backgroundColor: true,

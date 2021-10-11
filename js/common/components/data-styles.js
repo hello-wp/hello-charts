@@ -98,6 +98,16 @@ export default class DataStyles extends Component {
 	}
 
 	updateBorderWidth( width ) {
+		const style = this.getBorderStyle();
+		this.updateBorder( width, style );
+	}
+
+	updateBorderStyle( style ) {
+		const width = this.getBorderWidth();
+		this.updateBorder( width, style );
+	}
+
+	updateBorder( width, style ) {
 		const {
 			attributes: { chartData },
 			setAttributes,
@@ -107,6 +117,25 @@ export default class DataStyles extends Component {
 		const dataset = this.state.activeDataset;
 
 		data.datasets[ dataset ].borderWidth = width;
+
+		if ( style ) {
+			switch ( style ) {
+				case 'dotted':
+					data.datasets[ dataset ].borderDash = [ width, width ];
+					break;
+
+				case 'dashed':
+					data.datasets[ dataset ].borderDash = [ width * 3, width * 2 ];
+					break;
+
+				case 'solid':
+				default:
+					data.datasets[ dataset ].borderDash = [ 0, 0 ];
+					break;
+			}
+
+			data.datasets[ dataset ].borderStyle = style;
+		}
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
@@ -197,6 +226,19 @@ export default class DataStyles extends Component {
 		return data.datasets[ dataset ].pointStyle;
 	}
 
+	getBorderStyle() {
+		if ( ! this.props.hasBorderStyle ) {
+			return false;
+		}
+
+		const { attributes: { chartData } } = this.props;
+
+		const data = JSON.parse( chartData );
+		const dataset = this.state.activeDataset;
+
+		return data.datasets[ dataset ].borderStyle;
+	}
+
 	render() {
 		const {
 			attributes: {
@@ -207,6 +249,7 @@ export default class DataStyles extends Component {
 			setAttributes,
 			hasSegments,
 			hasPoints,
+			hasBorderStyle,
 		} = this.props;
 
 		const parsedData = JSON.parse( chartData );
@@ -287,6 +330,18 @@ export default class DataStyles extends Component {
 							max={ 12 }
 							step={ 1 }
 						/>
+						{ hasBorderStyle && (
+							<SelectControl
+								label={ __( 'Border Style', 'hello-charts' ) }
+								value={ this.getBorderStyle() }
+								options={ [
+									{ label: __( 'Solid', 'hello-charts' ), value: 'solid' },
+									{ label: __( 'Dotted', 'hello-charts' ), value: 'dotted' },
+									{ label: __( 'Dashed', 'hello-charts' ), value: 'dashed' },
+								] }
+								onChange={ ( style ) => this.updateBorderStyle( style ) }
+							/>
+						) }
 						{ hasPoints && (
 							<RangeControl
 								label={ __( 'Point Size', 'hello-charts' ) }
