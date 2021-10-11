@@ -118,22 +118,24 @@ export default class DataStyles extends Component {
 
 		data.datasets[ dataset ].borderWidth = width;
 
-		switch ( style ) {
-			case 'dotted':
-				data.datasets[ dataset ].borderDash = [ width, width ];
-				break;
+		if ( style ) {
+			switch ( style ) {
+				case 'dotted':
+					data.datasets[ dataset ].borderDash = [ width, width ];
+					break;
 
-			case 'dashed':
-				data.datasets[ dataset ].borderDash = [ width * 3, width * 2 ];
-				break;
+				case 'dashed':
+					data.datasets[ dataset ].borderDash = [ width * 3, width * 2 ];
+					break;
 
-			case 'solid':
-			default:
-				data.datasets[ dataset ].borderDash = [ 0, 0 ];
-				break;
+				case 'solid':
+				default:
+					data.datasets[ dataset ].borderDash = [ 0, 0 ];
+					break;
+			}
+
+			data.datasets[ dataset ].borderStyle = style;
 		}
-
-		data.datasets[ dataset ].borderStyle = style;
 
 		setAttributes( { chartData: JSON.stringify( data ) } );
 	}
