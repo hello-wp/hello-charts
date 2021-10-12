@@ -3,6 +3,11 @@
  */
 
 /**
+ * External components.
+ */
+import { get, set } from 'lodash';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -54,6 +59,8 @@ const attributes = {
 					pointRadius: 3,
 					hoverRadius: 3,
 					pointBorderWidth: 0,
+					borderDash: [ 0, 0 ],
+					borderStyle: 'solid',
 					tension: 0,
 					pointStyle: 'circle',
 					data: [ 'generate' ],
@@ -90,6 +97,7 @@ const attributes = {
 					ticks: {
 						display: true,
 						precision: 0,
+						showLabelBackdrop: false,
 					},
 					suggestedMin: 0,
 				},
@@ -132,6 +140,8 @@ registerBlockType( 'hello-charts/block-radar', {
 						pointRadius: 3,
 						hoverRadius: 3,
 						pointBorderWidth: 0,
+						borderDash: [ 0, 0 ],
+						borderStyle: 'solid',
 						tension: 0,
 						pointStyle: 'circle',
 						data: [ 5, 19, 14, 15, 6, 15 ],
@@ -188,28 +198,16 @@ registerBlockType( 'hello-charts/block-radar', {
 					to.backgroundColor = from.backgroundColor;
 					to.autoScale = from.autoScale;
 
-					toOptions.plugins.legend = fromOptions.plugins.legend;
-					toOptions.scales.r.grid.display = fromOptions.scales?.r?.grid?.display ?? true;
-					toOptions.scales.r.ticks.display = fromOptions.scales?.r?.ticks?.display ?? true;
-
-					if ( undefined !== fromOptions.scales?.r?.min || undefined !== fromOptions.scales?.y?.min ) {
-						const min = fromOptions.scales?.y?.min ?? fromOptions.scales?.r?.min;
-						if ( undefined !== min ) {
-							toOptions.scales.r.min = min;
-						}
-					}
-					if ( undefined !== fromOptions.scales?.r?.max || undefined !== fromOptions.scales?.y?.max ) {
-						const max = fromOptions.scales?.y?.max ?? fromOptions.scales?.r?.max;
-						if ( undefined !== max ) {
-							toOptions.scales.r.max = max;
-						}
-					}
-					if ( undefined !== fromOptions.scales?.r?.ticks?.stepSize || undefined !== fromOptions.scales?.y?.ticks?.stepSize ) {
-						const stepSize = fromOptions.scales?.y?.ticks?.stepSize ?? fromOptions.scales?.r?.ticks?.stepSize;
-						if ( undefined !== stepSize ) {
-							toOptions.scales.r.ticks.stepSize = stepSize;
-						}
-					}
+					set( toOptions, 'plugins.legend', get( fromOptions, 'plugins.legend' ) );
+					set( toOptions, 'scales.r.grid.display', get( fromOptions, 'scales.r.grid.display', true ) );
+					set( toOptions, 'scales.r.ticks.display', get( fromOptions, 'scales.r.ticks.display', true ) );
+					set( toOptions, 'scales.r.grid.color', get( fromOptions, 'scales.r.grid.color' ) || get( fromOptions, 'scales.y.grid.color' ) );
+					set( toOptions, 'scales.r.pointLabels.color', get( fromOptions, 'scales.r.pointLabels.color' ) || get( fromOptions, 'scales.y.pointLabels.color' ) );
+					set( toOptions, 'scales.r.ticks.color', get( fromOptions, 'scales.r.ticks.color' ) || get( fromOptions, 'scales.y.ticks.color' ) );
+					set( toOptions, 'scales.r.angleLines.color', get( fromOptions, 'scales.r.angleLines.color' ), get( fromOptions, 'scales.y.grid.color' ) );
+					set( toOptions, 'scales.r.min', get( fromOptions, 'scales.r.min' ) || get( fromOptions, 'scales.y.min' ) );
+					set( toOptions, 'scales.r.max', get( fromOptions, 'scales.r.max' ) || get( fromOptions, 'scales.y.max' ) );
+					set( toOptions, 'scales.r.ticks.stepSize', get( fromOptions, 'scales.r.ticks.stepSize' ) || get( fromOptions, 'scales.y.ticks.stepSize' ) );
 
 					to.chartOptions = JSON.stringify( toOptions );
 

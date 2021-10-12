@@ -41,6 +41,7 @@ export default class Edit extends Component {
 				chartRef={ this.chartRef }
 				hasAxis={ true }
 				hasPoints={ true }
+				hasBorderStyle={ true }
 				defaultAlpha={ 0 }
 				chartType="line"
 				supports={ {
@@ -50,9 +51,10 @@ export default class Edit extends Component {
 					xGridDisplay: true,
 					yGridDisplay: true,
 					scale: 'y',
+					axisColor: true,
 				} }
 				generateData={ () => {
-					return randomValues( 8 );
+					return randomValues( 6 );
 				} }
 			>
 				<Line

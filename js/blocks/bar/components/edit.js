@@ -48,6 +48,7 @@ export default class Edit extends Component {
 					xGridDisplay: true,
 					yGridDisplay: true,
 					scale: 'x' === parsedOptions.indexAxis ? 'y' : 'x',
+					axisColor: true,
 				} }
 				generateData={ () => {
 					return randomValues( 8 );

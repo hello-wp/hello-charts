@@ -6,6 +6,7 @@
  * External components.
  */
 import tinycolor from 'tinycolor2';
+import { get, set } from 'lodash';
 
 /**
  * WordPress dependencies.
@@ -151,7 +152,7 @@ registerBlockType( 'hello-charts/block-pie', {
 
 					to.backgroundColor = from.backgroundColor;
 
-					toOptions.plugins.legend = fromOptions.plugins.legend;
+					set( toOptions, 'plugins.legend', get( fromOptions, 'plugins.legend' ) );
 
 					to.chartOptions = JSON.stringify( toOptions );
 
