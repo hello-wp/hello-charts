@@ -33,10 +33,11 @@ class Blocks {
 
 	/**
 	 * Blocks constructor.
-	 *
-	 * @return void
 	 */
 	public function __construct() {
+		if ( ! hello_charts()->license->is_valid() ) {
+			return;
+		}
 		add_filter( 'block_categories', [ $this, 'block_categories' ] );
 		add_action( 'init', [ $this, 'block_assets' ] );
 

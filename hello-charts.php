@@ -12,6 +12,8 @@
  * @package Hello_Charts
  */
 
+use Hello_Charts\Plugin;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,10 +31,18 @@ function hello_charts_version(): string {
 /**
  * Block Initializer.
  */
+require_once plugin_dir_path( __FILE__ ) . 'php/class-plugin.php';
 require_once plugin_dir_path( __FILE__ ) . 'php/class-blocks.php';
 require_once plugin_dir_path( __FILE__ ) . 'php/class-license.php';
 
-$hello_charts = [
-	'blocks'  => new Hello_Charts\Blocks(),
-	'license' => new Hello_Charts\License( plugin_basename( __FILE__ ) ),
-];
+function hello_charts() {
+	static $instance;
+
+	if ( null === $instance ) {
+		$instance = new Plugin();
+	}
+
+	return $instance;
+};
+
+hello_charts()->init( plugin_basename( __FILE__ ) );

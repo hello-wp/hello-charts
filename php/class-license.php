@@ -43,6 +43,19 @@ class License {
 	private const PRODUCT_SLUG = 'hello-charts';
 
 	/**
+	 * The product price IDs mapped to blocks. The "all" slug is used for "all access" bundles.
+	 */
+	private const PRICE_IDS = [
+		1 => 'block-bar',
+		2 => 'block-line',
+		3 => 'block-pie',
+		4 => 'block-polar-area',
+		5 => 'block-radar',
+		6 => 'all',
+		7 => 'all',
+	];
+
+	/**
 	 * The name of the GET parameter that indicates we should register the plugin.
 	 *
 	 * @var string
@@ -67,22 +80,11 @@ class License {
 	private const REQUEST_FAILED = 'request_failed';
 
 	/**
-	 * Path to the plugin file relative to the plugins directory.
-	 *
-	 * @var string
-	 */
-	private $plugin_file;
-
-	/**
 	 * License constructor.
-	 *
-	 * @param string $plugin_file Path to the plugin file relative to the plugins directory.
 	 */
-	public function __construct( string $plugin_file ) {
-		$this->plugin_file = $plugin_file;
-
+	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'license_key_styles' ] );
-		add_action( 'after_plugin_row_' . $this->plugin_file, [ $this, 'license_key_field' ], 10, 2 );
+		add_action( 'after_plugin_row_' . hello_charts()->plugin_file, [ $this, 'license_key_field' ], 10, 2 );
 		add_action( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
 
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'update_plugins' ] );
@@ -153,13 +155,34 @@ class License {
 	 *
 	 * @return bool
 	 */
-	private function is_valid(): bool {
+	public function is_valid(): bool {
 		$license = $this->get_license();
 
 		if ( isset( $license->license ) && 'valid' === $license->license && isset( $license->expires ) ) {
 			if ( time() < strtotime( $license->expires ) || 'lifetime' === $license->expires ) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a specific block is valid.
+	 *
+	 * @param string $block_slug The slug of a block to check;
+	 *
+	 * @return bool
+	 */
+	public function valid_for_block( string $block_slug ): bool {
+		$price_id = $this->get_license()->price_id;
+
+		if ( ! isset( self::PRICE_IDS[ $price_id ] ) ) {
+			return false;
+		}
+
+		if ( $block_slug === self::PRICE_IDS[ $price_id ] || 'all' === self::PRICE_IDS[ $price_id ] ) {
+			return true;
 		}
 
 		return false;
@@ -262,7 +285,7 @@ class License {
 
 		if ( ! is_wp_error( $response ) && isset( $response->new_version ) ) {
 			if ( version_compare( hello_charts_version(), $response->new_version, '<' ) ) {
-				$value->response[ $this->plugin_file ] = $response;
+				$value->response[ hello_charts()->plugin_file ] = $response;
 			}
 		}
 
@@ -423,7 +446,7 @@ class License {
 	 * @return string
 	 */
 	private function license_inactive_message(): string {
-		$message = __( 'Enter your license key to receive plugin updates:', 'hello-charts' );
+		$message = __( 'Enter your license keys to use Hello Charts and receive plugin updates:', 'hello-charts' );
 		return sprintf(
 			'<p>%1$s</p><p>%2$s%3$s</p>',
 			$message,
