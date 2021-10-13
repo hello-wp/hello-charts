@@ -155,7 +155,7 @@ class License {
 	 *
 	 * @return bool
 	 */
-	public function is_valid(): bool {
+	private function is_valid(): bool {
 		$license = $this->get_license();
 
 		if ( isset( $license->license ) && 'valid' === $license->license && isset( $license->expires ) ) {
@@ -168,24 +168,29 @@ class License {
 	}
 
 	/**
-	 * Check if a specific block is valid.
+	 * Return an array of valid block slugs.
 	 *
-	 * @param string $block_slug The slug of a block to check;
-	 *
-	 * @return bool
+	 * @return array
 	 */
-	public function valid_for_block( string $block_slug ): bool {
-		$price_id = $this->get_license()->price_id;
+	public function get_valid_blocks(): array {
+		$all_blocks   = hello_charts()->blocks::BLOCK_SLUGS;
+		$valid_blocks = [];
+		$price_id     = $this->get_license()->price_id;
 
 		if ( ! isset( self::PRICE_IDS[ $price_id ] ) ) {
-			return false;
+			return $valid_blocks;
 		}
 
-		if ( $block_slug === self::PRICE_IDS[ $price_id ] || 'all' === self::PRICE_IDS[ $price_id ] ) {
-			return true;
+		if ( 'all' === self::PRICE_IDS[ $price_id ] ) {
+			return $all_blocks;
+		}
+		foreach ( $all_blocks as $block_slug ) {
+			if ( self::PRICE_IDS[ $price_id ] === $block_slug ) {
+				$valid_blocks[] = $block_slug;
+			}
 		}
 
-		return false;
+		return $valid_blocks;
 	}
 
 	/**

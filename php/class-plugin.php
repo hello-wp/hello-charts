@@ -35,9 +35,9 @@ class Plugin {
 	/**
 	 * Plugin initializer.
 	 *
-	 * @param string The plugin's basename.
+	 * @param string $plugin_file The plugin's basename.
 	 */
-	public function init( $plugin_file ) {
+	public function init( string $plugin_file ) {
 		$this->plugin_file = $plugin_file;
 		$this->license     = new License();
 		$this->blocks      = new Blocks();

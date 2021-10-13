@@ -35,7 +35,12 @@ require_once plugin_dir_path( __FILE__ ) . 'php/class-plugin.php';
 require_once plugin_dir_path( __FILE__ ) . 'php/class-blocks.php';
 require_once plugin_dir_path( __FILE__ ) . 'php/class-license.php';
 
-function hello_charts() {
+/**
+ * Return an instance of the Hello Charts plugin.
+ *
+ * @return Plugin
+ */
+function hello_charts(): Plugin {
 	static $instance;
 
 	if ( null === $instance ) {

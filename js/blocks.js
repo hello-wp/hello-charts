@@ -17,3 +17,4 @@ import './blocks/radar';
 
 // WordPress filter hooks.
 import './common/helpers/filters';
+import './common/helpers/unregister';

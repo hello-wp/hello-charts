@@ -35,9 +35,6 @@ class Blocks {
 	 * Blocks constructor.
 	 */
 	public function __construct() {
-		if ( ! hello_charts()->license->is_valid() ) {
-			return;
-		}
 		add_filter( 'block_categories', [ $this, 'block_categories' ] );
 		add_action( 'init', [ $this, 'block_assets' ] );
 
@@ -116,6 +113,12 @@ class Blocks {
 			true
 		);
 
+		wp_localize_script(
+			'hello-charts-block-js',
+			'helloChartsDisallowedBlockTypes',
+			array_diff( self::BLOCK_SLUGS, hello_charts()->license->get_valid_blocks() )
+		);
+
 		$this->register_block_types();
 	}
 
@@ -139,7 +142,7 @@ class Blocks {
 		 *
 		 * @link https://wordpress.org/gutenberg/handbook/blocks/writing-your-first-block-type#enqueuing-block-scripts
 		 */
-		foreach ( self::BLOCK_SLUGS as $block_slug ) {
+		foreach ( hello_charts()->license->get_valid_blocks() as $block_slug ) {
 			$namespace = self::BLOCK_NAMESPACE;
 			register_block_type( "$namespace/$block_slug", $block_type_args );
 		}
