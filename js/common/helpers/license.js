@@ -1,10 +1,15 @@
-const { unregisterBlockType } = wp.blocks;
+/**
+ * License related helper functions.
+ *
+ * @return {Object} Various license functions.
+ */
+const license = {
+	isAllowedBlock: ( blockSlug ) => {
+		if ( ! window.hasOwnProperty( 'helloChartsAllowedBlockTypes' ) ) {
+			return false;
+		}
+		return window.helloChartsAllowedBlockTypes.indexOf( blockSlug ) !== -1;
+	},
+};
 
-wp.domReady( () => {
-	if ( ! window.hasOwnProperty( 'helloChartsDisallowedBlockTypes' ) ) {
-		return;
-	}
-	Object.values( window.helloChartsDisallowedBlockTypes ).forEach(
-		( blockSlug ) => unregisterBlockType( `hello-charts/${ blockSlug }` )
-	);
-} );
+export default license;

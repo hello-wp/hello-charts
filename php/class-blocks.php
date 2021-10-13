@@ -115,8 +115,8 @@ class Blocks {
 
 		wp_localize_script(
 			'hello-charts-block-js',
-			'helloChartsDisallowedBlockTypes',
-			array_diff( self::BLOCK_SLUGS, hello_charts()->license->get_valid_blocks() )
+			'helloChartsAllowedBlockTypes',
+			hello_charts()->license->get_valid_blocks()
 		);
 
 		$this->register_block_types();
