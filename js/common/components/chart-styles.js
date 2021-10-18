@@ -26,6 +26,7 @@ export default class ChartStyles extends Component {
 				backgroundColor,
 				chartData,
 				chartOptions,
+				autoScale,
 			},
 			supports,
 			setAttributes,
@@ -40,8 +41,19 @@ export default class ChartStyles extends Component {
 
 		function updateIndexAxis( axis ) {
 			const options = JSON.parse( chartOptions );
+
 			options.indexAxis = axis;
-			setAttributes( { chartOptions: JSON.stringify( options ) } );
+
+			if ( ! autoScale ) {
+				delete options.scales[ axis ].min;
+				delete options.scales[ axis ].max;
+				delete options.scales[ axis ].ticks.stepSize;
+			}
+
+			setAttributes( {
+				autoScale: true,
+				chartOptions: JSON.stringify( options ),
+			} );
 		}
 
 		function updateStacked( state ) {

@@ -1,4 +1,9 @@
 /**
+ * External components.
+ */
+import { get, set } from 'lodash';
+
+/**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
@@ -11,30 +16,6 @@ const {
 } = wp.components;
 
 export default class AxisStyles extends Component {
-	componentDidUpdate( prevProps ) {
-		const {
-			attributes: {
-				autoScale,
-				chartOptions,
-			},
-			setAttributes,
-		} = this.props;
-
-		const prevOptions = JSON.parse( prevProps.attributes.chartOptions );
-		const options = JSON.parse( chartOptions );
-
-		if ( prevOptions.indexAxis !== options.indexAxis && ! autoScale ) {
-			delete options.scales[ options.indexAxis ].min;
-			delete options.scales[ options.indexAxis ].max;
-			delete options.scales[ options.indexAxis ].ticks.stepSize;
-
-			setAttributes( {
-				autoScale: true,
-				chartOptions: JSON.stringify( options ),
-			} );
-		}
-	}
-
 	render() {
 		const {
 			attributes: {
@@ -64,9 +45,9 @@ export default class AxisStyles extends Component {
 			const options = JSON.parse( chartOptions );
 
 			if ( ! state ) {
-				options.scales[ axis ].min = getMinValue( supports.scale );
-				options.scales[ axis ].max = getMaxValue( supports.scale );
-				options.scales[ axis ].ticks.stepSize = getStepSize( supports.scale );
+				set( options.scales, `${ axis }.min`, getMinValue( supports.scale ) );
+				set( options.scales, `${ axis }.max`, getMaxValue( supports.scale ) );
+				set( options.scales, `${ axis }.ticks.stepSize`, getStepSize( supports.scale ) );
 			} else {
 				delete options.scales[ axis ].min;
 				delete options.scales[ axis ].max;
@@ -180,21 +161,21 @@ export default class AxisStyles extends Component {
 							type="number"
 							className="chart-manual-scale-control"
 							label={ __( 'Min', 'hello-charts' ) }
-							value={ parsedOptions.scales[ supports.scale ].min }
+							value={ get( parsedOptions.scales, `${ supports.scale }.min` ) }
 							onChange={ ( state ) => updateMinMax( state, supports.scale, 'min' ) }
 						/>
 						<TextControl
 							type="number"
 							className="chart-manual-scale-control"
 							label={ __( 'Max', 'hello-charts' ) }
-							value={ parsedOptions.scales[ supports.scale ].max }
+							value={ get( parsedOptions.scales, `${ supports.scale }.max` ) }
 							onChange={ ( state ) => updateMinMax( state, supports.scale, 'max' ) }
 						/>
 						<TextControl
 							type="number"
 							className="chart-manual-scale-control"
 							label={ __( 'Step Size', 'hello-charts' ) }
-							value={ parsedOptions.scales[ supports.scale ].ticks.stepSize }
+							value={ get( parsedOptions.scales, `${ supports.scale }.ticks.stepSize` ) }
 							min={ 1 }
 							onChange={ ( stepSize ) => updateStepSize( stepSize, supports.scale ) }
 						/>
