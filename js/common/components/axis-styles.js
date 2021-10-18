@@ -43,11 +43,12 @@ export default class AxisStyles extends Component {
 
 		function updateAutoScale( state, axis ) {
 			const options = JSON.parse( chartOptions );
+			const scale = supports.scale;
 
 			if ( ! state ) {
-				set( options.scales, `${ axis }.min`, getMinValue( supports.scale ) );
-				set( options.scales, `${ axis }.max`, getMaxValue( supports.scale ) );
-				set( options.scales, `${ axis }.ticks.stepSize`, getStepSize( supports.scale ) );
+				set( options.scales, `${ axis }.min`, getMinValue( scale ) );
+				set( options.scales, `${ axis }.max`, getMaxValue( scale ) );
+				set( options.scales, `${ axis }.ticks.stepSize`, getStepSize( scale ) );
 			} else {
 				delete options.scales[ axis ].min;
 				delete options.scales[ axis ].max;
