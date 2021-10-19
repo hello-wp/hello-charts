@@ -406,7 +406,7 @@ class License {
 			self::LICENSE_URL,
 			[
 				'timeout'   => 10,
-				'sslverify' => true,
+				'sslverify' => false,
 				'body'      => $api_params,
 			]
 		);
