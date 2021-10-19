@@ -47,7 +47,7 @@ export default class Edit extends Component {
 					stacked: true,
 					xGridDisplay: true,
 					yGridDisplay: true,
-					scale: 'y',
+					scale: 'x' === parsedOptions.indexAxis ? 'y' : 'x',
 					axisColor: true,
 				} }
 				generateData={ () => {
