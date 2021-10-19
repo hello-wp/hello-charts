@@ -25,6 +25,9 @@ export default class AxisStyles extends Component {
 			chartRef,
 			setAttributes,
 			supports,
+			supports: {
+				scale,
+			},
 		} = this.props;
 
 		function getMaxValue( axis ) {
@@ -43,7 +46,6 @@ export default class AxisStyles extends Component {
 
 		function updateAutoScale( state, axis ) {
 			const options = JSON.parse( chartOptions );
-			const scale = supports.scale;
 
 			if ( ! state ) {
 				set( options.scales, `${ axis }.min`, getMinValue( scale ) );
@@ -149,36 +151,36 @@ export default class AxisStyles extends Component {
 						onChange={ ( state ) => updateShowAxisProperty( state, 'r', 'pointLabels' ) }
 					/>
 				) }
-				{ supports.scale && (
+				{ scale && (
 					<ToggleControl
 						label={ __( 'Auto Scale', 'hello-charts' ) }
 						checked={ autoScale }
-						onChange={ ( state ) => updateAutoScale( state, supports.scale ) }
+						onChange={ ( state ) => updateAutoScale( state, scale ) }
 					/>
 				) }
-				{ supports.scale && ! autoScale && (
+				{ scale && ! autoScale && (
 					<BaseControl className="chart-manual-scale" >
 						<TextControl
 							type="number"
 							className="chart-manual-scale-control"
 							label={ __( 'Min', 'hello-charts' ) }
-							value={ get( parsedOptions.scales, `${ supports.scale }.min` ) }
-							onChange={ ( state ) => updateMinMax( state, supports.scale, 'min' ) }
+							value={ get( parsedOptions.scales, `${ scale }.min` ) }
+							onChange={ ( state ) => updateMinMax( state, scale, 'min' ) }
 						/>
 						<TextControl
 							type="number"
 							className="chart-manual-scale-control"
 							label={ __( 'Max', 'hello-charts' ) }
-							value={ get( parsedOptions.scales, `${ supports.scale }.max` ) }
-							onChange={ ( state ) => updateMinMax( state, supports.scale, 'max' ) }
+							value={ get( parsedOptions.scales, `${ scale }.max` ) }
+							onChange={ ( state ) => updateMinMax( state, scale, 'max' ) }
 						/>
 						<TextControl
 							type="number"
 							className="chart-manual-scale-control"
 							label={ __( 'Step Size', 'hello-charts' ) }
-							value={ get( parsedOptions.scales, `${ supports.scale }.ticks.stepSize` ) }
+							value={ get( parsedOptions.scales, `${ scale }.ticks.stepSize` ) }
 							min={ 1 }
-							onChange={ ( stepSize ) => updateStepSize( stepSize, supports.scale ) }
+							onChange={ ( stepSize ) => updateStepSize( stepSize, scale ) }
 						/>
 					</BaseControl>
 				) }
