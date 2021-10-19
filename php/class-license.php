@@ -388,6 +388,10 @@ class License {
 						$this->license_inactive_message(),
 						[
 							'p'     => [],
+							'a'     => [
+								'href'   => true,
+								'target' => true,
+							],
 							'input' => [
 								'type'    => true,
 								'class'   => true,
@@ -423,7 +427,13 @@ class License {
 	 * @return string
 	 */
 	private function license_inactive_message(): string {
-		$message = __( 'Enter your license key to receive plugin updates:', 'hello-charts' );
+		$message = sprintf(
+			// translators: Placeholders are html anchor links.
+			__( 'Enter your license key to receive plugin updates. Purchase a %1$slicense%3$s or %2$saccess%3$s an existing one.', 'hello-charts' ),
+			'<a href="https://hellocharts.co/" target="_blank">',
+			'<a href="https://hellocharts.co/checkout/purchase-history/" target="_blank">',
+			'</a>'
+		);
 		return sprintf(
 			'<p>%1$s</p><p>%2$s%3$s</p>',
 			$message,
