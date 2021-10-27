@@ -415,9 +415,9 @@ class License {
 			$response = json_decode( wp_remote_retrieve_body( $request ) );
 
 			if ( $response && $response->success ) {
-				$response->sections = maybe_unserialize( $response->sections || '' );
-				$response->banners  = maybe_unserialize( $response->banners || '' );
-				$response->icons    = maybe_unserialize( $response->icons || '' );
+				$response->sections = maybe_unserialize( $response->sections ?? '' );
+				$response->banners  = maybe_unserialize( $response->banners ?? '' );
+				$response->icons    = maybe_unserialize( $response->icons ?? '' );
 			}
 
 			return $response;
