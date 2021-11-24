@@ -110,6 +110,8 @@ class License {
 		$key     = filter_input( INPUT_GET, self::REGISTER_KEY, FILTER_SANITIZE_STRING );
 		$license = $this->activate_license( $key );
 
+		delete_transient( self::TRANSIENT_NAME );
+
 		if ( ! $this->is_valid( $license ) ) {
 			if ( isset( $license->license ) && self::REQUEST_FAILED === $license->license ) {
 				add_filter( 'hello_charts_plugin_row_notice', [ $this, 'license_request_failed_message' ] );
@@ -220,6 +222,7 @@ class License {
 			foreach ( $keys as $key ) {
 				$licenses[] = $this->activate_license( $key );
 			}
+			set_transient( self::TRANSIENT_NAME, $licenses, DAY_IN_SECONDS );
 		}
 
 		return $licenses;
@@ -241,7 +244,7 @@ class License {
 		}
 
 		if ( $this->is_valid( $license ) ) {
-			$this->add_license( $key, $license );
+			$this->add_license_key( $key );
 		}
 
 		return $license;
@@ -251,27 +254,15 @@ class License {
 	 * Adds a new license key to the license keys option and licenses transient.
 	 *
 	 * @param string $key The license key to add.
-	 * @param object $license The license to add.
 	 */
-	private function add_license( string $key, $license ) {
-		$licenses   = $this->get_licenses();
-		$keys       = get_option( self::OPTION_NAME, [] );
-		$expiration = DAY_IN_SECONDS;
+	private function add_license_key( string $key ) {
+		$keys = get_option( self::OPTION_NAME, [] );
 
 		if ( ! in_array( $key, $keys, true ) ) {
 			$keys[] = $key;
 		}
 
 		update_option( self::OPTION_NAME, $keys );
-
-		if ( ! $licenses ) {
-			$licenses = [];
-		}
-
-		if ( ! in_array( $license, $licenses, true ) ) {
-			$licenses[] = $license;
-		}
-		set_transient( self::TRANSIENT_NAME, $licenses, $expiration );
 	}
 
 	/**
