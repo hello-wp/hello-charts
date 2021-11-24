@@ -3,7 +3,7 @@
  * Plugin Name: Hello Charts
  * Plugin URI: https://hellocharts.co/
  * Description: A library of blocks that make it super easy to add dynamic charts to your WordPress pages and posts.
- * Author: Hello Charts
+ * Author: Hello WP
  * Author URI: https://hellocharts.co/
  * Version: 1.0.0
  * License: GPL2+

@@ -1,8 +1,8 @@
 {
-    "name": "hello-charts/hello-charts",
+    "name": "hello-wp/hello-charts",
     "type": "wordpress-plugin",
     "description": "A library of blocks that make it super easy to add dynamic charts to your WordPress pages and posts.",
-    "homepage": "https://github.com/Hello-Charts/Hello-Charts",
+    "homepage": "https://github.com/hello-wp/hello-charts",
     "license": "GPL-2.0",
     "require-dev": {
         "phpcompatibility/phpcompatibility-wp": "^2.1",
