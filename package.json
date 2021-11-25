@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^9.0.4",
-    "@wordpress/scripts": "^15.0.1",
+    "@wordpress/scripts": "^19.2.2",
     "babel-plugin-lodash": "^3.3.4",
     "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^5.2.4",
