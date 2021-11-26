@@ -5,7 +5,7 @@
  * Description: A library of blocks that make it super easy to add dynamic charts to your WordPress pages and posts.
  * Author: Hello WP
  * Author URI: https://hellocharts.co/
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  *
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function hello_charts_version(): string {
-	return '1.0.0';
+	return '1.0.1';
 }
 
 /**
