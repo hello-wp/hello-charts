@@ -9,6 +9,7 @@ const { createRef, Component } = wp.element;
 import { Bar } from 'react-chartjs-2';
 import { ChartBlock } from '../../../common/components';
 import { legend, randomValues } from '../../../common/helpers';
+import htmlLegendPlugin from '../../../common/helpers/html-legend-plugin';
 
 export default class Edit extends Component {
 	constructor( props ) {
@@ -60,6 +61,7 @@ export default class Edit extends Component {
 					id={ blockId }
 					data={ parsedData }
 					options={ parsedOptions }
+					plugins={ [ htmlLegendPlugin ] }
 					ref={ this.chartRef }
 				/>
 			</ChartBlock>

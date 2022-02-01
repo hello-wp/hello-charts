@@ -190,9 +190,12 @@ export default class ChartBlock extends Component {
 				<div className={ className } key="preview">
 					<div className="wrapper" style={ styles }>
 						{ ! this.state.editorOpen && ! this.state.refreshChart && (
-							<div className="chart" ref={ this.chartWrapperRef }>
-								{ children }
-							</div>
+							<>
+								<div id="legend-container"></div>
+								<div className="chart" ref={ this.chartWrapperRef }>
+									{ children }
+								</div>
+							</>
 						) }
 						{ this.state.editorOpen && (
 							<Modal
