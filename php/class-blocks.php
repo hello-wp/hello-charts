@@ -35,7 +35,7 @@ class Blocks {
 	 * Blocks constructor.
 	 */
 	public function __construct() {
-		add_filter( 'block_categories', [ $this, 'block_categories' ] );
+		add_filter( 'block_categories_all', [ $this, 'block_categories' ] );
 		add_action( 'init', [ $this, 'block_assets' ] );
 
 		foreach ( self::BLOCK_SLUGS as $block_slug ) {
