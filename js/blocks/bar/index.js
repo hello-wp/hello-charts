@@ -71,6 +71,9 @@ const attributes = {
 					position: 'top',
 					align: 'center',
 				},
+				htmlLegend: {
+					containerID: 'legend-container',
+				},
 				tooltip: {
 					displayColors: false,
 				},
@@ -141,6 +144,9 @@ if ( license.isAllowedBlock( 'block-bar' ) ) {
 					animation: false,
 					responsive: false,
 					plugins: {
+						htmlLegend: {
+							containerID: 'legend-container',
+						},
 						legend: {
 							display: false,
 						},
