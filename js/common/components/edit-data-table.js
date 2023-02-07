@@ -24,6 +24,8 @@ export default class EditDataTable extends Component {
 			activeCol: null,
 			activeRow: null,
 			table: null,
+			undo: [],
+			redo: [],
 		};
 
 		this.tableRef = createRef();
@@ -38,6 +40,93 @@ export default class EditDataTable extends Component {
 			activeCol: column,
 			activeRow: row,
 		} );
+	}
+
+	updateData( value, index, row ) {
+		const data = JSON.parse( this.props.attributes.chartData );
+
+		if (
+			'' === value ||
+			'-' === value ||
+			! isNaN( value )
+		) {
+			const oldValue = data.datasets[ index ].data[ row ];
+			this.setState( {
+				undo: [ ...this.state.undo,
+					{
+						value: oldValue,
+						index,
+						row,
+					},
+				],
+				redo: [],
+			} );
+			data.datasets[ index ].data[ row ] = value;
+		}
+
+		this.props.setAttributes( { chartData: JSON.stringify( data ) } );
+	}
+
+	doUndo( event ) {
+		event.stopPropagation();
+
+		if ( 0 === this.state.undo.length ) {
+			return;
+		}
+
+		const data = JSON.parse( this.props.attributes.chartData );
+
+		const prevValue = this.state.undo[ this.state.undo.length - 1 ];
+
+		this.setState( {
+			redo: [ ...this.state.redo,
+				{
+					value: data.datasets[ prevValue.index ].data[ prevValue.row ],
+					index: prevValue.index,
+					row: prevValue.row,
+				},
+			],
+		} );
+
+		data.datasets[ prevValue.index ].data[ prevValue.row ] = prevValue.value;
+
+		this.props.setAttributes( { chartData: JSON.stringify( data ) } );
+
+		const oldState = this.state.undo;
+		oldState.pop();
+
+		this.setState( { undo: oldState } );
+	}
+
+	doRedo( event ) {
+		event.stopPropagation();
+
+		if ( 0 === this.state.redo.length ) {
+			return;
+		}
+
+		const data = JSON.parse( this.props.attributes.chartData );
+
+		const nextValue = this.state.redo[ this.state.redo.length - 1 ];
+
+		this.setState( {
+			undo: [ ...this.state.undo,
+				{
+					value: data.datasets[ nextValue.index ].data[ nextValue.row ],
+					index: nextValue.index,
+					row: nextValue.row,
+				},
+			],
+		} );
+
+		data.datasets[ nextValue.index ].data[ nextValue.row ] = nextValue.value;
+
+		this.props.setAttributes( { chartData: JSON.stringify( data ) } );
+
+		const oldState = this.state.redo;
+		oldState.pop();
+
+		this.setState( { redo: oldState } );
 	}
 
 	render() {
@@ -87,20 +176,6 @@ export default class EditDataTable extends Component {
 		function updateLabel( text, row ) {
 			const data = JSON.parse( chartData );
 			data.labels[ row ] = text;
-			setAttributes( { chartData: JSON.stringify( data ) } );
-		}
-
-		function updateData( value, index, row ) {
-			const data = JSON.parse( chartData );
-
-			if (
-				'' === value ||
-				'-' === value ||
-				! isNaN( value )
-			) {
-				data.datasets[ index ].data[ row ] = value;
-			}
-
 			setAttributes( { chartData: JSON.stringify( data ) } );
 		}
 
@@ -378,6 +453,10 @@ export default class EditDataTable extends Component {
 					left: previousCell,
 					'shift+enter': previousRow,
 					up: previousRow,
+					'command+z': ( event ) => this.doUndo( event ),
+					'ctrl+z': ( event ) => this.doUndo( event ),
+					'command+shift+z': ( event ) => this.doRedo( event ),
+					'ctrl+y': ( event ) => this.doRedo( event ),
 				} }
 				bindGlobal={ true }
 			>
@@ -454,7 +533,7 @@ export default class EditDataTable extends Component {
 										inputMode="decimal"
 										value={ dataset.data[ row ] }
 										onFocus={ () => this.updateActiveCell( row + 1, index + 1 ) }
-										onChange={ ( event ) => updateData( event.target.value, index, row ) }
+										onChange={ ( event ) => this.updateData( event.target.value, index, row ) }
 									/>
 								</td>
 							) ) }
